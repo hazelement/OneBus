@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <title>Busso</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}" media="screen" />
+    <link rel="icon" href="http://example.com/favicon.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div id="loading_hold" align="center"> loading... </div>
+    <div class="center-block" id="divSearch">
+
+        <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token }}"
+        >
+        <p id="logo" align="center">OneBus</p>
+        <form id="frmSearch" autocomplete="off">
+            <div class="radio-toolbar">
+                <input type="radio" id="google" value="google" name="rbEngines" checked="checked"> <label for="google">Google Maps</label>
+                <input type="radio" id="four_square" name="rbEngines" value="four_square"> <label for="four_square">Four Square</label>
+            </div> <br>
+
+            <input id="txtSearch" name="txtSearch" type="text" placeholder="What're we looking for ?" required>
+
+
+        </form>
+    </div>
+
+    <div id="background"></div>
+    <div id="map" ></div>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+    <script src="{{ url_for('static', filename='script/map.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/control.js') }}"></script>
+    <script>
+        initMap();
+    </script>
+
+</body>
+</html>

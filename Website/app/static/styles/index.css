@@ -1,0 +1,110 @@
+
+#map {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    opacity: 1.0;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+
+
+.center-block {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  height: 6px;
+  width: 40%;
+  background-color: transparent;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+#background {
+    height: 100%;
+    width: 100%;
+    left: 0;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    background-color: black;
+    z-index: 2;
+}
+
+
+#frmSearch input[type="text"] {
+    background: url("/static/images/search-dark.png") no-repeat 10px 6px #444 ;
+    border: 0 none;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #c3c3c3;
+    width: 90%;
+    padding: 6px 15px 6px 35px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.3s ease 0s;
+}
+
+#frmSearch input[type="text"]:focus {
+    background: url("/static/images/search-white.png") no-repeat 10px 6px #fcfcfc;
+    border: 0 none;
+    color: #6a6f75;
+    width: 90%;
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(0, 0, 0, 0.9) inset;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.radio-toolbar input[type="radio"] {
+    display:none;
+}
+
+.radio-toolbar label {
+    border-radius: 25px;
+    display:inline-block;
+    background-color: transparent;
+    padding:4px 11px;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #afafaf;
+}
+
+.radio-toolbar input[type="radio"]:checked + label {
+    background-color:white;
+    color: #0c0c0c;
+}
+
+#logo{
+    left: 50%;
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	font-size: 100px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bolder;
+	line-height: 0px;
+	color: #f3f3f3 ;
+}
+
+#loading_hold{
+	border-radius: 25px;
+	z-index: 1;
+    height: 15%;
+    width: 45%;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0%;
+    background-color: black;
+    transform: translate(60%, 10%);
+    font: bold 50px Arial,Helvetica,Sans-serif;
+    color: #afafaf;
+    line-height: 200%;
+}

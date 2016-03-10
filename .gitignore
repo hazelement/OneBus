@@ -45,3 +45,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+.hg/00changelog.i
+*.tags-wntqyc
+.hg/branch
+.hg/
+.hgcheck/
+.idea/
+*.hgignore
+*.txt
+*.sqlite
+*.pyc
