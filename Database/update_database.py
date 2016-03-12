@@ -5,8 +5,8 @@ import os
 import numpy as np
 
 
-
-# todo when dump service_ids, convert it to integer ids , this can speed up query speed
+# todo add yelp api
+# todo add function to download gtfs zip from transitfeed.com and dump it into database
 
 def update_database(city_province_country):
 
