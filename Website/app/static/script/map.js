@@ -129,7 +129,11 @@ function add_marker(target, is_home) {
         map: map,
         animation: google.maps.Animation.DROP,
         title: target.dest_name,
-        description: target.address,
+        address: target.address,
+        image_url: target.image_url,
+        yelp_url: target.yelp_url,
+        review_count: target.review_count,
+        ratings_img: target.ratings_img,
         path: target.path
         });
 
@@ -138,7 +142,8 @@ function add_marker(target, is_home) {
             'click',
             function(){
                 infowindow.close();
-                infowindow.setContent(target.dest_name + "\n" +marker.description);
+//                infowindow.setContent(target.dest_name + "\n" +marker.description);
+                infowindow.setContent(make_infobox(marker))
                 infowindow.open(map, marker);
                 directionsDisplay.setMap(map)
                 calculateAndDisplayRoute(marker);
@@ -149,6 +154,17 @@ function add_marker(target, is_home) {
         markers.push(marker);
     }
 
+}
+
+function make_infobox(marker){
+    retVal = "<b><font size=\"3\">";
+    retVal = retVal + marker.title +"</font></b><br>" ;
+    retVal = retVal + "<img src=\"" + marker.ratings_img + "\"><br>";
+    retVal = retVal + "Number of Reviews: " + marker.review_count.toString() + "<br>";
+//    retVal = retVal + "<img src=\"" +
+    retVal = retVal + marker.address;
+    retVal = retVal + "<br><a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"static\\images\\yelp_review_btn_light.png\"></a>";
+    return retVal;
 }
 
 function calculateAndDisplayRoute(dest) {

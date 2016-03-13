@@ -40,7 +40,7 @@ def get_destinations(lat, lng, query, option):
 
 
     # yelp_loc_list
-    gps_array, names, addresses = yelp_loc_list(lat, lng, query)
+    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = yelp_loc_list(lat, lng, query)
 
     # gps_array=np.concatenate((gps_array, gps_array2), axis=0)
     # names=np.concatenate((names, names2), axis=0)
@@ -59,6 +59,10 @@ def get_destinations(lat, lng, query, option):
     gps_array = gps_array[filter_index]
     names = names[filter_index]
     addresses = addresses[filter_index]
+    image_url = image_url[filter_index]
+    yelp_url = yelp_url[filter_index]
+    review_count = review_count[filter_index]
+    rating_img_url = rating_img_url[filter_index]
 
 
     print("Transit friendly results: " + str(len(names)))
@@ -69,9 +73,13 @@ def get_destinations(lat, lng, query, option):
 
     for i in range(0, len(gps_array)):
         dest_dict[names[i]]={"dest_name": names[i],
-                                  "address": addresses[i],
-                                  "lat": gps_array[i][0],
-                                  "lng": gps_array[i][1]}
+                             "address": addresses[i],
+                             "lat": gps_array[i][0],
+                             "lng": gps_array[i][1],
+                             "image_url": image_url[i],
+                             "yelp_url": yelp_url[i],
+                             "review_count": review_count[i],
+                             "ratings_img": rating_img_url[i]}
 
     retVal={}
     retVal['results']=dest_dict
@@ -211,22 +219,35 @@ def yelp_loc_list(lat, lng, query):
     loc_list = []
     name = []
     address = []
+    image_url = []
+    yelp_url = []
+    review_count = []
+    rating_img_url = []
+
 
     for loc in response.businesses:
-        lat = loc.location.coordinate.latitude
-        lng = loc.location.coordinate.longitude
-        loc_list.append([lat, lng])
+        loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
         name.append(loc.name)
         address.append(' '.join(loc.location.display_address))
+        image_url.append(loc.image_url)
+        yelp_url.append(loc.url)
+        review_count.append(loc.review_count)
+        rating_img_url.append(loc.rating_img_url)
 
 
-    gps_array = np.array(loc_list)
+
+    loc_list = np.array(loc_list)
     name = np.array(name)
     address = np.array(address)
+    image_url = np.array(image_url)
+    yelp_url = np.array(yelp_url)
+    review_count = np.array(review_count)
+    rating_img_url = np.array(rating_img_url)
+
 
     print name
     # print address
-    return gps_array, name, address
+    return loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
 
 if __name__ == "__main__":
 
@@ -239,9 +260,9 @@ if __name__ == "__main__":
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
-    # test = get_destinations(lat, lng, query, "google")
+    test = get_destinations(lat, lng, query, "google")
 
-    test = yelp_loc_list(lat, lng, query)
+    # test = yelp_loc_list(lat, lng, query)
 
     print test
 
