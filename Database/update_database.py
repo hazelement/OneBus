@@ -5,9 +5,10 @@ import os
 import numpy as np
 
 
-# todo add yelp api
-# todo add yelp label on front page
+
+
 # todo add function to download gtfs zip from transitfeed.com and dump it into database
+# todo add rating from api and link to yelp pages
 
 def update_database(city_province_country):
 

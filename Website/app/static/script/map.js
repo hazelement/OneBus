@@ -7,26 +7,6 @@ var directionsService;
 var markers = [];
 var shapes = []
 var home_gps;
-//var myIcon = new google.maps.MarkerImage(
-//    "/static/images/my_location.png",
-//    null, /* size is determined at runtime */
-//    null, /* origin is 0,0 */
-//    null, /* anchor is bottom center of the scaled image */
-//    new google.maps.Size(42, 68)
-//);
-
-//
-//var myIcon={
-//  url: "/static/images/my_location.png",
-//  size: new google.maps.Size(71, 71),
-//  origin: new google.maps.Point(0, 0),
-//  anchor: new google.maps.Point(17, 34),
-//  scaledSize: new google.maps.Size(25, 25)
-//};
-// todo use jQuery AJAX to post current address and a lot of locations to server, server to filter for locations along bus stops get targeted locations
-// http://www.w3schools.com/jquery/jquery_ajax_get_post.asp
-
-// todo https://chadkillingsworth.github.io/geolocation-marker/   detect location of user
 
 function initMap(){
     var mapDiv = document.getElementById('map');
@@ -41,7 +21,6 @@ function initMap(){
         timeout           : 1000
     };
 
-// todo figure out this GPS data
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(location_success, location_error, geo_options);
     } else {

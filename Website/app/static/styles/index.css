@@ -108,3 +108,13 @@
     color: #afafaf;
     line-height: 200%;
 }
+
+#yelp_logo{
+	  position: absolute;
+	  top: 90%;
+	  left: 90%;
+	  height: 5%;
+	  width: 6%;
+	  background-color: transparent;
+	  z-index: 2;
+}

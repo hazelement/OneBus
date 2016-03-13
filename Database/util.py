@@ -192,7 +192,6 @@ def yelp_loc_list(lat, lng, query):
     # lat = 51.135494
     # lng = -114.158389
     # query = 'japanese restaurant'
-    # query += " Calgary AB"
 
     auth = Oauth1Authenticator( consumer_key=cf.read_api_config('yelp_consumer_key'),
                                 consumer_secret=cf.read_api_config('yelp_consumer_secret'),
@@ -240,9 +239,9 @@ if __name__ == "__main__":
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
-    test = get_destinations(lat, lng, query, "google")
+    # test = get_destinations(lat, lng, query, "google")
 
-    # test = yelp_loc_list(lat, lng, query)
+    test = yelp_loc_list(lat, lng, query)
 
     print test
 
