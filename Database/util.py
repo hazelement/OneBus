@@ -28,7 +28,8 @@ def filter_by_distance(stops, targets):
     return min_target_distance<threshold
 
 
-def get_destinations(lat, lng, query, option):
+# def get_destinations(lat, lng, query, option):
+def get_destinations(lat, lng, query):
 
     # return {'results': {'restaurant 1':{"dest_name": 'restaurant 1', "address":'address 1', "lat": 51.135494, "lng": -114.158389},
     #         'restaurant 2':{"dest_name": 'restaurant 2', "address":'address 2', "lat": 51.132494, "lng": -114.157389},
