@@ -6,6 +6,7 @@ $("#frmSearch").submit(function( event ){
     $("#divSearch").animate({ top: "5%" }, 800);
     $("#background").slideUp("normal", function() { $(this).remove(); } );
     $("#logo").slideUp("normal", function() { $(this).remove(); } );
+    $("#intro").slideUp("normal", function() { $(this).remove(); } );
     disable_inputs();
 
 //    $("#loading_hold").animate({ top: "0" }, 800);

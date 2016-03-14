@@ -93,6 +93,17 @@
 	color: #f3f3f3 ;
 }
 
+#intro{
+    left: 50%;
+	font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+	font-size: 12;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bolder;
+	line-height: 0px;
+	color: #f3f3f3 ;
+}
+
 #loading_hold{
 	border-radius: 25px;
 	z-index: 1;
