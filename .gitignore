@@ -55,4 +55,4 @@ Temporary Items
 *.txt
 *.sqlite
 *.pyc
-*.config
+api.config
