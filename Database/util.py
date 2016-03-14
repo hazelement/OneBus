@@ -261,7 +261,7 @@ if __name__ == "__main__":
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
-    test = get_destinations(lat, lng, query, "google")
+    test = get_destinations(lat, lng, query)
 
     # test = yelp_loc_list(lat, lng, query)
 
