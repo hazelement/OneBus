@@ -214,7 +214,7 @@ def yelp_loc_list(lat, lng, query):
     #     'limit': '40',
     #     'radius_filter': '10000'
     # }
-    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000') # meter
+    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='4000', sort='1') # meter
 
 
     loc_list = []
