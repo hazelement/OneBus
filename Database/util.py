@@ -4,14 +4,17 @@ import numpy as np
 from scipy.spatial.distance import cdist
 import stop_query
 import config as cf
+import datetime
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
+# todo fix bus route find, get latest bus in time
+# todo return result should contain upcoming bus arrival time, bus shape from stop to destination, shape from my location to bus stop?, bus number
 
 
 
-def filter_by_distance(stops, targets):
+def _result_filter_by_distance(stops, targets):
     '''
     return index only
     :param stops: array of stops to reference from
@@ -29,7 +32,7 @@ def filter_by_distance(stops, targets):
 
 
 # def get_destinations(lat, lng, query, option):
-def get_destinations(lat, lng, query):
+def get_destinations(lat, lng, query, time):
 
     # return {'results': {'restaurant 1':{"dest_name": 'restaurant 1', "address":'address 1', "lat": 51.135494, "lng": -114.158389},
     #         'restaurant 2':{"dest_name": 'restaurant 2', "address":'address 2', "lat": 51.132494, "lng": -114.157389},
@@ -41,7 +44,7 @@ def get_destinations(lat, lng, query):
 
 
     # yelp_loc_list
-    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = yelp_loc_list(lat, lng, query)
+    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = _yelp_loc_list(lat, lng, query)
 
     # gps_array=np.concatenate((gps_array, gps_array2), axis=0)
     # names=np.concatenate((names, names2), axis=0)
@@ -50,19 +53,19 @@ def get_destinations(lat, lng, query):
     print("Number of raw destinations: " + str(len(names)))
 
     if(len(names)>0):
-        stops= stop_query.find_stops(lat, lng)
+        stops= stop_query.find_stops_around(lat, lng, time)
 
-        filter_index = filter_by_distance(stops, gps_array)
+        result_filter_index = _result_filter_by_distance(stops, gps_array)
 
         dest_dict = {}
 
-        gps_array = gps_array[filter_index]
-        names = names[filter_index]
-        addresses = addresses[filter_index]
-        image_url = image_url[filter_index]
-        yelp_url = yelp_url[filter_index]
-        review_count = review_count[filter_index]
-        rating_img_url = rating_img_url[filter_index]
+        gps_array = gps_array[result_filter_index]
+        names = names[result_filter_index]
+        addresses = addresses[result_filter_index]
+        image_url = image_url[result_filter_index]
+        yelp_url = yelp_url[result_filter_index]
+        review_count = review_count[result_filter_index]
+        rating_img_url = rating_img_url[result_filter_index]
 
 
         print("Transit friendly results: " + str(len(names)))
@@ -90,12 +93,12 @@ def get_destinations(lat, lng, query):
     return retVal
 
 
-def fetch_url(url):
+def _fetch_url(url):
     f = urllib.urlopen(url)
     response = json.loads(f.read())
     return response
 
-def fs_loc_list(lat, lng, query):
+def _fs_loc_list(lat, lng, query):
     print("using four square")
     
     fs_secret=cf.read_api_config('fs_secret') 
@@ -106,7 +109,7 @@ def fs_loc_list(lat, lng, query):
     srchquery+="&v=20150214&m=foursquare&client_secret=" + fs_secret + "&client_id=" + fs_client
 
                
-    res = fetch_url(srchquery)
+    res = _fetch_url(srchquery)
     #print res
 
     loc_list = []
@@ -125,8 +128,7 @@ def fs_loc_list(lat, lng, query):
     return gps_array, name, address
 
 
-
-def go_loc_list(lat, lng, query):
+def _go_loc_list(lat, lng, query):
     # lat = 51.135494
     # lng = -114.158389
     # query = 'japanese restaurant'
@@ -152,7 +154,7 @@ def go_loc_list(lat, lng, query):
     srch += rad_p + '&'
     srch += api_key
 
-    res = fetch_url(srch)
+    res = _fetch_url(srch)
 
     # return res
 
@@ -176,7 +178,7 @@ def go_loc_list(lat, lng, query):
         srch += page_token +"&"
         srch += api_key
 
-        res = fetch_url(srch)
+        res = _fetch_url(srch)
 
         for loc in res['results']:
             lat = loc['geometry']['location']['lat']
@@ -195,10 +197,7 @@ def go_loc_list(lat, lng, query):
     return gps_array, name, address
 
 
-
-
-
-def yelp_loc_list(lat, lng, query):
+def _yelp_loc_list(lat, lng, query):
     print("using yelp")
     # lat = 51.135494
     # lng = -114.158389
@@ -252,6 +251,7 @@ def yelp_loc_list(lat, lng, query):
     # print address
     return loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
 
+
 if __name__ == "__main__":
 
 
@@ -263,7 +263,10 @@ if __name__ == "__main__":
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
-    test = get_destinations(lat, lng, query)
+    current_time = datetime.datetime.now()
+
+    time = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    test = get_destinations(lat, lng, query, time)
 
     # test = yelp_loc_list(lat, lng, query)
 

@@ -9,6 +9,21 @@ from io import BytesIO
 import config
 
 
+
+def convert_time_string_to_int(time_as_array):
+
+    retVal = np.empty_like(time_as_array, dtype=int)
+    for i in range(0,len(time_as_array)):
+        foo = time_as_array[i].split(":")
+        retVal[i] = int(foo[1])*60 + int(foo[2])
+
+        h = int(foo[0])
+        if(h>=24): h-=24
+
+        retVal[i] += h*3600
+
+    return retVal
+
 def update_database(city_province_country):
     
     print("updating database for " +city_province_country)
@@ -18,7 +33,7 @@ def update_database(city_province_country):
     print("download finished")
     
     file_names=['agency', 'calendar_dates',
-                'shapes', 'stop_times', 'stops']
+                'shapes', 'stops']
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
@@ -30,7 +45,26 @@ def update_database(city_province_country):
             data = pd.read_csv(z.open(fname + ".txt"))
             data.to_sql(fname, con, if_exists='replace')
 
-        # maping service id string to integers in calendar
+
+        ''' convert stop times from string to integer '''
+
+        fname = 'stop_times'
+        print("processing " + fname)
+        data = pd.read_csv(z.open(fname + ".txt"))
+
+        arrival_time = data['arrival_time'].values
+        departure_time = data['arrival_time'].values
+
+        arrival_time = convert_time_string_to_int(arrival_time)
+        departure_time = convert_time_string_to_int(departure_time)
+
+        data['arrival_time']=arrival_time
+        data['departure_time']=departure_time
+
+        data.to_sql(fname, con, if_exists='replace')
+
+        ''' maping service id string to integers in calendar '''
+
         fname = 'calendar'
         print("processing " + fname)
         data = pd.read_csv(z.open(fname + ".txt"))
@@ -39,15 +73,17 @@ def update_database(city_province_country):
 
         service_dict = {}
 
+        count = 0
         for service_id in service_ids:
-            service_dict[service_id] = len(service_dict)
+            service_dict[service_id] = count
+            count+=1
 
         data.replace({"service_id": service_dict}, inplace=True)
         data[['service_id']]=data[['service_id']].astype(int)
 
         data.to_sql(fname, con, if_exists='replace')
 
-        # maping service id string to integers in trips, route_id to intergers
+        ''' maping service id string to integers in trips, route_id to intergers '''
 
         fname = 'trips'
         print("processing " + fname)
@@ -62,7 +98,7 @@ def update_database(city_province_country):
         data.to_sql(fname, con, if_exists='replace')
 
 
-        # maping service id string to integers in trips, route_id to intergers
+        ''' maping service id string to integers in routes, route_id to intergers '''
 
         fname = 'routes'
         print("processing " + fname)
@@ -79,6 +115,8 @@ def update_database(city_province_country):
 
 if __name__ == "__main__":
     update_database("calgary_ab_canada")
-
+    # list = ["23:42:23", "32:01:32"]
+    #
+    # print(convert_time_string_to_int(list))
 
 

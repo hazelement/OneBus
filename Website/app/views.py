@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import datetime
 import sys
 
 from app import app
@@ -23,13 +23,15 @@ def api_port():
     home_lng = home['lng']
 
     txtSearch = post_data['search_text']
+    current_time = datetime.datetime.now()
+    ctime = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
     # search_option = post_data['search_option']
     # print(search_option, file=sys.stderr)
 
 
 
     # resultAna = ut.get_destinations(home_lat, home_lng, txtSearch, search_option)
-    resultAna = ut.get_destinations(home_lat, home_lng, txtSearch)
+    resultAna = ut.get_destinations(home_lat, home_lng, txtSearch, ctime)
 
 
     # target_lat, target_lng = google(txtSearch)

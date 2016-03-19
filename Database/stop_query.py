@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 import datetime
-import time
+import update_database
 from scipy.spatial.distance import cdist
 
 import time
@@ -38,10 +38,13 @@ def find_near_trips(near_stops, service_id, currenttime, con):
 
     trips=[]
 
-    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ")", con) # todo do sorting
+    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") and arrival_time>" +str(currenttime), con) # todo do sorting
     trips_trip_id=pd.read_sql("SELECT * FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
 
     result = pd.merge(st_trip_id, trips_trip_id, on='trip_id')
+
+    print(result)
+    print(currenttime)
 
     # result = result[result['arrival_time']>currenttime]
 
@@ -60,7 +63,14 @@ def find_stopids_along_strips(trips, con):
 
     return stop_ids
 
-def find_stops(lat, lng):
+def find_stops_around(lat, lng, ctime):
+    '''
+    find stops that is accessible from gps location through bus
+    :param lat:
+    :param lng:
+    :param ctime: 'hh:mm:ss'
+    :return: stops [[lat, lng], [lat, lng], [lat, lng]]
+    '''
 
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/calgary_ab_canada.sqlite'
 
@@ -75,6 +85,7 @@ def find_stops(lat, lng):
 
 
             calcValues=cdist(myLocation, stop_loc)[0]
+
             nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values #stop_loc[calcValues<0.005]
 
         print nearestStopLocations
@@ -85,17 +96,16 @@ def find_stops(lat, lng):
         with Timer("find today service id"):
             dt_today = datetime.datetime.today()
 
-            today = time.strftime("%Y%m%d") #today = '20160124'
-            dayofthweek = time.strftime("%A").lower()  # saturday
-            currenttime=time.strftime("%H:%M:%S")
+            today = dt_today.strftime("%Y%m%d") #today = '20160124'
+            dayofthweek = dt_today.strftime("%A").lower()  # saturday
 
-            # currenttime = dt_today.hour * 3600 + dt_today.minute * 60 + dt_today.second
 
             service_id = currentServiceID(today, dayofthweek, con)
 
         gps_loc=[]
 
         with Timer("find trips from these stops"):
+            currenttime=update_database.convert_time_string_to_int([ctime])[0]
             trips=find_near_trips(nearestStopLocations,service_id,currenttime,con)
 
         with Timer("find stops along trips"):
@@ -115,7 +125,9 @@ def find_stops(lat, lng):
 def foo():
     lat = 51.135494
     lng = -114.158389
-    print(find_stops(lat, lng))
+    current_time = datetime.datetime.now()
+    time = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    print(find_stops_around(lat, lng, time))
 
 if __name__ == "__main__":
     foo()
