@@ -38,13 +38,13 @@ def find_near_trips(near_stops, service_id, currenttime, con):
 
     trips=[]
 
-    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") and arrival_time>" +str(currenttime), con) # todo do sorting
+    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
     trips_trip_id=pd.read_sql("SELECT * FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
 
     result = pd.merge(st_trip_id, trips_trip_id, on='trip_id')
 
-    print(result)
-    print(currenttime)
+    # print(result)
+    # print(currenttime)
 
     # result = result[result['arrival_time']>currenttime]
 

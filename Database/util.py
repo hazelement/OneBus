@@ -9,7 +9,6 @@ import datetime
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
-# todo fix bus route find, get latest bus in time
 # todo return result should contain upcoming bus arrival time, bus shape from stop to destination, shape from my location to bus stop?, bus number
 
 
@@ -32,28 +31,29 @@ def _result_filter_by_distance(stops, targets):
 
 
 # def get_destinations(lat, lng, query, option):
-def get_destinations(lat, lng, query, time):
+def get_destinations(lat, lng, query, ctime):
+    '''
+    return filter destination results
+    :param lat:
+    :param lng:
+    :param query: search text
+    :param ctime: "hh:mm:ss"
+    :return:{ 'results':  {'restaurant 1':{"dest_name": 'restaurant 1', "address":'address 1', "lat": 51.135494, "lng": -114.158389, *param},
+                            'restaurant 2':{"dest_name": 'restaurant 2', "address":'address 2', "lat": 51.132494, "lng": -114.157389, *param},
+                            'restaurant 3': {"dest_name":'restaurant 3', "address":'address 3', "lat": 51.131494, "lng": -114.155389, *param}
+                          }
+            }
+    '''
 
-    # return {'results': {'restaurant 1':{"dest_name": 'restaurant 1', "address":'address 1', "lat": 51.135494, "lng": -114.158389},
-    #         'restaurant 2':{"dest_name": 'restaurant 2', "address":'address 2', "lat": 51.132494, "lng": -114.157389},
-    #         'restaurant 3': {"dest_name":'restaurant 3', "address":'address 3', "lat": 51.131494, "lng": -114.155389}}}
 
     # gps_array, names, addresses = go_loc_list(lat, lng, query)  # Google
-
     # gps_array2, names2, addresses2 = fs_loc_list(lat, lng, query)  # Foursquare
-
-
-    # yelp_loc_list
-    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = _yelp_loc_list(lat, lng, query)
-
-    # gps_array=np.concatenate((gps_array, gps_array2), axis=0)
-    # names=np.concatenate((names, names2), axis=0)
-    # addresses=np.concatenate((addresses, addresses2), axis=0)
+    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = _yelp_loc_list(lat, lng, query) #yelp results
 
     print("Number of raw destinations: " + str(len(names)))
 
     if(len(names)>0):
-        stops= stop_query.find_stops_around(lat, lng, time)
+        stops= stop_query.find_stops_around(lat, lng, ctime)
 
         result_filter_index = _result_filter_by_distance(stops, gps_array)
 
@@ -198,10 +198,14 @@ def _go_loc_list(lat, lng, query):
 
 
 def _yelp_loc_list(lat, lng, query):
+    '''
+
+    :param lat:
+    :param lng:
+    :param query:
+    :return: np.arrays loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
+    '''
     print("using yelp")
-    # lat = 51.135494
-    # lng = -114.158389
-    # query = 'japanese restaurant'
 
     auth = Oauth1Authenticator( consumer_key=cf.read_api_config('yelp_consumer_key'),
                                 consumer_secret=cf.read_api_config('yelp_consumer_secret'),
@@ -210,13 +214,7 @@ def _yelp_loc_list(lat, lng, query):
 
     client = Client(auth)
 
-    # params = {
-    #     'term':query,
-    #     'limit': '40',
-    #     'radius_filter': '10000'
-    # }
-    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='4000', sort='1') # meter
-
+    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1') # meter
 
     loc_list = []
     name = []
@@ -225,7 +223,6 @@ def _yelp_loc_list(lat, lng, query):
     yelp_url = []
     review_count = []
     rating_img_url = []
-
 
     for loc in response.businesses:
         loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
@@ -236,7 +233,17 @@ def _yelp_loc_list(lat, lng, query):
         review_count.append(loc.review_count)
         rating_img_url.append(loc.rating_img_url)
 
+    # get second set of 20
+    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1', offset='20') # meter
 
+    for loc in response.businesses:
+        loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
+        name.append(loc.name)
+        address.append(' '.join(loc.location.display_address))
+        image_url.append(loc.image_url)
+        yelp_url.append(loc.url)
+        review_count.append(loc.review_count)
+        rating_img_url.append(loc.rating_img_url)
 
     loc_list = np.array(loc_list)
     name = np.array(name)

@@ -56,7 +56,7 @@ def api_port():
     #
     # data={}
     # data['stops']=stops
-    # data['shape']=get_shape()  #todo modify to take multiple shapes and their stops
+    # data['shape']=get_shape()
 
     # return jsonify(**data)
 
