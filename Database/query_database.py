@@ -2,12 +2,12 @@ import pandas as pd
 import sqlite3
 import numpy as np
 import os
-
 import datetime
-import update_database
+import time
+
 from scipy.spatial.distance import cdist
 
-import time
+import util
 
 
 class Timer:
@@ -24,7 +24,7 @@ class Timer:
         print(self.name + " took " + str(self.interval) + " sec.")
 
 
-def currentServiceID(currDate, dayofthweek, con):  # currentServiceID(today, dayofthweek)
+def _find_current_serviceID(currDate, dayofthweek, con):
 
     sql_query="SELECT service_id FROM calendar where start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
 
@@ -34,7 +34,7 @@ def currentServiceID(currDate, dayofthweek, con):  # currentServiceID(today, day
 
 
 
-def find_near_trips(near_stops, service_id, currenttime, con):
+def _find_near_trips(near_stops, service_id, currenttime, con):
 
     trips=[]
 
@@ -55,7 +55,7 @@ def find_near_trips(near_stops, service_id, currenttime, con):
 
     return trips
 
-def find_stopids_along_strips(trips, con):
+def _find_stopID_along_strips(trips, con):
 
     stop_ids = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)['stop_id'].values
 
@@ -71,6 +71,11 @@ def find_stops_around(lat, lng, ctime):
     :param ctime: 'hh:mm:ss'
     :return: stops [[lat, lng], [lat, lng], [lat, lng]]
     '''
+
+    current = ctime.split("|")
+    current_day = current[0]
+    current_time = current[1]
+
 
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/calgary_ab_canada.sqlite'
 
@@ -90,47 +95,40 @@ def find_stops_around(lat, lng, ctime):
 
         print nearestStopLocations
 
-        ## /yyyy/mm/d format
-
 
         with Timer("find today service id"):
-            dt_today = datetime.datetime.today()
+            dt_today = datetime.datetime.strptime(current_day, "%Y-%m-%d") # yyyy-mm-dd to datetime object
 
             today = dt_today.strftime("%Y%m%d") #today = '20160124'
             dayofthweek = dt_today.strftime("%A").lower()  # saturday
 
-
-            service_id = currentServiceID(today, dayofthweek, con)
+            service_id = _find_current_serviceID(today, dayofthweek, con)
 
         gps_loc=[]
 
         with Timer("find trips from these stops"):
-            currenttime=update_database.convert_time_string_to_int([ctime])[0]
-            trips=find_near_trips(nearestStopLocations,service_id,currenttime,con)
+            currenttime=util.convert_time_string_to_int([current_time])[0]
+            trips=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
 
         with Timer("find stops along trips"):
-            stop_ids = find_stopids_along_strips(trips, con)
+            stop_ids = _find_stopID_along_strips(trips, con)
 
             lat_lng = df_stops[df_stops['stop_id'].isin(stop_ids)]
             # lat_lng = pd.read_sql("SELECT stop_lat, stop_lon FROM stops WHERE stop_id IN " + "(" + ','.join("{0}".format(x) for x in stop_ids) + ")", con)
 
             gps_loc=lat_lng[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
-
-
     # print(gps_loc)
 
     return(np.array(gps_loc))
 
-def foo():
+
+if __name__ == "__main__":
     lat = 51.135494
     lng = -114.158389
     current_time = datetime.datetime.now()
     time = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
     print(find_stops_around(lat, lng, time))
-
-if __name__ == "__main__":
-    foo()
 
     # cProfile.run('foo() -s time')
 

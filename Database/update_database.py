@@ -6,23 +6,10 @@ import numpy as np
 import requests
 from zipfile import ZipFile
 from io import BytesIO
+
 import config
+import util
 
-
-
-def convert_time_string_to_int(time_as_array):
-
-    retVal = np.empty_like(time_as_array, dtype=int)
-    for i in range(0,len(time_as_array)):
-        foo = time_as_array[i].split(":")
-        retVal[i] = int(foo[1])*60 + int(foo[2])
-
-        h = int(foo[0])
-        if(h>=24): h-=24
-
-        retVal[i] += h*3600
-
-    return retVal
 
 def update_database(city_province_country):
     
@@ -55,8 +42,8 @@ def update_database(city_province_country):
         arrival_time = data['arrival_time'].values
         departure_time = data['arrival_time'].values
 
-        arrival_time = convert_time_string_to_int(arrival_time)
-        departure_time = convert_time_string_to_int(departure_time)
+        arrival_time = util.convert_time_string_to_int(arrival_time)
+        departure_time = util.convert_time_string_to_int(departure_time)
 
         data['arrival_time']=arrival_time
         data['departure_time']=departure_time

@@ -5,7 +5,7 @@ import sys
 from app import app
 from flask import render_template, request, jsonify
 
-from Database import util as ut
+from Database import backend
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -24,14 +24,14 @@ def api_port():
 
     txtSearch = post_data['search_text']
     current_time = datetime.datetime.now()
-    ctime = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
     # search_option = post_data['search_option']
     # print(search_option, file=sys.stderr)
 
 
 
     # resultAna = ut.get_destinations(home_lat, home_lng, txtSearch, search_option)
-    resultAna = ut.get_destinations(home_lat, home_lng, txtSearch, ctime)
+    resultAna = backend.get_destinations(home_lat, home_lng, txtSearch, ctime) # yyyy-mm-dd|hh:mm:ss
 
 
     # target_lat, target_lng = google(txtSearch)
