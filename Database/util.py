@@ -49,41 +49,43 @@ def get_destinations(lat, lng, query):
 
     print("Number of raw destinations: " + str(len(names)))
 
+    if(len(names)>0):
+        stops= stop_query.find_stops(lat, lng)
+
+        filter_index = filter_by_distance(stops, gps_array)
+
+        dest_dict = {}
+
+        gps_array = gps_array[filter_index]
+        names = names[filter_index]
+        addresses = addresses[filter_index]
+        image_url = image_url[filter_index]
+        yelp_url = yelp_url[filter_index]
+        review_count = review_count[filter_index]
+        rating_img_url = rating_img_url[filter_index]
 
 
-    stops= stop_query.find_stops(lat, lng)
+        print("Transit friendly results: " + str(len(names)))
+        print(names)
 
-    filter_index = filter_by_distance(stops, gps_array)
+        # print(names)
+        # print(addresses)
 
-    dest_dict = {}
+        for i in range(0, len(gps_array)):
+            dest_dict[names[i]]={"dest_name": names[i],
+                                 "address": addresses[i],
+                                 "lat": gps_array[i][0],
+                                 "lng": gps_array[i][1],
+                                 "image_url": image_url[i],
+                                 "yelp_url": yelp_url[i],
+                                 "review_count": review_count[i],
+                                 "ratings_img": rating_img_url[i]}
 
-    gps_array = gps_array[filter_index]
-    names = names[filter_index]
-    addresses = addresses[filter_index]
-    image_url = image_url[filter_index]
-    yelp_url = yelp_url[filter_index]
-    review_count = review_count[filter_index]
-    rating_img_url = rating_img_url[filter_index]
-
-
-    print("Transit friendly results: " + str(len(names)))
-    print(names)
-
-    # print(names)
-    # print(addresses)
-
-    for i in range(0, len(gps_array)):
-        dest_dict[names[i]]={"dest_name": names[i],
-                             "address": addresses[i],
-                             "lat": gps_array[i][0],
-                             "lng": gps_array[i][1],
-                             "image_url": image_url[i],
-                             "yelp_url": yelp_url[i],
-                             "review_count": review_count[i],
-                             "ratings_img": rating_img_url[i]}
-
-    retVal={}
-    retVal['results']=dest_dict
+        retVal={}
+        retVal['results']=dest_dict
+    else:
+        retVal={}
+        retVal['results']={}
 
     return retVal
 

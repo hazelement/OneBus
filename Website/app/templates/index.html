@@ -4,9 +4,11 @@
 <html lang="en">
 <head>
 
+    <!--todo  make website mobile friendly-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="HandheldFriendly" content="true" />
+    <!--<meta name="HandheldFriendly" content="true" />-->
     <title>OneBus</title>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}" media="screen" />
@@ -27,8 +29,8 @@
             value="{{ csrf_token }}"
         >
         <p id="logo" align="center">OneBus</p>
-        <p id="intro" align="center"> find out where a bus can take you, you will be surprised... </p>
-        <form id="frmSearch" autocomplete="off">
+        <p id="intro" align="center">find out where a bus can take you, you will be surprised... </p>
+        <form id="frmSearch" autocomplete="off" align="center">
             <!--<div class="radio-toolbar">-->
                 <!--<input type="radio" id="google" value="google" name="rbEngines" checked="checked"> <label for="google">Google Maps</label>-->
                 <!--<input type="radio" id="four_square" name="rbEngines" value="four_square"> <label for="four_square">Four Square</label>-->
