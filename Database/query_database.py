@@ -8,6 +8,7 @@ import time
 from scipy.spatial.distance import cdist
 
 import util
+import config
 
 
 class Timer:
@@ -76,8 +77,9 @@ def find_stops_around(lat, lng, ctime):
     current_day = current[0]
     current_time = current[1]
 
-
-    db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/calgary_ab_canada.sqlite'
+    city_code = config.read_city_code_from_config(lat, lng)
+    print("city_code: " + city_code)
+    db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
 
     with sqlite3.connect(db_location) as con:
 
@@ -127,8 +129,9 @@ if __name__ == "__main__":
     lat = 51.135494
     lng = -114.158389
     current_time = datetime.datetime.now()
-    time = str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    print(find_stops_around(lat, lng, time))
+
+    ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    print(find_stops_around(lat, lng, ctime))
 
     # cProfile.run('foo() -s time')
 

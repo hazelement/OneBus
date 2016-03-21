@@ -12,10 +12,12 @@ import util
 
 
 def update_database(city_province_country):
-    
+
+    #todo update all city database
+
     print("updating database for " +city_province_country)
     print("downloading from transitfeed.com " +city_province_country)
-    request = requests.get(config.read_transitfeed_config(city_province_country))
+    request = requests.get(config.read_city_url_from_config(city_province_country))
     z = ZipFile(BytesIO(request.content))
     print("download finished")
     

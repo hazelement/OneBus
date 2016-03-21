@@ -9,6 +9,7 @@ import query_api as api
 
 # todo return result should contain upcoming bus arrival time, bus shape from stop to destination, shape from my location to bus stop?, bus number
 # todo update code to follow PEP8 format
+# todo add city gps coordinates to city_url.config => automatically detect city from gps location and select database to use
 
 def _result_filter_by_distance(stops, targets):
     '''

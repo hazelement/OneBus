@@ -126,10 +126,7 @@ def yelp_loc_list(lat, lng, query):
                                 consumer_secret=cf.read_api_config('yelp_consumer_secret'),
                                 token=cf.read_api_config('yelp_token'),
                                 token_secret=cf.read_api_config('yelp_token_secret'))
-
     client = Client(auth)
-
-    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1') # meter
 
     loc_list = []
     name = []
@@ -139,26 +136,16 @@ def yelp_loc_list(lat, lng, query):
     review_count = []
     rating_img_url = []
 
-    for loc in response.businesses:
-        loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
-        name.append(loc.name)
-        address.append(' '.join(loc.location.display_address))
-        image_url.append(loc.image_url)
-        yelp_url.append(loc.url)
-        review_count.append(loc.review_count)
-        rating_img_url.append(loc.rating_img_url)
-
-    # get second set of 20
-    response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1', offset='20') # meter
-
-    for loc in response.businesses:
-        loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
-        name.append(loc.name)
-        address.append(' '.join(loc.location.display_address))
-        image_url.append(loc.image_url)
-        yelp_url.append(loc.url)
-        review_count.append(loc.review_count)
-        rating_img_url.append(loc.rating_img_url)
+    for i in range(0, 2):
+        response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1', offset=str(i*20)) # meter
+        for loc in response.businesses:
+            loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
+            name.append(loc.name)
+            address.append(' '.join(loc.location.display_address))
+            image_url.append(loc.image_url)
+            yelp_url.append(loc.url)
+            review_count.append(loc.review_count)
+            rating_img_url.append(loc.rating_img_url)
 
     loc_list = np.array(loc_list)
     name = np.array(name)
@@ -168,7 +155,13 @@ def yelp_loc_list(lat, lng, query):
     review_count = np.array(review_count)
     rating_img_url = np.array(rating_img_url)
 
-
+    print(len(name))
     print name
     # print address
     return loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
+
+if __name__=="__main__":
+    lat = 51.0454027
+    lng = -114.05651890000001
+    query = "restaurant"
+    yelp_loc_list(lat, lng, query)

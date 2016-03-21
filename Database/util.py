@@ -1,6 +1,8 @@
 
 import numpy as np
 
+
+
 def convert_time_string_to_int(time_as_array):
     '''
     convert 'hh:mm:ss' time array to int array
@@ -19,3 +21,4 @@ def convert_time_string_to_int(time_as_array):
         retVal[i] += h*3600
 
     return retVal
+
