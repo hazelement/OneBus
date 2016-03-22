@@ -11,7 +11,18 @@ import config
 import util
 
 
-def update_database(city_province_country):
+#todo different city seems to have different data format, maybe keep useful ones only and line up data value and types
+
+def update_all_database():
+    config = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + '/city_url.config')
+
+    city_codes = config['city'].values
+
+    for city in city_codes:
+        _update_city_database(city)
+
+
+def _update_city_database(city_province_country):
 
     #todo update all city database
 
@@ -21,8 +32,8 @@ def update_database(city_province_country):
     z = ZipFile(BytesIO(request.content))
     print("download finished")
     
-    file_names=['agency', 'calendar_dates',
-                'shapes', 'stops']
+    file_names=['agency', 'shapes', 'stops']
+
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
@@ -37,20 +48,23 @@ def update_database(city_province_country):
 
         ''' convert stop times from string to integer '''
 
-        fname = 'stop_times'
-        print("processing " + fname)
-        data = pd.read_csv(z.open(fname + ".txt"))
-
-        arrival_time = data['arrival_time'].values
-        departure_time = data['arrival_time'].values
-
-        arrival_time = util.convert_time_string_to_int(arrival_time)
-        departure_time = util.convert_time_string_to_int(departure_time)
-
-        data['arrival_time']=arrival_time
-        data['departure_time']=departure_time
-
-        data.to_sql(fname, con, if_exists='replace')
+        # fname = 'stop_times'
+        # print("processing " + fname)
+        # data = pd.read_csv(z.open(fname + ".txt"))
+        #
+        # if('shape_dist_traveled' in data):
+        #     data.drop('shape_dist_traveled', axis=1, inplace=True)
+        #
+        # arrival_time = data['arrival_time'].values
+        # departure_time = data['arrival_time'].values
+        #
+        # arrival_time = util.convert_time_string_to_int(arrival_time)
+        # departure_time = util.convert_time_string_to_int(departure_time)
+        #
+        # data['arrival_time']=arrival_time
+        # data['departure_time']=departure_time
+        #
+        # data.to_sql(fname, con, if_exists='replace')
 
         ''' maping service id string to integers in calendar '''
 
@@ -58,17 +72,21 @@ def update_database(city_province_country):
         print("processing " + fname)
         data = pd.read_csv(z.open(fname + ".txt"))
 
-        service_ids = np.unique(data['service_id'].values)
 
-        service_dict = {}
 
-        count = 0
-        for service_id in service_ids:
-            service_dict[service_id] = count
-            count+=1
+        service_id_replacement=0
+        if(type(data['service_id'].values[0]) is str): # convert service id to int if it is read in as string
+            service_ids = np.unique(data['service_id'].values)
+            service_id_replacement=1
+            service_dict = {}
 
-        data.replace({"service_id": service_dict}, inplace=True)
-        data[['service_id']]=data[['service_id']].astype(int)
+            count = 0
+            for service_id in service_ids:
+                service_dict[service_id] = count
+                count+=1
+
+            data.replace({"service_id": service_dict}, inplace=True)
+            data[['service_id']]=data[['service_id']].astype(int)
 
         data.to_sql(fname, con, if_exists='replace')
 
@@ -77,12 +95,16 @@ def update_database(city_province_country):
         fname = 'trips'
         print("processing " + fname)
         data = pd.read_csv(z.open(fname + ".txt"))
-        
-        data.replace({"service_id": service_dict}, inplace=True)
-        data[['service_id']]=data[['service_id']].astype(int)
 
-        data['route_id'] = data['route_id'].str.replace('-','0')
-        data[['route_id']]=data[['route_id']].astype(int)
+        if(service_id_replacement==1):
+            data.replace({"service_id": service_dict}, inplace=True)
+            data[['service_id']]=data[['service_id']].astype(int)
+
+        route_id_replacement=0
+        if(type(data['route_id'].values[0]) is str):
+            route_id_replacement=1
+            data['route_id'] = data['route_id'].str.replace('-','0')  # maybe need to find other special char
+            data[['route_id']]=data[['route_id']].astype(int)
 
         data.to_sql(fname, con, if_exists='replace')
 
@@ -93,8 +115,9 @@ def update_database(city_province_country):
         print("processing " + fname)
         data = pd.read_csv(z.open(fname + ".txt"))
 
-        data['route_id'] = data['route_id'].str.replace('-','0')
-        data[['route_id']]=data[['route_id']].astype(int)
+        if(route_id_replacement==1):
+            data['route_id'] = data['route_id'].str.replace('-','0')
+            data[['route_id']]=data[['route_id']].astype(int)
 
         data.to_sql(fname, con, if_exists='replace')
 
@@ -103,8 +126,9 @@ def update_database(city_province_country):
     print("finished")
 
 if __name__ == "__main__":
-    update_database("calgary_ab_canada")
+    update_all_database()
     # list = ["23:42:23", "32:01:32"]
+    # _update_city_database('toronto_on_canada')
     #
     # print(convert_time_string_to_int(list))
 

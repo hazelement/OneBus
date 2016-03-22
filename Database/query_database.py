@@ -77,7 +77,7 @@ def find_stops_around(lat, lng, ctime):
     current_day = current[0]
     current_time = current[1]
 
-    city_code = config.read_city_code_from_config(lat, lng)
+    city_code = config.read_city_code_from_config(lat, lng) # find city code
     print("city_code: " + city_code)
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
 
@@ -93,7 +93,7 @@ def find_stops_around(lat, lng, ctime):
 
             calcValues=cdist(myLocation, stop_loc)[0]
 
-            nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values #stop_loc[calcValues<0.005]
+            nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values
 
         print nearestStopLocations
 

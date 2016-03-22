@@ -28,6 +28,6 @@ def read_api_config(item):
 if __name__ == "__main__":
     lat = 51.135494
     lng = -114.158389
-    #print(read_api_config('fs_secret'))
+
     print(read_city_code_from_config(lat, lng))
 
