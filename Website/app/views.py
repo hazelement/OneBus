@@ -1,6 +1,7 @@
 from __future__ import print_function
 import datetime
 import sys
+import traceback
 
 from app import app
 from flask import render_template, request, jsonify
@@ -29,8 +30,13 @@ def api_port():
     try:
         result = backend.get_destinations(home_lat, home_lng, txtSearch, ctime) # yyyy-mm-dd|hh:mm:ss
     except Exception, e:
+        exc_info = sys.exc_info()
+        
+
+        traceback.print_exception(*exc_info)
         print(str(e))
         result={}
         result['results']={}
 
+        
     return jsonify(**result)
