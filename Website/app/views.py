@@ -28,7 +28,8 @@ def api_port():
 
     try:
         result = backend.get_destinations(home_lat, home_lng, txtSearch, ctime) # yyyy-mm-dd|hh:mm:ss
-    except:
+    except Exception, e:
+        print(str(e))
         result={}
         result['results']={}
 
