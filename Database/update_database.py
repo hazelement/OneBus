@@ -50,23 +50,23 @@ def _update_city_database(city_province_country):
 
         ''' convert stop times from string to integer '''
 
-        # fname = 'stop_times'
-        # print("processing " + fname)
-        # data = pd.read_csv(z.open(fname + ".txt"))
-        #
-        # if('shape_dist_traveled' in data):
-        #     data.drop('shape_dist_traveled', axis=1, inplace=True)
-        #
-        # arrival_time = data['arrival_time'].values
-        # departure_time = data['arrival_time'].values
-        #
-        # arrival_time = util.convert_time_string_to_int(arrival_time)
-        # departure_time = util.convert_time_string_to_int(departure_time)
-        #
-        # data['arrival_time']=arrival_time
-        # data['departure_time']=departure_time
-        #
-        # data.to_sql(fname, con, if_exists='replace')
+        fname = 'stop_times'
+        print("processing " + fname)
+        data = pd.read_csv(z.open(fname + ".txt"))
+
+        if('shape_dist_traveled' in data):
+            data.drop('shape_dist_traveled', axis=1, inplace=True)
+
+        arrival_time = data['arrival_time'].values
+        departure_time = data['arrival_time'].values
+
+        arrival_time = util.convert_time_string_to_int(arrival_time)
+        departure_time = util.convert_time_string_to_int(departure_time)
+
+        data['arrival_time']=arrival_time
+        data['departure_time']=departure_time
+
+        data.to_sql(fname, con, if_exists='replace')
 
         ''' maping service id string to integers in calendar '''
 
