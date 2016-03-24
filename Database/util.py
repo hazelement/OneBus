@@ -54,8 +54,6 @@ def convert_csv_file_to_pd(csvfile):
     for col_name in data.columns.values.tolist():
         if(col_name in must_drop_col):
             data.drop(col_name, axis=1, inplace=True)
-            data[col_name]=remove_char_convert_to_int(data[col_name])
-
 
     must_convert_col = ['trip_id', 'route_id', 'stop_id'] # service id?
 
