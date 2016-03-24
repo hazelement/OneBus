@@ -18,6 +18,8 @@ def update_all_database():
 
     city_codes = config['city'].values
 
+    city_codes = ['calgary_ab_canada']  #only update calgary
+
     for city in city_codes:
         _update_city_database(city)
 

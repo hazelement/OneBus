@@ -50,6 +50,7 @@ def get_destinations(lat, lng, query, ctime):
 
     print("Number of raw destinations: " + str(len(names)))
 
+
     if(len(names)>0):
         stops= query_database.find_stops_around(lat, lng, ctime)
 
