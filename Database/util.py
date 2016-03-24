@@ -40,6 +40,7 @@ def convert_csv_file_to_pd(csvfile):
         data = pd.read_csv(csvfile,engine='c')
     except:
         print('pandas failed, using alternative')
+        csvfile.seek(0)
         reader = csv.reader(csvfile, delimiter=',')
         header = next(reader)
 
