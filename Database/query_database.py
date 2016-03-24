@@ -126,8 +126,10 @@ def find_stops_around(lat, lng, ctime):
 
 
 if __name__ == "__main__":
-    lat = 51.135494
-    lng = -114.158389
+    lat = 43.7000
+    lng = -79.4000
+    # lat = 51.135494
+    # lng = -114.158389
     current_time = datetime.datetime.now()
 
     ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
