@@ -6,7 +6,7 @@ import numpy as np
 import requests
 from zipfile import ZipFile
 from io import BytesIO
-import csv
+import shutil
 
 import config
 import util
@@ -39,25 +39,35 @@ def _update_city_database(city_province_country):
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
+    temp_folder = current_folder + "temp/"
+
+    try:
+        shutil.rmtree(temp_folder)
+    except:
+        pass
+
+    for name in z.namelist():
+        z.extract(name, temp_folder)
+
 
     with sqlite3.connect(db_name) as con:
         for fname in file_names:
             print("processing " + fname)
-            data = util.convert_csv_file_to_pd(z.open(fname + ".txt"))
+            data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
             data.to_sql(fname, con, if_exists='replace')
 
 
         # convert stop times from string to integer
         fname = 'stop_times'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(z.open(fname + ".txt"))
+        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
         data.to_sql(fname, con, if_exists='replace')
 
         # maping service id string to integers in calendar
 
         fname = 'calendar'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(z.open(fname + ".txt"))
+        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
 
         service_id_replacement=0
         if(type(data['service_id'].values[0]) is str): # convert service id to int if it is read in as string
@@ -79,7 +89,7 @@ def _update_city_database(city_province_country):
 
         fname = 'trips'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(z.open(fname + ".txt"))
+        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
 
         if(service_id_replacement==1):
             data.replace({"service_id": service_dict}, inplace=True)
@@ -91,11 +101,14 @@ def _update_city_database(city_province_country):
 
         fname = 'routes'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(z.open(fname + ".txt"))
+        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
 
         data.to_sql(fname, con, if_exists='replace')
 
-
+    try:
+        shutil.rmtree(temp_folder)
+    except:
+        pass
 
     print("finished")
 
