@@ -27,9 +27,13 @@ class Timer:
 
 def _find_current_serviceID(currDate, dayofthweek, con):
 
-    sql_query="SELECT service_id FROM calendar where start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
+    sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
 
     df = pd.read_sql(sql_query, con)
+
+    if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
+        sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
+        df = pd.read_sql(sql_query, con)
 
     return df['service_id'].tolist()
 
@@ -126,9 +130,9 @@ def find_stops_around(lat, lng, ctime):
 
 
 if __name__ == "__main__":
-    lat = 43.7000
+    lat = 43.7000  # toronto
     lng = -79.4000
-    # lat = 51.135494
+    # lat = 51.135494 # calgary
     # lng = -114.158389
     current_time = datetime.datetime.now()
 
