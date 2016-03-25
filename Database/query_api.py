@@ -113,13 +113,13 @@ def go_loc_list(lat, lng, query):
 
 
 def yelp_loc_list(lat, lng, query):
-    '''
+    """
 
     :param lat:
     :param lng:
     :param query:
     :return: np.arrays loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
-    '''
+    """
     print("using yelp")
 
     auth = Oauth1Authenticator( consumer_key=cf.read_api_config('yelp_consumer_key'),

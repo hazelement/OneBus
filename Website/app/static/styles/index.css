@@ -122,10 +122,10 @@ p {
 
 #yelp_logo{
 	  position: absolute;
-	  top: 2%;
-	  left: 92%;
-	  height: 5%;
-	  width: 5.5%;
+	  top: 90%;
+	  left: 50%;
+	  height: 50px;
+	  width: 90px;
 	  background-color: transparent;
 	  z-index: 2;
 }

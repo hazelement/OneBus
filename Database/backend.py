@@ -12,12 +12,12 @@ import query_api as api
 # todo add city gps coordinates to city_url.config => automatically detect city from gps location and select database to use
 
 def _result_filter_by_distance(stops, targets):
-    '''
+    """
     return index only
     :param stops: array of stops to reference from
     :param targets: array of targets to filter through
     :return:
-    '''
+    """
 
     map_distance = cdist(stops, targets, 'seuclidean')
 
@@ -30,7 +30,7 @@ def _result_filter_by_distance(stops, targets):
 
 # def get_destinations(lat, lng, query, option):
 def get_destinations(lat, lng, query, ctime):
-    '''
+    """
     return filter destination results
     :param lat:
     :param lng:
@@ -41,7 +41,7 @@ def get_destinations(lat, lng, query, ctime):
                             'restaurant 3': {"dest_name":'restaurant 3', "address":'address 3', "lat": 51.131494, "lng": -114.155389, *param}
                           }
             }
-    '''
+    """
 
 
     # gps_array, names, addresses = go_loc_list(lat, lng, query)  # Google

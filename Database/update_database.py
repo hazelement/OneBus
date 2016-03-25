@@ -19,8 +19,6 @@ def update_all_database():
 
     city_codes = config['city'].values
 
-    # city_codes = ['calgary_ab_canada']  #only update calgary
-
     for city in city_codes:
         _update_city_database(city)
 
@@ -35,39 +33,22 @@ def _update_city_database(city_province_country):
     z = ZipFile(BytesIO(request.content))
     print("download finished")
     
-    file_names=['agency', 'shapes', 'stops']
+    file_names=['agency', 'shapes', 'stops', 'stop_times', 'routes']
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
-    temp_folder = current_folder + "temp/"
-
-    try:
-        shutil.rmtree(temp_folder)
-    except:
-        pass
-
-    for name in z.namelist():
-        z.extract(name, temp_folder)
-
 
     with sqlite3.connect(db_name) as con:
         for fname in file_names:
             print("processing " + fname)
-            data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
-            data.to_sql(fname, con, if_exists='replace')
+            data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
+            # data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
+            util.save_dataframe_to_db(data, fname, con)
 
-
-        # convert stop times from string to integer
-        fname = 'stop_times'
-        print("processing " + fname)
-        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
-        data.to_sql(fname, con, if_exists='replace')
-
-        # maping service id string to integers in calendar
 
         fname = 'calendar'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
+        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
 
         service_id_replacement=0
         if(type(data['service_id'].values[0]) is str): # convert service id to int if it is read in as string
@@ -83,32 +64,19 @@ def _update_city_database(city_province_country):
             data.replace({"service_id": service_dict}, inplace=True)
             data[['service_id']]=data[['service_id']].astype(int)
 
-        data.to_sql(fname, con, if_exists='replace')
+        util.save_dataframe_to_db(data, fname, con)
 
         # maping service id string to integers in trips, route_id to intergers
 
         fname = 'trips'
         print("processing " + fname)
-        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
+        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
 
         if(service_id_replacement==1):
             data.replace({"service_id": service_dict}, inplace=True)
             data[['service_id']]=data[['service_id']].astype(int)
 
-        data.to_sql(fname, con, if_exists='replace')
-
-        # maping service id string to integers in routes, route_id to intergers
-
-        fname = 'routes'
-        print("processing " + fname)
-        data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
-
-        data.to_sql(fname, con, if_exists='replace')
-
-    try:
-        shutil.rmtree(temp_folder)
-    except:
-        pass
+        util.save_dataframe_to_db(data, fname, con)
 
     print("finished")
 
