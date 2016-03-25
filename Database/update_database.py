@@ -6,7 +6,7 @@ import numpy as np
 import requests
 from zipfile import ZipFile
 from io import BytesIO
-import shutil
+import gc
 
 import config
 import util
@@ -20,6 +20,8 @@ def update_all_database():
     city_codes = config['city'].values
 
     for city in city_codes:
+        print "Garbage collection: ", gc.collect()
+        print "unreachable garbage: ", gc.collect()
         _update_city_database(city)
 
 
@@ -42,7 +44,6 @@ def _update_city_database(city_province_country):
         for fname in file_names:
             print("processing " + fname)
             data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
-            # data = util.convert_csv_file_to_pd(open(temp_folder + fname + ".txt"))
             util.save_dataframe_to_db(data, fname, con)
 
 
@@ -77,6 +78,8 @@ def _update_city_database(city_province_country):
             data[['service_id']]=data[['service_id']].astype(int)
 
         util.save_dataframe_to_db(data, fname, con)
+
+
 
     print("finished")
 

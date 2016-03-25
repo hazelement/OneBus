@@ -38,7 +38,7 @@ def remove_char_convert_to_int(data_array):
 # todo parse file name to this function instead of file object
 def convert_csv_to_dataframe(csvfile):
 
-    chunksize = 10000
+    chunksize = 1000
 
     print('using pandas')
 
@@ -52,7 +52,16 @@ def convert_csv_to_dataframe(csvfile):
 
 
 def save_dataframe_to_db(dataframe, tablename, con):
-    dataframe.to_sql(tablename, con, if_exists='replace', chunksize=10000)
+
+    sql_query= "DROP TABLE " + tablename
+    c = con.cursor()
+    c.execute(sql_query)
+    con.commit()
+
+    try:
+        dataframe.to_sql(tablename, con, if_exists='replace')
+    except MemoryError:
+        dataframe.to_sql(tablename, con, if_exists='replace', chunksize=1000)
 
 
 def _clean_data(dataframe):

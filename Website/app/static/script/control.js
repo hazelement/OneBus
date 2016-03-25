@@ -7,6 +7,7 @@ $("#frmSearch").submit(function( event ){
     $("#background").slideUp("normal", function() { $(this).remove(); } );
     $("#logo").slideUp("normal", function() { $(this).remove(); } );
     $("#intro").slideUp("normal", function() { $(this).remove(); } );
+    $("#txtSearch").blur()
     disable_inputs();
 
 //    $("#loading_hold").animate({ top: "0" }, 800);
