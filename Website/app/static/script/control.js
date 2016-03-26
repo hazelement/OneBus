@@ -10,11 +10,21 @@ $("#frmSearch").submit(function( event ){
     $("#txtSearch").blur()
     disable_inputs();
 
+    var currentdate = new Date();
+    var datetime =  currentdate.getFullYear() + "-"
+                  + currentdate.getMonth() + "-"
+                  + currentdate.getDate() + "|"
+                  + currentdate.getHours() + ":"
+                  + currentdate.getMinutes() + ":"
+                  + currentdate.getSeconds()
+
 //    $("#loading_hold").animate({ top: "0" }, 800);
     $.ajax({
         type: "POST",
         url: "/api",
-        data: JSON.stringify({search_text: $("#txtSearch").val(), home_gps: home_gps, search_option: $('input[name=rbEngines]:checked').val()}),
+        data: JSON.stringify({search_text: $("#txtSearch").val(),
+                                home_gps: home_gps,
+                                current_time: datetime}),
         success: function(data){ refreshMap(data); enable_inputs();},
         contentType: "application/json",
         dataType:'json'})

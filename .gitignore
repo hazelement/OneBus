@@ -56,3 +56,4 @@ Temporary Items
 *.sqlite
 *.pyc
 api.config
+iOS/OneBus/Alamofire

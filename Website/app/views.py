@@ -16,19 +16,31 @@ def index():
 
 @app.route('/api', methods=['POST'])
 def api_port():
-    post_data = request.get_json()
-    print(post_data, file=sys.stderr)
 
-    home = post_data['home_gps']
-    home_lat = home['lat']  # it has gps data
-    home_lng = home['lng']
+    try:
+        post_data = request.get_json()
+        print(post_data, file=sys.stderr)
 
-    txtSearch = post_data['search_text']
-    current_time = datetime.datetime.now()
-    ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+        home = post_data['home_gps']
+        home_lat = home['lat']  # it has gps data
+        home_lng = home['lng']
+        txtSearch = post_data['search_text']
+        ctime = post_data['current_time']
+        #
+        # current_time = datetime.datetime.now()
+        # ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    except:
+        result={}
+        result['results']={}
+        result['success']=0
+        result['message']='posting data error'
+
+        return jsonify(**result)
 
     try:
         result = backend.get_destinations(home_lat, home_lng, txtSearch, ctime) # yyyy-mm-dd|hh:mm:ss
+        result['success'] = 1
+        result['message'] = 'success'
     except Exception, e:
         exc_info = sys.exc_info()
         
@@ -37,6 +49,8 @@ def api_port():
         print(str(e))
         result={}
         result['results']={}
+        result['success']=0
+        result['message']=str(exc_info)
 
         
     return jsonify(**result)
