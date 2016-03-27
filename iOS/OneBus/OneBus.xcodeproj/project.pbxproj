@@ -20,6 +20,8 @@
 		54C57DDF1CA6D23E00392165 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C57DD01CA6D20000392165 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54CA06AE1CA6EB8D00AD45A7 /* Toronto.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */; };
 		54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */; };
+		54CA06B31CA78AE200AD45A7 /* POI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA06B21CA78AE200AD45A7 /* POI.swift */; };
+		54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +131,8 @@
 		54C57DC51CA6D20000392165 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Toronto.gpx; sourceTree = "<group>"; };
 		54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Calgary.gpx; sourceTree = "<group>"; };
+		54CA06B21CA78AE200AD45A7 /* POI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POI.swift; sourceTree = "<group>"; };
+		54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCMapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,11 +192,13 @@
 			children = (
 				546743FC1CA5D7D700B1667A /* AppDelegate.swift */,
 				546743FE1CA5D7D700B1667A /* ViewController.swift */,
+				54CA06B21CA78AE200AD45A7 /* POI.swift */,
 				546744001CA5D7D700B1667A /* Main.storyboard */,
 				546744031CA5D7D700B1667A /* Assets.xcassets */,
 				546744051CA5D7D700B1667A /* LaunchScreen.storyboard */,
 				546744081CA5D7D700B1667A /* Info.plist */,
 				546744301CA5FDAC00B1667A /* ApiClass.swift */,
+				54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */,
 			);
 			path = OneBus;
 			sourceTree = "<group>";
@@ -423,7 +429,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54CA06B31CA78AE200AD45A7 /* POI.swift in Sources */,
 				546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */,
+				54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */,
 				546743FF1CA5D7D700B1667A /* ViewController.swift in Sources */,
 				546743FD1CA5D7D700B1667A /* AppDelegate.swift in Sources */,
 			);

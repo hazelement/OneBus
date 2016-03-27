@@ -6,6 +6,12 @@
 //  Copyright © 2016 Harry Zheng. All rights reserved.
 //
 
+
+// todo add pin drop annimation
+// todo add html support in detailCalloutAccessoryView
+// todo add bus route display
+
+
 import UIKit
 import MapKit
 import CoreLocation
@@ -52,6 +58,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     }
     
     func searchBarSearchButtonClicked( search_bar: UISearchBar){
+        let annotationsToRemove = self.mapView.annotations.filter { $0 !== self.mapView.userLocation }
+        self.mapView.removeAnnotations( annotationsToRemove )
         let search_txt = search_bar.text!
 
         api.search_results(search_txt, lat: self.lat, lng: self.lng)
@@ -60,7 +68,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                     if(response!["success"]! as! Int==1){
                         print(response!["message"])
     //                    self.performSegueWithIdentifier("login_success",sender: self)
-                        self.parseResult(response!["results"] as! NSDictionary)
+                        self.plotResult(response!["results"] as! NSDictionary)
                     }
                     else{
                         print(response!["message"])
@@ -76,11 +84,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.searchBar.endEditing(true)
     }
     
-    func parseResult(result: NSDictionary){
+    func plotResult(result: NSDictionary){
         
         for (key, value) in result {
+            
+            let detail = value as! NSDictionary
+            
+            let lat = detail["lat"] as! Double
+            let lng = detail["lng"] as! Double
+            
+            let myLocation = CLLocationCoordinate2DMake(lat, lng)
+//            let myLocation = CLLocation(latitude: lat, longitude: lng)
+            
+            let poi = POI(destName: detail["dest_name"] as! String, address: detail["address"] as! String, image_url: detail["image_url"] as! String, yelp_url: detail["yelp_url"] as! String, review_count: detail["review_count"] as! Int, ratings_img_url: detail["ratings_img"] as! String, coordinate: myLocation)
+            
+            self.mapView.addAnnotation(poi)
+            
             print("Property: \"\(key as! String)\"")
         }
+
     }
     
 
@@ -92,29 +114,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
     
-//    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-//        func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-//            if (annotation is MKUserLocation) {
-//                return nil
-//            }
-//            
-//            if (annotation.isKindOfClass(CustomAnnotation)) {
-//                let customAnnotation = annotation as? CustomAnnotation
-//                mapView.translatesAutoresizingMaskIntoConstraints = false
-//                var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier("CustomAnnotation") as MKAnnotationView!
-//                
-//                if (annotationView == nil) {
-//                    annotationView = customAnnotation?.annotationView()
-//                } else {
-//                    annotationView.annotation = annotation;
-//                }
-//                
-//                self.addBounceAnimationToView(annotationView)
-//                return annotationView
-//            } else {
-//                return nil
-//            }
-//        }
+
 
     
     
