@@ -10,5 +10,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "ViewController.plotResult(NSDictionary) -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "detail[&quot;address&quot;] as! String">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>
