@@ -56,9 +56,11 @@ def _find_near_trips(near_stops, service_id, currenttime, con):
     _ , unique_indices = np.unique(result['route_id'].values, return_index = True)
 
     trips = np.unique(result['trip_id'].values[unique_indices])
+    routes = np.unique(result['route_id'].values[unique_indices])
+    start_stops = np.unique(result['stop_id'].values[unique_indices])
 
 
-    return trips
+    return trips, routes, start_stops
 
 def _find_stopID_along_strips(trips, con):
 
@@ -68,7 +70,7 @@ def _find_stopID_along_strips(trips, con):
 
     return stop_ids
 
-def find_stops_around(lat, lng, ctime):
+def find_accessiable_stops(lat, lng, ctime):
     '''
     find stops that is accessible from gps location through bus
     :param lat:
@@ -114,7 +116,7 @@ def find_stops_around(lat, lng, ctime):
 
         with Timer("find trips from these stops"):
             currenttime=util.convert_time_string_to_int([current_time])[0]
-            trips=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
+            trips, routes, start_stopIDs=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
 
         with Timer("find stops along trips"):
             stop_ids = _find_stopID_along_strips(trips, con)
@@ -126,18 +128,19 @@ def find_stops_around(lat, lng, ctime):
 
     # print(gps_loc)
 
-    return(np.array(gps_loc))
+    return(np.array(gps_loc)), stop_ids, routes, start_stopIDs
 
 
 if __name__ == "__main__":
-    lat = 43.7000  # toronto
-    lng = -79.4000
-    # lat = 51.135494 # calgary
-    # lng = -114.158389
+    # lat = 43.7000  # toronto
+    # lng = -79.4000
+    lat = 51.135494 # calgary
+    lng = -114.158389
     current_time = datetime.datetime.now()
 
     ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    print(find_stops_around(lat, lng, ctime))
+    ctime = "2016-03-28|08:10:32"
+    print(find_accessiable_stops(lat, lng, ctime))
 
     # cProfile.run('foo() -s time')
 

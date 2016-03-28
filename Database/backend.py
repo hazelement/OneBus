@@ -19,13 +19,18 @@ def _result_filter_by_distance(stops, targets):
     :return:
     """
 
-    map_distance = cdist(stops, targets, 'seuclidean')
+    distance_matrix = cdist(stops, targets, 'euclidean')
 
-    min_target_distance = np.amin(map_distance, axis=0)
+    min_target_distance = np.amin(distance_matrix, axis=0)
+    threshold = 0.003
 
-    threshold = 0.08
+    # find targets are closest to stops
+    target_mapping = min_target_distance<threshold
 
-    return min_target_distance<threshold
+    # find stops that are closest to these targets
+    stop_mapping = np.argmin(distance_matrix, axis=0)
+
+    return target_mapping, stop_mapping
 
 
 # def get_destinations(lat, lng, query, option):
@@ -52,19 +57,21 @@ def get_destinations(lat, lng, query, ctime):
 
 
     if(len(names)>0):
-        stops= query_database.find_stops_around(lat, lng, ctime)
+        # todo consider put this into dataframe, with repetitive stop_ids etc
+        stops, stop_ids, routes, start_stopIDs= query_database.find_accessiable_stops(lat, lng, ctime)
 
-        result_filter_index = _result_filter_by_distance(stops, gps_array)
+        target_filter_index, stop_filter_index = _result_filter_by_distance(stops, gps_array)
 
         dest_dict = {}
 
-        gps_array = gps_array[result_filter_index]
-        names = names[result_filter_index]
-        addresses = addresses[result_filter_index]
-        image_url = image_url[result_filter_index]
-        yelp_url = yelp_url[result_filter_index]
-        review_count = review_count[result_filter_index]
-        rating_img_url = rating_img_url[result_filter_index]
+        # todo maybe we can use pandas here, consider move everything into query_database.py
+        gps_array = gps_array[target_filter_index]
+        names = names[target_filter_index]
+        addresses = addresses[target_filter_index]
+        image_url = image_url[target_filter_index]
+        yelp_url = yelp_url[target_filter_index]
+        review_count = review_count[target_filter_index]
+        rating_img_url = rating_img_url[target_filter_index]
 
 
         print("Transit friendly results: " + str(len(names)))
@@ -98,12 +105,12 @@ def get_destinations(lat, lng, query, ctime):
 if __name__ == "__main__":
 
     # toronto
-    lat = 43.7000
-    lng = -79.4000
+    # lat = 43.7000
+    # lng = -79.4000
 
     # calgary
-    # lat = 51.0454027
-    # lng = -114.05651890000001
+    lat = 51.0454027
+    lng = -114.05651890000001
 
     # query = 'chinese restaurant calgary'
     query = 'superstore'
@@ -113,6 +120,7 @@ if __name__ == "__main__":
     current_time = datetime.datetime.now()
 
     ctime = str(current_time.year) + "-" + str(current_time.month) + "-" +str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    # ctime = "2016-03-16|08:10:32"
     test = get_destinations(lat, lng, query, ctime)
 
     # test = yelp_loc_list(lat, lng, query)
