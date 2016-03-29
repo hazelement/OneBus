@@ -1,12 +1,11 @@
 
 import numpy as np
-from scipy.spatial.distance import cdist
+# from scipy.spatial.distance import cdist
 import datetime
 
 import query_database
 import query_api as api
-
-
+import util
 # todo return result should contain upcoming bus arrival time, bus shape from stop to destination, shape from my location to bus stop?, bus number
 # todo update code to follow PEP8 format
 # todo add city gps coordinates to city_url.config => automatically detect city from gps location and select database to use
@@ -19,7 +18,8 @@ def _result_filter_by_distance(stops, targets):
     :return:
     """
 
-    distance_matrix = cdist(stops, targets, 'euclidean')
+    # distance_matrix = cdist(stops, targets, 'euclidean')
+    distance_matrix = util.distance_calc(stops, targets)
 
     min_target_distance = np.amin(distance_matrix, axis=0)
     threshold = 0.003

@@ -5,7 +5,7 @@ import os
 import datetime
 import time
 
-from scipy.spatial.distance import cdist
+# from scipy.spatial.distance import cdist
 
 import util
 import config
@@ -97,7 +97,8 @@ def find_accessiable_stops(lat, lng, ctime):
             stop_loc=df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
 
-            calcValues=cdist(myLocation, stop_loc)[0]
+            # calcValues=cdist(myLocation, stop_loc)[0]
+            calcValues=util.distance_calc(myLocation, stop_loc)[0]
 
             nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values
 

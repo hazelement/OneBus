@@ -4,6 +4,32 @@ import numpy as np
 import re
 
 
+def distance_calc(array1, array2):
+    """
+    calculate distance between two arrays of coordinates, return
+    :param array1:
+    :param array2:
+    :return: mxn matrix
+    """
+    # a^2 - 2ab + b^2
+    dot_p = np.dot(array1, np.transpose(array2))
+
+    item2 = -2.0 * dot_p
+
+    array1 = np.square(array1)
+    array2 = np.square(array2)
+
+    sum1= np.sum(array1, axis = 1)
+    sum2 = np.sum(array2, axis = 1)
+
+    item1 = np.repeat(np.transpose([sum1]), len(sum2), axis = 1)
+    item3 = np.repeat([sum2], len(sum1), axis = 0)
+
+    retVal = item1 + item2 + item3
+
+    return np.sqrt(retVal)
+
+
 def convert_time_string_to_int(time_as_array):
     """
     convert 'hh:mm:ss' time array to int array

@@ -2,7 +2,8 @@ import pandas as pd
 import os
 import numpy as np
 
-from scipy.spatial.distance import cdist
+import util
+# from scipy.spatial.distance import cdist
 
 def read_city_url_from_config(city):
     config = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + '/city_url.config')
@@ -13,7 +14,8 @@ def read_city_code_from_config(lat, lng):
 
     lat_lng=config[['lat', 'lng']].as_matrix().astype(float)
 
-    calcValues=cdist([[lat, lng]],lat_lng)[0]
+    # calcValues=cdist([[lat, lng]],lat_lng)[0]
+    calcValues=util.distance_calc([[lat, lng]],lat_lng)[0]
     city_index = np.argmin(calcValues, axis=0)
 
     city_code = config.ix[city_index]['city']
