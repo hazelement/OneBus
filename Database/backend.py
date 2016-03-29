@@ -30,7 +30,7 @@ def _result_filter_by_distance(stops, targets):
     # find stops that are closest to these targets
     stop_mapping = np.argmin(distance_matrix, axis=0)
 
-    return target_mapping, stop_mapping
+    return target_mapping, stop_mapping[target_mapping] # selecting only stops that are closed to good targets
 
 
 # def get_destinations(lat, lng, query, option):
@@ -76,6 +76,11 @@ def get_destinations(lat, lng, query, ctime):
         review_count = review_count[target_filter_index]
         rating_img_url = rating_img_url[target_filter_index]
 
+        start_stops = df_stops.ix[stop_filter_index]['start_stop_id'].values
+        end_stops = df_stops.ix[stop_filter_index]['stop_id'].values
+
+
+
         print("Transit friendly results: " + str(len(names)))
         print(names)
 
@@ -90,7 +95,9 @@ def get_destinations(lat, lng, query, ctime):
                                  "image_url": image_url[i],
                                  "yelp_url": yelp_url[i],
                                  "review_count": review_count[i],
-                                 "ratings_img": rating_img_url[i]}
+                                 "ratings_img": rating_img_url[i],
+                                 "start_stop": start_stops[i],
+                                 "end_stop": end_stops[i]}
 
         retVal={}
         retVal['results']=dest_dict

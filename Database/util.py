@@ -3,6 +3,26 @@ import pandas as pd
 import numpy as np
 import re
 
+def ramerdouglas(line, dist):
+    """Does Ramer-Douglas-Peucker simplification of
+    a line with `dist` threshold.
+    `line` must be a list of Vec objects,
+    all of the same type (either 2d or 3d)."""
+    if len(line) < 3:
+        return line
+
+    begin, end = line[0], line[-1]
+    distSq = [begin.distSq(curr) -
+        ((end - begin) * (curr - begin)) ** 2 /
+        begin.distSq(end) for curr in line[1:-1]]
+
+    maxdist = max(distSq)
+    if maxdist < dist ** 2:
+        return [begin, end]
+
+    pos = distSq.index(maxdist)
+    return (ramerdouglas(line[:pos + 2], dist) +
+            ramerdouglas(line[pos + 1:], dist)[1:])
 
 def distance_calc(array1, array2):
     """

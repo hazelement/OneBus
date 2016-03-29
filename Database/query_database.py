@@ -5,6 +5,8 @@ import os
 import datetime
 import time
 
+from rdp import rdp
+
 # from scipy.spatial.distance import cdist
 
 import util
@@ -79,6 +81,41 @@ def _find_stopID_along_strips(trips, con):
 
     return stop_ids
 
+def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
+
+    city_code = config.read_city_code_from_config(lat, lng) # find city code
+    print("city_code: " + city_code)
+    db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
+
+    with sqlite3.connect(db_location) as con:
+        sql_query = "SELECT shape_id FROM trips WHERE trip_id=" + str(trip_id)
+        shape_id = pd.read_sql(sql_query, con)['shape_id'].values[0]
+
+        sql_query = "SELECT shape_pt_lat,shape_pt_lon FROM shapes WHERE shape_id=" + str(shape_id) + " ORDER BY shape_pt_sequence"
+        shape = pd.read_sql(sql_query, con)
+        shape_lat_lng = shape[['shape_pt_lat', 'shape_pt_lon']].as_matrix().astype(float)
+
+        sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(start_stop)
+        start_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+
+
+        sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(end_stop)
+        end_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+
+        start_loc = np.argmin(util.distance_calc(start_lat_lng, shape_lat_lng), axis=1)[0]
+        end_loc = np.argmin(util.distance_calc(end_lat_lng, shape_lat_lng), axis=1)[0]
+
+        lower = min(start_loc, end_loc)
+        upper = max(start_loc, end_loc)
+
+        shape_lat_lng = shape.ix[lower:upper][['shape_pt_lat', 'shape_pt_lon']].as_matrix().astype(float)
+
+        shape_lat_lng_small = rdp(shape_lat_lng, epsilon=0.0001)  # reduce size using Ramer–Douglas–Peucker algorithm
+
+
+    return shape
+
+
 def find_accessiable_stops(lat, lng, ctime):
     '''
     find stops that is accessible from gps location through bus
@@ -105,8 +142,6 @@ def find_accessiable_stops(lat, lng, ctime):
             df_stops = pd.read_sql(sql_query, con)
             stop_loc=df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
-
-            # calcValues=cdist(myLocation, stop_loc)[0]
             calcValues=util.distance_calc(myLocation, stop_loc)[0]
 
             nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values
@@ -122,8 +157,6 @@ def find_accessiable_stops(lat, lng, ctime):
 
             service_id = _find_current_serviceID(today, dayofthweek, con)
 
-        gps_loc=[]
-
         with Timer("find trips from these stops"):
             currenttime=util.convert_time_string_to_int([current_time])[0]
             trips, routes, start_stopIDs=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
@@ -131,41 +164,39 @@ def find_accessiable_stops(lat, lng, ctime):
         with Timer("find stops along trips"):
             stop_ids = _find_stopID_along_strips(trips, con)
 
+        with Timer("generate dataframe"):
+            long_routes = []
+            long_start_stopIDs = []
+            long_stop_ids = np.array([])
+            long_trips = []
 
-        long_routes = []
-        long_start_stopIDs = []
-        long_stop_ids = np.array([])
+            for i in range(0, len(stop_ids)):
+                long_routes.extend([routes[i]] * len(stop_ids[i]))
+                long_start_stopIDs.extend([start_stopIDs[i]] * len(stop_ids[i]))
+                long_trips.extend([trips[i]] * len(stop_ids[i]))
+                long_stop_ids = np.append(long_stop_ids, stop_ids[i])
 
-        for i in range(0, len(stop_ids)):
-            long_routes.extend([routes[i]] * len(stop_ids[i]))
-            long_start_stopIDs.extend([start_stopIDs[i]] * len(stop_ids[i]))
-            long_stop_ids = np.append(long_stop_ids, stop_ids[i])
+            df = pd.DataFrame({'route_id': long_routes, 'start_stop_id': long_start_stopIDs, 'stop_id': long_stop_ids, 'trip_id': long_trips})
 
+            df = df.merge(df_stops, on='stop_id')
+            df[['stop_id']] = df[['stop_id']].astype(int)
 
-        # lat_lng = df_stops[df_stops['stop_id'].isin(long_stop_ids)]
-        # lat_lng = pd.read_sql("SELECT stop_lat, stop_lon FROM stops WHERE stop_id IN " + "(" + ','.join("{0}".format(x) for x in stop_ids) + ")", con)
-
-        df = pd.DataFrame({'route_id': long_routes, 'start_stop_id': long_start_stopIDs, 'stop_id': long_stop_ids})# 'lat': lat_lng['stop_lat'], 'lon': lat_lng['stop_lon']})
-        df = df.merge(df_stops, on='stop_id')
-        # gps_loc=lat_lng[['stop_lat', 'stop_lon']].as_matrix().astype(float)
-
-    # print(gps_loc)
     return df
-    # return(np.array(gps_loc)), stop_ids, routes, start_stopIDs
-
 
 if __name__ == "__main__":
     # lat = 43.7000  # toronto
     # lng = -79.4000
     lat = 51.135494 # calgary
     lng = -114.158389
-    current_time = datetime.datetime.now()
-
-    ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    ctime = "2016-03-28|08:10:32"
-    print(find_accessiable_stops(lat, lng, ctime))
+    # current_time = datetime.datetime.now()
+    #
+    # ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    # ctime = "2016-03-28|08:10:32"
+    # print(find_accessiable_stops(lat, lng, ctime))
 
     # cProfile.run('foo() -s time')
+
+    find_shape_lat_lng(lat, lng, 32252846, 3698, 3844)
 
 
 
