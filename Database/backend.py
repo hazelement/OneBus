@@ -22,7 +22,7 @@ def _result_filter_by_distance(stops, targets):
     distance_matrix = util.distance_calc(stops, targets)
 
     min_target_distance = np.amin(distance_matrix, axis=0)
-    threshold = 0.003
+    threshold = 0.005
 
     # find targets are closest to stops
     target_mapping = min_target_distance<threshold
@@ -58,9 +58,12 @@ def get_destinations(lat, lng, query, ctime):
 
     if(len(names)>0):
         # todo consider put this into dataframe, with repetitive stop_ids etc
-        stops, stop_ids, routes, start_stopIDs= query_database.find_accessiable_stops(lat, lng, ctime)
+        # stops, stop_ids, routes, start_stopIDs= query_database.find_accessiable_stops(lat, lng, ctime)
+        df_stops = query_database.find_accessiable_stops(lat, lng, ctime)
 
-        target_filter_index, stop_filter_index = _result_filter_by_distance(stops, gps_array)
+        stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+
+        target_filter_index, stop_filter_index = _result_filter_by_distance(stop_gps, gps_array)
 
         dest_dict = {}
 
@@ -72,7 +75,6 @@ def get_destinations(lat, lng, query, ctime):
         yelp_url = yelp_url[target_filter_index]
         review_count = review_count[target_filter_index]
         rating_img_url = rating_img_url[target_filter_index]
-
 
         print("Transit friendly results: " + str(len(names)))
         print(names)
@@ -112,8 +114,11 @@ if __name__ == "__main__":
     lat = 51.0454027
     lng = -114.05651890000001
 
+    lat = 51.174280200000005
+    lng = -114.121324
+
     # query = 'chinese restaurant calgary'
-    query = 'superstore'
+    query = 'restaurant'
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
