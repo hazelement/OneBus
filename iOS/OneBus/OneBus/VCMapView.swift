@@ -45,21 +45,32 @@ extension ViewController {
                 let detailView = UIWebView()
                 let poi = annotation as POI
                 
-                var htmlString: String = "<html><body><p>"
-                htmlString = htmlString + "<b><font size = \"3\">" + poi.title! + "</font></b><br>"
-//                htmlString = htmlString + "<img src=\"" + poi.ratings_img_url + "\"><br>"
+//                var htmlString: String = "<html><body><p>"
+                var htmlString: String = ""
+//                htmlString = htmlString + "<b><font size = \"3\">" + poi.title! + "</font></b><br>"
+                htmlString = htmlString + "<img src=\"" + poi.ratings_img_url + "\"><br>"
                 htmlString = htmlString + "Number of Reviews: " + String(poi.review_count) + "<br>"
                 htmlString = htmlString + poi.address
-                //            htmlString = htmlString + "<br><a href=\"" + poi.yelp_url + "\" target=\"_blank\">" + "<img src=\"yelp_rewview_btn_light.png\"></a>"
+                htmlString = htmlString + "<br><a href=\"" + poi.yelp_url + "\" target=\"_blank\">" + "<img src=\"yelp_review_btn_light.png\"></a>"
                 
-                htmlString = htmlString + "</p></body></html>"
+//                htmlString = htmlString + "</p></body></html>"
                 
                 print(htmlString)
                 
-                detailView.frame = CGRectMake(0, 0, 200, 200)
+                
                 
                 detailView.loadHTMLString(htmlString, baseURL: nil)
+//                detailView.frame = CGRectMake(0, 0, 200, 200)
+                
+                let widthConstraint = NSLayoutConstraint(item: detailView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 400)
+                detailView.addConstraint(widthConstraint)
+                
+                let heightConstraint = NSLayoutConstraint(item: detailView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
+                detailView.addConstraint(heightConstraint)
+          
+                
                 view.detailCalloutAccessoryView = detailView
+                view.canShowCallout = true
                 
 //                view.translatesAutoresizingMaskIntoConstraints = true
                 

@@ -16,9 +16,9 @@ public class API_Class{
     
     public init (){
         
-//        self._client = "http://162.246.156.126:8000"
+        self._client = "http://162.246.156.126:8000"
 //        self._client = "http://localhost:8000"
-        self._client = "http://192.168.0.10:8000"
+//        self._client = "http://192.168.0.10:8000"
         
     }
     

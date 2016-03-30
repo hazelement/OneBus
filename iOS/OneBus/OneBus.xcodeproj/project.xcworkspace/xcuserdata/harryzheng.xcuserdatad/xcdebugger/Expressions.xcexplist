@@ -3,6 +3,9 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #2):ViewController.swift">
+      </ContextState>
+      <ContextState
          contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -14,7 +17,13 @@
          contextName = "ViewController.plotResult(NSDictionary) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
+               value = "(detail[&quot;image_url&quot;] as? String)!">
+            </PersistentString>
+            <PersistentString
                value = "detail[&quot;address&quot;] as! String">
+            </PersistentString>
+            <PersistentString
+               value = "detail[&quot;image_url&quot;] as? String">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

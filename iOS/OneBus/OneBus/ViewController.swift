@@ -95,7 +95,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
             
             let myLocation = CLLocationCoordinate2DMake(lat, lng)
             
-            let poi = POI(destName: detail["dest_name"] as! String, address: detail["address"] as! String, image_url: detail["image_url"] as! String, yelp_url: detail["yelp_url"] as! String, review_count: detail["review_count"] as! Int, ratings_img_url: detail["ratings_img"] as! String, coordinate: myLocation)
+            let poi = POI(destName: extractString(detail["dest_name"]), address: extractString(detail["address"]), image_url: extractString(detail["image_url"]), yelp_url: extractString(detail["yelp_url"]), review_count: detail["review_count"] as! Int, ratings_img_url: extractString(detail["ratings_img"]), coordinate: myLocation)
             
 //            usleep(useconds_t(500)) // todo drop down pins one after another like maps on iphone
             self.mapView.addAnnotation(poi)

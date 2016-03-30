@@ -22,6 +22,8 @@
 		54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */; };
 		54CA06B31CA78AE200AD45A7 /* PoiClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA06B21CA78AE200AD45A7 /* PoiClass.swift */; };
 		54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */; };
+		54CA06C51CAB7E0200AD45A7 /* util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54CA06C41CAB7E0200AD45A7 /* util.swift */; };
+		54CA06CD1CAB89C300AD45A7 /* yelp_review_btn_light.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06CC1CAB89C300AD45A7 /* yelp_review_btn_light.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +135,8 @@
 		54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Calgary.gpx; sourceTree = "<group>"; };
 		54CA06B21CA78AE200AD45A7 /* PoiClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PoiClass.swift; sourceTree = "<group>"; };
 		54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCMapView.swift; sourceTree = "<group>"; };
+		54CA06C41CAB7E0200AD45A7 /* util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = util.swift; sourceTree = "<group>"; };
+		54CA06CC1CAB89C300AD45A7 /* yelp_review_btn_light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yelp_review_btn_light.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +194,7 @@
 		546743FB1CA5D7D700B1667A /* OneBus */ = {
 			isa = PBXGroup;
 			children = (
+				54CA06CC1CAB89C300AD45A7 /* yelp_review_btn_light.png */,
 				546743FC1CA5D7D700B1667A /* AppDelegate.swift */,
 				546743FE1CA5D7D700B1667A /* ViewController.swift */,
 				54CA06B21CA78AE200AD45A7 /* PoiClass.swift */,
@@ -199,6 +204,7 @@
 				546744081CA5D7D700B1667A /* Info.plist */,
 				546744301CA5FDAC00B1667A /* ApiClass.swift */,
 				54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */,
+				54CA06C41CAB7E0200AD45A7 /* util.swift */,
 			);
 			path = OneBus;
 			sourceTree = "<group>";
@@ -405,6 +411,7 @@
 				546744041CA5D7D700B1667A /* Assets.xcassets in Resources */,
 				546744021CA5D7D700B1667A /* Main.storyboard in Resources */,
 				54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */,
+				54CA06CD1CAB89C300AD45A7 /* yelp_review_btn_light.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +439,7 @@
 				54CA06B31CA78AE200AD45A7 /* PoiClass.swift in Sources */,
 				546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */,
 				54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */,
+				54CA06C51CAB7E0200AD45A7 /* util.swift in Sources */,
 				546743FF1CA5D7D700B1667A /* ViewController.swift in Sources */,
 				546743FD1CA5D7D700B1667A /* AppDelegate.swift in Sources */,
 			);
