@@ -14,6 +14,7 @@ def read_city_code_from_config(lat, lng):
 
     lat_lng=config[['lat', 'lng']].as_matrix().astype(float)
 
+    print(lat, lng)
     # calcValues=cdist([[lat, lng]],lat_lng)[0]
     calcValues=util.distance_calc([[lat, lng]],lat_lng)[0]
     city_index = np.argmin(calcValues, axis=0)

@@ -27,7 +27,8 @@ def get_destinations(lat, lng, query, ctime):
                           }
             }
     """
-
+    lat = float(lat)
+    lng = float(lng)
     df_targets = api.yelp_loc_list(lat, lng, query)
 
     print("Number of raw destinations: " + str(len(df_targets)))

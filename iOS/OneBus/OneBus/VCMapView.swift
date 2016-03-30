@@ -56,6 +56,8 @@ extension ViewController {
                 
                 print(htmlString)
                 
+                detailView.frame = CGRectMake(0, 0, 200, 200)
+                
                 detailView.loadHTMLString(htmlString, baseURL: nil)
                 view.detailCalloutAccessoryView = detailView
                 
