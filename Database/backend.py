@@ -10,28 +10,9 @@ import util
 # todo update code to follow PEP8 format
 # todo add city gps coordinates to city_url.config => automatically detect city from gps location and select database to use
 
-def _result_filter_by_distance(stops, targets):
-    """
-    return index only
-    :param stops: array of stops to reference from
-    :param targets: array of targets to filter through
-    :return:
-    """
 
-    # distance_matrix = cdist(stops, targets, 'euclidean')
-    distance_matrix = util.distance_calc(stops, targets)
-
-    min_target_distance = np.amin(distance_matrix, axis=0)
-    threshold = 0.005
-
-    # find targets are closest to stops
-    target_mapping = min_target_distance<threshold
-
-    # find stops that are closest to these targets
-    stop_mapping = np.argmin(distance_matrix, axis=0)
-
-    return target_mapping, stop_mapping[target_mapping] # selecting only stops that are closed to good targets
-
+def get_shape_gps(lat, lng, trip_id, start_stop, end_stop):
+    return query_database.find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop)
 
 # def get_destinations(lat, lng, query, option):
 def get_destinations(lat, lng, query, ctime):
@@ -51,6 +32,8 @@ def get_destinations(lat, lng, query, ctime):
 
     # gps_array, names, addresses = go_loc_list(lat, lng, query)  # Google
     # gps_array2, names2, addresses2 = fs_loc_list(lat, lng, query)  # Foursquare
+
+    # todo put this into dataframe
     gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = api.yelp_loc_list(lat, lng, query) #yelp results
 
     print("Number of raw destinations: " + str(len(names)))
@@ -63,7 +46,7 @@ def get_destinations(lat, lng, query, ctime):
 
         stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
-        target_filter_index, stop_filter_index = _result_filter_by_distance(stop_gps, gps_array)
+        stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, gps_array)
 
         dest_dict = {}
 
@@ -76,10 +59,11 @@ def get_destinations(lat, lng, query, ctime):
         review_count = review_count[target_filter_index]
         rating_img_url = rating_img_url[target_filter_index]
 
-        start_stops = df_stops.ix[stop_filter_index]['start_stop_id'].values
-        end_stops = df_stops.ix[stop_filter_index]['stop_id'].values
-
-
+        df_stops=df_stops.ix[stop_filter_index]
+        start_stops = df_stops['start_stop_id'].values
+        end_stops = df_stops['stop_id'].values
+        trip_ids = df_stops['trip_id'].values
+        route_ids = df_stops['route_id'].values
 
         print("Transit friendly results: " + str(len(names)))
         print(names)
@@ -96,8 +80,10 @@ def get_destinations(lat, lng, query, ctime):
                                  "yelp_url": yelp_url[i],
                                  "review_count": review_count[i],
                                  "ratings_img": rating_img_url[i],
-                                 "start_stop": start_stops[i],
-                                 "end_stop": end_stops[i]}
+                                 "start_stop": str(start_stops[i]),
+                                 "end_stop": str(end_stops[i]),
+                                 "trip_id": str(trip_ids[i]),
+                                 "route_id": str(route_ids[i])}
 
         retVal={}
         retVal['results']=dest_dict
@@ -106,9 +92,6 @@ def get_destinations(lat, lng, query, ctime):
         retVal['results']={}
 
     return retVal
-
-
-
 
 
 if __name__ == "__main__":

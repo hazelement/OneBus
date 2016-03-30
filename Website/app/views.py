@@ -8,11 +8,39 @@ from flask import render_template, request, jsonify
 
 from Database import backend
 
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     return render_template('index.html')
+
+
+@app.route('/api/route', methods=['POST'])
+def route_port():
+    try:
+        post_data = request.get_json()
+        print(post_data, file=sys.stderr)
+
+        trip_id = post_data['trip_id']
+        start_stop = post_data['start_stop']  # it has gps data
+        end_stop = post_data['end_stop']
+        lat = post_data['lat']
+        lng = post_data['lng']
+
+    except:
+        result={}
+        result['results']={}
+        result['success']=0
+        result['message']='posting data error'
+
+        return jsonify(**result)
+
+    result={}
+    result['result'] = backend.get_shape_gps(lat, lng, trip_id, start_stop, end_stop)
+    result['success'] = 1
+    result['message'] = 'success'
+
+    return jsonify(**result)
+
 
 @app.route('/api', methods=['POST'])
 def api_port():

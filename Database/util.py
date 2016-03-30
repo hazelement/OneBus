@@ -1,7 +1,31 @@
-import csv
+
 import pandas as pd
 import numpy as np
 import re
+
+
+def result_filter_by_distance(stops, targets):
+    """
+    return filtered index of stops, and targets
+    :param stops: array of stops to reference from
+    :param targets: array of targets to filter through
+    :return:
+    """
+
+    # distance_matrix = cdist(stops, targets, 'euclidean')
+    distance_matrix = distance_calc(stops, targets)
+
+    min_target_distance = np.amin(distance_matrix, axis=0)
+    threshold = 0.005
+
+    # find targets are closest to stops
+    target_mapping = min_target_distance<threshold
+
+    # find stops that are closest to these targets
+    stop_mapping = np.argmin(distance_matrix, axis=0)
+
+    return stop_mapping[target_mapping], target_mapping  # selecting only stops that are closed to good targets
+
 
 def ramerdouglas(line, dist):
     """Does Ramer-Douglas-Peucker simplification of

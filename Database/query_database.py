@@ -27,64 +27,16 @@ class Timer:
         print(self.name + " took " + str(self.interval) + " sec.")
 
 
-def _find_current_serviceID(currDate, dayofthweek, con):
-
-    sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
-
-    df = pd.read_sql(sql_query, con)
-
-    if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
-        sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
-        df = pd.read_sql(sql_query, con)
-
-    return df['service_id'].tolist()
-
-
-
-def _find_near_trips(near_stops, service_id, currenttime, con):
-
-    trips=[]
-
-    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
-    trips_trip_id=pd.read_sql("SELECT * FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
-
-    result = pd.merge(st_trip_id, trips_trip_id, on='trip_id')
-
-    # print(result)
-    # print(currenttime)
-
-    # result = result[result['arrival_time']>currenttime]
-
-    _ , unique_indices = np.unique(result['route_id'].values, return_index = True)
-
-    trips = result['trip_id'].values[unique_indices]
-    routes = result['route_id'].values[unique_indices]
-    start_stops = result['stop_id'].values[unique_indices]
-
-
-    return trips, routes, start_stops
-
-def _find_stopID_along_strips(trips, con):
-
-    # t2 = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
-    # t = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ") GROUP BY trip_id" , con)
-    # stop_ids = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)['stop_id'].values
-
-    all_stop_ids = pd.read_sql("SELECT stop_id,trip_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
-
-    stop_ids=[]
-    for trip_id in trips:
-        stop_id = all_stop_ids[all_stop_ids['trip_id']==trip_id]['stop_id'].values#  pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id=" + str(trip_id) , con)['stop_id'].values
-        stop_ids.append(stop_id)
-
-    # stop_ids = np.unique(stop_ids)
-
-    return stop_ids
-
 def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
+    """
+    find the shape points between start_stop, end_stop, along trip_id
+    :param trip_id:
+    :param start_stop:
+    :param end_stop:
+    :return:
+    """
 
     city_code = config.read_city_code_from_config(lat, lng) # find city code
-    print("city_code: " + city_code)
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
 
     with sqlite3.connect(db_location) as con:
@@ -110,10 +62,11 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
 
         shape_lat_lng = shape.ix[lower:upper][['shape_pt_lat', 'shape_pt_lon']].as_matrix().astype(float)
 
-        shape_lat_lng_small = rdp(shape_lat_lng, epsilon=0.0001)  # reduce size using Ramer–Douglas–Peucker algorithm
+        shape_lat_lng_small = rdp(shape_lat_lng, epsilon=0.0001)  # reduce size using Ramer-Douglas-Peucker algorithm
 
+        df = pd.DataFrame(shape_lat_lng_small, columns=['lat', 'lng'])
 
-    return shape
+    return df.to_json()
 
 
 def find_accessiable_stops(lat, lng, ctime):
@@ -142,9 +95,8 @@ def find_accessiable_stops(lat, lng, ctime):
             df_stops = pd.read_sql(sql_query, con)
             stop_loc=df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
-            calcValues=util.distance_calc(myLocation, stop_loc)[0]
-
-            nearestStopLocations=df_stops[calcValues<0.005]['stop_id'].values
+            _, location_mapping = util.result_filter_by_distance(myLocation, stop_loc)
+            nearestStopLocations = df_stops.ix[location_mapping]['stop_id'].values
 
         print nearestStopLocations
 
@@ -183,6 +135,64 @@ def find_accessiable_stops(lat, lng, ctime):
 
     return df
 
+
+def _find_current_serviceID(currDate, dayofthweek, con):
+
+    sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
+
+    df = pd.read_sql(sql_query, con)
+
+    if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
+        sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
+        df = pd.read_sql(sql_query, con)
+
+    return df['service_id'].tolist()
+
+
+def _find_near_trips(near_stops, service_id, currenttime, con):
+
+    trips=[]
+
+    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
+    trips_trip_id=pd.read_sql("SELECT * FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
+
+    result = pd.merge(st_trip_id, trips_trip_id, on='trip_id')
+
+    # print(result)
+    # print(currenttime)
+
+    # result = result[result['arrival_time']>currenttime]
+
+    _ , unique_indices = np.unique(result['route_id'].values, return_index = True)
+
+    trips = result['trip_id'].values[unique_indices]
+    routes = result['route_id'].values[unique_indices]
+    start_stops = result['stop_id'].values[unique_indices]
+
+
+    return trips, routes, start_stops
+
+
+def _find_stopID_along_strips(trips, con):
+
+    # t2 = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
+    # t = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ") GROUP BY trip_id" , con)
+    # stop_ids = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)['stop_id'].values
+
+    all_stop_ids = pd.read_sql("SELECT stop_id,trip_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
+
+    stop_ids=[]
+    for trip_id in trips:
+        stop_id = all_stop_ids[all_stop_ids['trip_id']==trip_id]['stop_id'].values#  pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id=" + str(trip_id) , con)['stop_id'].values
+        stop_ids.append(stop_id)
+
+    # stop_ids = np.unique(stop_ids)
+
+    return stop_ids
+
+
+
+
 if __name__ == "__main__":
     # lat = 43.7000  # toronto
     # lng = -79.4000
@@ -196,7 +206,7 @@ if __name__ == "__main__":
 
     # cProfile.run('foo() -s time')
 
-    find_shape_lat_lng(lat, lng, 32252846, 3698, 3844)
+    print(find_shape_lat_lng(lat, lng, 32252846, 3698, 3844))
 
 
 
