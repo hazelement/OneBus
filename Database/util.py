@@ -12,7 +12,7 @@ def result_filter_by_distance(stops, targets):
     :return:
     """
 
-    # distance_matrix = cdist(stops, targets, 'euclidean')
+    # generate distance matrix
     distance_matrix = distance_calc(stops, targets)
 
     min_target_distance = np.amin(distance_matrix, axis=0)
@@ -105,7 +105,6 @@ def remove_char_convert_to_int(data_array):
     return retVal
 
 
-# todo parse file name to this function instead of file object
 def convert_csv_to_dataframe(csvfile):
 
     chunksize = 1000
@@ -135,7 +134,7 @@ def save_dataframe_to_db(dataframe, tablename, con):
 
 
 def _clean_data(dataframe):
-    must_drop_col = ['shape_dist_traveled']  # todo use must keep list instead ?
+    must_drop_col = ['shape_dist_traveled']  # todo use must keep column header list instead ?
     for col_name in dataframe.columns.values.tolist():
         if(col_name in must_drop_col):
             dataframe.drop(col_name, axis=1, inplace=True)

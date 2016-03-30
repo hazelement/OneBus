@@ -1,7 +1,6 @@
 import sys
 import os
 
-# radius parameter on both search around tops and places around stops should be smaller
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

@@ -7,8 +7,6 @@ import time
 
 from rdp import rdp
 
-# from scipy.spatial.distance import cdist
-
 import util
 import config
 

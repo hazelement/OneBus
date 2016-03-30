@@ -14,6 +14,7 @@ def index():
     return render_template('index.html')
 
 
+# todo check this api works
 @app.route('/api/route', methods=['POST'])
 def route_port():
     try:

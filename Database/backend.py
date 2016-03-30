@@ -6,15 +6,14 @@ import datetime
 import query_database
 import query_api as api
 import util
-# todo return result should contain upcoming bus arrival time, bus shape from stop to destination, shape from my location to bus stop?, bus number
-# todo update code to follow PEP8 format
-# todo add city gps coordinates to city_url.config => automatically detect city from gps location and select database to use
 
+
+# todo return result should contain upcoming bus arrival time
 
 def get_shape_gps(lat, lng, trip_id, start_stop, end_stop):
     return query_database.find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop)
 
-# def get_destinations(lat, lng, query, option):
+
 def get_destinations(lat, lng, query, ctime):
     """
     return filter destination results
@@ -29,61 +28,43 @@ def get_destinations(lat, lng, query, ctime):
             }
     """
 
+    df_targets = api.yelp_loc_list(lat, lng, query)
 
-    # gps_array, names, addresses = go_loc_list(lat, lng, query)  # Google
-    # gps_array2, names2, addresses2 = fs_loc_list(lat, lng, query)  # Foursquare
+    print("Number of raw destinations: " + str(len(df_targets)))
 
-    # todo put this into dataframe
-    gps_array, names, addresses, image_url, yelp_url, review_count, rating_img_url = api.yelp_loc_list(lat, lng, query) #yelp results
-
-    print("Number of raw destinations: " + str(len(names)))
-
-
-    if(len(names)>0):
-        # todo consider put this into dataframe, with repetitive stop_ids etc
-        # stops, stop_ids, routes, start_stopIDs= query_database.find_accessiable_stops(lat, lng, ctime)
+    if(len(df_targets)>0):
         df_stops = query_database.find_accessiable_stops(lat, lng, ctime)
 
         stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+        target_gps = df_targets[['lat', 'lon']].as_matrix().astype(float)
 
-        stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, gps_array)
+        stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, target_gps)
 
         dest_dict = {}
 
-        # todo maybe we can use pandas here, consider move everything into query_database.py
-        gps_array = gps_array[target_filter_index]
-        names = names[target_filter_index]
-        addresses = addresses[target_filter_index]
-        image_url = image_url[target_filter_index]
-        yelp_url = yelp_url[target_filter_index]
-        review_count = review_count[target_filter_index]
-        rating_img_url = rating_img_url[target_filter_index]
+        # filter out data
 
-        df_stops=df_stops.ix[stop_filter_index]
-        start_stops = df_stops['start_stop_id'].values
-        end_stops = df_stops['stop_id'].values
-        trip_ids = df_stops['trip_id'].values
-        route_ids = df_stops['route_id'].values
+        df_targets = df_targets[target_filter_index]
+        df_stops = df_stops.ix[stop_filter_index]
 
-        print("Transit friendly results: " + str(len(names)))
-        print(names)
 
-        # print(names)
-        # print(addresses)
 
-        for i in range(0, len(gps_array)):
-            dest_dict[names[i]]={"dest_name": names[i],
-                                 "address": addresses[i],
-                                 "lat": gps_array[i][0],
-                                 "lng": gps_array[i][1],
-                                 "image_url": image_url[i],
-                                 "yelp_url": yelp_url[i],
-                                 "review_count": review_count[i],
-                                 "ratings_img": rating_img_url[i],
-                                 "start_stop": str(start_stops[i]),
-                                 "end_stop": str(end_stops[i]),
-                                 "trip_id": str(trip_ids[i]),
-                                 "route_id": str(route_ids[i])}
+        print("Transit friendly results: " + str(len(df_targets)))
+        print(df_targets['name'].values)
+
+        for i in range(0, len(df_targets)):
+            dest_dict[df_targets.iloc[i]['name']]={"dest_name": df_targets.iloc[i]['name'],
+                                                     "address": df_targets.iloc[i]['address'],
+                                                     "lat": df_targets.iloc[i]['lat'],
+                                                     "lng": df_targets.iloc[i]['lon'],
+                                                     "image_url": df_targets.iloc[i]['image_url'],
+                                                     "yelp_url": df_targets.iloc[i]['yelp_url'],
+                                                     "review_count": df_targets.iloc[i]['review_count'],
+                                                     "ratings_img": df_targets.iloc[i]['ratings_img_url'],
+                                                     "start_stop": df_stops.iloc[i]['start_stop_id'],
+                                                     "end_stop": df_stops.iloc[i]['stop_id'],
+                                                     "trip_id": df_stops.iloc[i]['trip_id'],
+                                                     "route_id": df_stops.iloc[i]['route_id']}
 
         retVal={}
         retVal['results']=dest_dict

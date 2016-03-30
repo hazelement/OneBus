@@ -2,6 +2,7 @@
 import urllib
 import json
 import numpy as np
+import pandas as pd
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
@@ -114,11 +115,11 @@ def go_loc_list(lat, lng, query):
 
 def yelp_loc_list(lat, lng, query):
     """
-
+    return yelp results based on user lat and lng, search query
     :param lat:
     :param lng:
     :param query:
-    :return: np.arrays loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
+    :return: dataframe object, columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon']
     """
     print("using yelp")
 
@@ -136,32 +137,26 @@ def yelp_loc_list(lat, lng, query):
     review_count = []
     rating_img_url = []
 
+    df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
+
     for i in range(0, 2):
         response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1', offset=str(i*20)) # meter
         for loc in response.businesses:
-            loc_list.append([loc.location.coordinate.latitude, loc.location.coordinate.longitude])
-            name.append(loc.name)
-            address.append(' '.join(loc.location.display_address))
-            image_url.append(loc.image_url)
-            yelp_url.append(loc.url)
-            review_count.append(loc.review_count)
-            rating_img_url.append(loc.rating_img_url)
+            df.loc[len(df)+1]=[loc.name,
+                               ' '.join(loc.location.display_address),
+                               loc.image_url, loc.url,
+                               loc.review_count,
+                               loc.rating_img_url,
+                               loc.location.coordinate.latitude,
+                               loc.location.coordinate.longitude]
 
-    loc_list = np.array(loc_list)
-    name = np.array(name)
-    address = np.array(address)
-    image_url = np.array(image_url)
-    yelp_url = np.array(yelp_url)
-    review_count = np.array(review_count)
-    rating_img_url = np.array(rating_img_url)
 
-    print(len(name))
-    print name
-    # print address
-    return loc_list, name, address, image_url, yelp_url, review_count, rating_img_url
+    df[['review_count']] = df[['review_count']].astype(int)
+    return df
+
 
 if __name__=="__main__":
     lat = 51.0454027
     lng = -114.05651890000001
     query = "restaurant"
-    yelp_loc_list(lat, lng, query)
+    print(yelp_loc_list(lat, lng, query))
