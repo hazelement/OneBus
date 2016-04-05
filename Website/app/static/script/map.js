@@ -8,6 +8,8 @@ var markers = [];
 var shapes = []
 var home_gps;
 
+var set_center = 0;
+
 function initMap(){
     var mapDiv = document.getElementById('map');
 
@@ -23,10 +25,13 @@ function initMap(){
 
     if (navigator.geolocation) {
         navigator.geolocation.watchPosition(location_success, location_error, geo_options);
+
     } else {
         home_gps = {lat: 51.0486151, lng:-114.0708459}
-        map.setCenter(home_gps)
+
     }
+
+
 
     directionsDisplay = new google.maps.DirectionsRenderer;
     directionsService = new google.maps.DirectionsService;
@@ -53,12 +58,19 @@ function initMap(){
 
 function location_success(position) {
     home_gps = {lat: position.coords.latitude, lng: position.coords.longitude};
-    map.setCenter(home_gps)
+    if(set_center==0){
+        map.setCenter(home_gps);
+        set_center=1;
+    }
+
 }
 
 function location_error() {
     home_gps = {lat: 51.0486151, lng:-114.0708459}
-    map.setCenter(home_gps)
+    if(set_center==0){
+        map.setCenter(home_gps);
+        set_center=1;
+    }
 }
 
 function refreshMap(data) {

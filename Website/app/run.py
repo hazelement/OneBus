@@ -19,4 +19,5 @@ if __name__ == "__main__":
     # app.run(debug=True, port=8000, host='192.168.0.10')
     # app.run(debug=True, port=8000, host='0.0.0.0')
     # app.run(host='localhost', port=8000, ssl_context=context, threaded=True, debug=True)
-    app.run(host='0.0.0.0', ssl_context=context, threaded=True, debug=True)
+    # app.run(host='localhost', threaded=True, debug=True)
+    app.run(host='192.168.0.10', threaded=True, debug=True)

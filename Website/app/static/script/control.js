@@ -3,12 +3,12 @@ $("#frmSearch").submit(function( event ){
     event.preventDefault();
     clearMap();
     
-    $("#divSearch").animate({ top: "5%" }, 800);
-    $("#background").slideUp("normal", function() { $(this).remove(); } );
-    $("#logo").slideUp("normal", function() { $(this).remove(); } );
-    $("#intro").slideUp("normal", function() { $(this).remove(); } );
-    $("#txtSearch").blur()
-    disable_inputs();
+//    $("#divSearch").animate({ top: "5%" }, 800);
+//    $("#background").slideUp("normal", function() { $(this).remove(); } );
+//    $("#logo").slideUp("normal", function() { $(this).remove(); } );
+//    $("#intro").slideUp("normal", function() { $(this).remove(); } );
+//    $("#txtSearch").blur()
+//    disable_inputs();
 
     var currentdate = new Date();
     var datetime =  currentdate.getFullYear() + "-"
@@ -31,32 +31,3 @@ $("#frmSearch").submit(function( event ){
 
 });
 
-
-
-function disable_inputs(){
-    var radios = document.getElementsByName('rbEngines');
-    for (var i = 0; i< radios.length;  i++){
-        radios[i].disabled = true;
-    };
-
-    var input_field = document.getElementsByName('txtSearch');
-    input_field.readOnly = true;
-
-    document.getElementById("loading_hold").style.zIndex = "5";
-    $("#loading_hold").animate({ opacity: "0.8" }, 200);
-
-}
-
-function enable_inputs(){
-
-    var radios = document.getElementsByName('rbEngines');
-    for (var i = 0; i< radios.length;  i++){
-        radios[i].disabled = false;
-    };
-
-    var input_field = document.getElementsByName('txtSearch');
-    input_field.readOnly = false;
-
-    $("#loading_hold").animate({ opacity: "0" }, 200);
-    document.getElementById("loading_hold").style.zIndex = "1";
-}
