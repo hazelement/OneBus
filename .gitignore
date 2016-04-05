@@ -57,3 +57,7 @@ Temporary Items
 *.pyc
 api.config
 iOS/OneBus/Alamofire
+
+onebus.dynu.com.cert
+onebus.dynu.com.key
+

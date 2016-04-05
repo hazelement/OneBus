@@ -16,11 +16,25 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate {
+
+extension UIView {
+    func loadFromNibNamed(nibNamed: String, bundle : NSBundle? = nil) -> UIView? {
+        return UINib(
+            nibName: nibNamed,
+            bundle: bundle
+            ).instantiateWithOwner(nil, options: nil)[0] as? UIView
+    }
+}
+
+
+
+class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UIWebViewDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
     
+//    @IBOutlet weak var webView: UIWebView!
+//    var webView: UIWebView!
     var locationManager: CLLocationManager!
     var api = API_Class()
     
@@ -54,6 +68,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.mapView.delegate = self
         self.mapView.mapType = MKMapType(rawValue: 0)!
         self.mapView.userTrackingMode = MKUserTrackingMode(rawValue: 1)!
+        
+//        self.webView.delegate = self
 
     }
     

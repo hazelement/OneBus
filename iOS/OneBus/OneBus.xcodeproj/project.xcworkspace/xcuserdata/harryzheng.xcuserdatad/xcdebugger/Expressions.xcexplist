@@ -3,7 +3,15 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #2):ViewController.swift">
+         contextName = "static POIView.instanceFromNib(String, no_review : Int) -&gt; UIView:POIView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "myview.viewWithTag(0) as! UILabel">
+            </PersistentString>
+            <PersistentString
+               value = "myview.viewWithTag(0)">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
@@ -24,6 +32,20 @@
             </PersistentString>
             <PersistentString
                value = "detail[&quot;image_url&quot;] as? String">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #2):ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.viewDidLoad() -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.webView.delegate">
+            </PersistentString>
+            <PersistentString
+               value = "self">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
