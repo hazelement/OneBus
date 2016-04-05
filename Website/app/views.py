@@ -11,9 +11,10 @@ from Database import backend
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
-    return render_template('index2.html')
+    return render_template('index.html')
 
-
+# todo add loading bar on html
+# todo add list panel on html
 # todo check this api works
 @app.route('/api/route', methods=['POST'])
 def route_port():
