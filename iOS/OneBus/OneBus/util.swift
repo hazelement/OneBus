@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 func extractString(value : AnyObject?) -> String {
     if value is NSNull {
@@ -16,3 +16,4 @@ func extractString(value : AnyObject?) -> String {
         return (value as! String)
     }
 }
+

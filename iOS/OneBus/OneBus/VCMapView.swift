@@ -11,6 +11,25 @@ import MapKit
 
 extension ViewController {
     
+    func instanceFromNib(address: String, no_review: Int, yelp_url: String) -> UIView {
+        let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
+        let address_label = myview.viewWithTag(2) as! UILabel
+        let review_count = myview.viewWithTag(1) as! UILabel
+        let yelp_button = myview.viewWithTag(4) as! YelpUIButton
+        
+        yelp_button.urlString = yelp_url
+        yelp_button.addTarget(self, action: "yelpButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        address_label.text = address
+        review_count.text = String(no_review)
+        
+        return myview
+    }
+    
+    func yelpButtonClicked(sender:YelpUIButton){
+        // open button url in safari
+        UIApplication.sharedApplication().openURL(NSURL(string: sender.urlString!)!)
+    }
     
     func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
         for myview in views {
@@ -24,18 +43,7 @@ extension ViewController {
         }
     }
     
-    
-    // 1
-    
-//    func createDetailView(address: String, review_count: Int, raing_img_url: String, yelp_url: String) -> UIView{
-//    func createDetailView() -> UIView{
-//        var myview: UIView = UIView()
-//        myview.loadFromNibNamed("ViewPOI.xib")  // looks like this file is not loaded properly
-//        
-//        
-//        return myview
-//        
-//    }
+
     
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -66,29 +74,12 @@ extension ViewController {
                 
                 print(htmlString)
                 
-
+                let myview = instanceFromNib(poi.address, no_review: poi.review_count, yelp_url: poi.yelp_url)
                 
-//                detailView.loadHTMLString(htmlString, baseURL: nil)
-//                detailView.frame = CGRectMake(0, 0, 200, 200)
-//                
-//                let widthConstraint = NSLayoutConstraint(item: detailView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
-//                detailView.addConstraint(widthConstraint)
-//
-//                let heightConstraint = NSLayoutConstraint(item: detailView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
-//                detailView.addConstraint(heightConstraint)
-//
-//                detailView.scrollView.scrollEnabled = false
-//                
-//                
-//                view.detailCalloutAccessoryView = detailView
-                
-                
-                let myview = POIView.instanceFromNib(poi.address, no_review: poi.review_count, yelp_url: poi.yelp_url)
-                
-                let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 280)
+                let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 240)
                 myview.addConstraint(widthConstraint)
                 
-                let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 90)
+                let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)
                 myview.addConstraint(heightConstraint)
                 
                 view.detailCalloutAccessoryView = myview

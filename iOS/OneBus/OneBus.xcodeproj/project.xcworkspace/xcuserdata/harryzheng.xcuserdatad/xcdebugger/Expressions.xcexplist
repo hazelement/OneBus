@@ -36,6 +36,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.mapView(MKMapView!, viewForAnnotation : MKAnnotation!) -&gt; MKAnnotationView!:VCMapView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(myview.viewWithTag(4) as! YelpUIButton).urlString!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #2):ViewController.swift">
       </ContextState>
       <ContextState
