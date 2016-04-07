@@ -11,11 +11,14 @@ import MapKit
 
 extension ViewController {
     
-    func instanceFromNib(address: String, no_review: Int, yelp_url: String) -> UIView {
+    func instanceFromNib(address: String, no_review: Int, yelp_url: String, ratings_img_url: String) -> UIView {
         let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
         let address_label = myview.viewWithTag(2) as! UILabel
         let review_count = myview.viewWithTag(1) as! UILabel
         let yelp_button = myview.viewWithTag(4) as! YelpUIButton
+        let rating_image = myview.viewWithTag(3) as! UIImageView
+        
+        rating_image.downloadedFrom(link: ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
         
         yelp_button.urlString = yelp_url
         yelp_button.addTarget(self, action: "yelpButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -74,9 +77,12 @@ extension ViewController {
                 
                 print(htmlString)
                 
-                let myview = instanceFromNib(poi.address, no_review: poi.review_count, yelp_url: poi.yelp_url)
+                let myview = instanceFromNib(poi.address,
+                                            no_review: poi.review_count,
+                                            yelp_url: poi.yelp_url,
+                                            ratings_img_url: poi.ratings_img_url)
                 
-                let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 240)
+                let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
                 myview.addConstraint(widthConstraint)
                 
                 let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)

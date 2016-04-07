@@ -19,6 +19,7 @@
 		546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546744301CA5FDAC00B1667A /* ApiClass.swift */; };
 		549177021CB225B7000855E3 /* POIView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 549177011CB225B7000855E3 /* POIView.xib */; };
 		549177151CB327D6000855E3 /* YelpUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177141CB327D6000855E3 /* YelpUIButton.swift */; };
+		5491771A1CB5B90F000855E3 /* SwfitSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177191CB5B90F000855E3 /* SwfitSpinner.swift */; };
 		54C57DDF1CA6D23E00392165 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C57DD01CA6D20000392165 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54CA06AE1CA6EB8D00AD45A7 /* Toronto.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */; };
 		54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */; };
@@ -134,6 +135,7 @@
 		546744301CA5FDAC00B1667A /* ApiClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiClass.swift; sourceTree = "<group>"; };
 		549177011CB225B7000855E3 /* POIView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POIView.xib; sourceTree = "<group>"; };
 		549177141CB327D6000855E3 /* YelpUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpUIButton.swift; sourceTree = "<group>"; };
+		549177191CB5B90F000855E3 /* SwfitSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwfitSpinner.swift; sourceTree = "<group>"; };
 		54C57DC51CA6D20000392165 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Toronto.gpx; sourceTree = "<group>"; };
 		54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Calgary.gpx; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				54CA06C41CAB7E0200AD45A7 /* util.swift */,
+				549177191CB5B90F000855E3 /* SwfitSpinner.swift */,
 			);
 			name = Helper;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54CA06B31CA78AE200AD45A7 /* POIClass.swift in Sources */,
+				5491771A1CB5B90F000855E3 /* SwfitSpinner.swift in Sources */,
 				546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */,
 				54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */,
 				54CA06C51CAB7E0200AD45A7 /* util.swift in Sources */,

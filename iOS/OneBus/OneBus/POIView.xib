@@ -10,10 +10,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="240" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="250" height="100"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No. of Reviews: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZz-J4-hOC">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No. of Reviews: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZz-J4-hOC">
                     <rect key="frame" x="8" y="42" width="123" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="123" id="XTm-3w-XWa"/>
@@ -22,7 +22,7 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsd-b8-dYG">
+                <label opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsd-b8-dYG">
                     <rect key="frame" x="114" y="42" width="31" height="21"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="31" id="aPS-3W-XjI"/>
@@ -31,8 +31,23 @@
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnG-d1-vkE">
-                    <rect key="frame" x="153" y="44" width="64" height="17"/>
+                <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3J-ki-dym" customClass="YelpUIButton" customModule="OneBus" customModuleProvider="target">
+                    <rect key="frame" x="8" y="64" width="132" height="34"/>
+                    <state key="normal" title="Button" image="yelp_review_btn_light.png"/>
+                    <state key="selected" image="yelp_review_btn_light.png"/>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="139 King's street NW TXT, JE, Ssdfasfasfandiag" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbf-m3-KYz">
+                    <rect key="frame" x="8" y="0.0" width="221" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4o9-tz-RBV">
+                    <rect key="frame" x="164" y="66" width="62" height="30"/>
+                    <state key="normal" title="Take Bus"/>
+                </button>
+                <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TnG-d1-vkE">
+                    <rect key="frame" x="162" y="44" width="64" height="17"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="17" id="6bU-XF-4bg"/>
                         <constraint firstAttribute="width" constant="64" id="Ajw-IB-6dF"/>
@@ -44,27 +59,16 @@
                         </mask>
                     </variation>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="139 King's street NW TXT, JE, Ssdfasfasfandiag" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tbf-m3-KYz">
-                    <rect key="frame" x="8" y="0.0" width="221" height="34"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3J-ki-dym" customClass="YelpUIButton" customModule="OneBus" customModuleProvider="target">
-                    <rect key="frame" x="8" y="64" width="132" height="34"/>
-                    <state key="normal" title="Button" image="yelp_review_btn_light.png"/>
-                    <state key="selected" image="yelp_review_btn_light.png"/>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="TnG-d1-vkE" secondAttribute="bottom" constant="42" id="0z9-Qz-cAr"/>
+                <constraint firstAttribute="bottom" secondItem="TnG-d1-vkE" secondAttribute="bottom" constant="39" id="0z9-Qz-cAr"/>
                 <constraint firstItem="Wsd-b8-dYG" firstAttribute="baseline" secondItem="SZz-J4-hOC" secondAttribute="baseline" id="3lt-29-PhM"/>
                 <constraint firstAttribute="bottom" secondItem="TnG-d1-vkE" secondAttribute="bottom" constant="7" id="CvH-y3-G9J"/>
-                <constraint firstItem="TnG-d1-vkE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="153" id="D9S-xg-I8L"/>
+                <constraint firstItem="TnG-d1-vkE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="162" id="D9S-xg-I8L"/>
                 <constraint firstItem="TnG-d1-vkE" firstAttribute="top" secondItem="SZz-J4-hOC" secondAttribute="bottom" constant="1" id="JuU-jc-rgq"/>
                 <constraint firstItem="SZz-J4-hOC" firstAttribute="leading" secondItem="tbf-m3-KYz" secondAttribute="leading" id="Mry-8e-D2h"/>
-                <constraint firstAttribute="trailing" secondItem="tbf-m3-KYz" secondAttribute="trailing" constant="8" id="R60-z2-vHu"/>
+                <constraint firstAttribute="trailing" secondItem="tbf-m3-KYz" secondAttribute="trailing" constant="21" id="R60-z2-vHu"/>
                 <constraint firstAttribute="bottom" secondItem="tbf-m3-KYz" secondAttribute="bottom" constant="28" id="WU3-xY-8Ns"/>
                 <constraint firstItem="TnG-d1-vkE" firstAttribute="top" secondItem="SZz-J4-hOC" secondAttribute="bottom" constant="-19" id="cGP-1t-9Co"/>
                 <constraint firstItem="Wsd-b8-dYG" firstAttribute="firstBaseline" secondItem="SZz-J4-hOC" secondAttribute="firstBaseline" id="eA9-xL-9Fi"/>
@@ -86,7 +90,7 @@
                     <exclude reference="JuU-jc-rgq"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="-96.5" y="-277.5"/>
+            <point key="canvasLocation" x="-92.5" y="-278"/>
         </view>
     </objects>
     <resources>

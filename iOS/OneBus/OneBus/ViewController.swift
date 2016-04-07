@@ -78,12 +78,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.mapView.removeAnnotations( annotationsToRemove )
         let search_txt = search_bar.text!
 
+        SwiftSpinner.show("Looking around ...")
         api.search_results(search_txt, lat: self.lat, lng: self.lng)
             {response in
                 if(response != nil){
                     if(response!["success"]! as! Int==1){
                         print(response!["message"])
-    //                    self.performSegueWithIdentifier("login_success",sender: self)
                         self.plotResult(response!["results"] as! NSDictionary)
                     }
                     else{
@@ -93,7 +93,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                 else{
                     print("nil")
                 }
-
+                SwiftSpinner.hide()
         }
 
         
