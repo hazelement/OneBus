@@ -122,11 +122,6 @@ def convert_csv_to_dataframe(csvfile):
 
 def save_dataframe_to_db(dataframe, tablename, con):
 
-    sql_query= "DROP TABLE " + tablename
-    c = con.cursor()
-    c.execute(sql_query)
-    con.commit()
-
     try:
         dataframe.to_sql(tablename, con, if_exists='replace')
     except MemoryError:

@@ -41,8 +41,11 @@ def _update_city_database(city_province_country):
     with sqlite3.connect(db_name) as con:
         for fname in file_names:
             print("processing " + fname)
-            data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
-            util.save_dataframe_to_db(data, fname, con)
+            try:
+                data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
+                util.save_dataframe_to_db(data, fname, con)
+            except KeyError:
+                print(fname + " not in the data catalog")
 
 
         fname = 'calendar'
@@ -82,9 +85,12 @@ def _update_city_database(city_province_country):
     print("finished")
 
 if __name__ == "__main__":
-    update_all_database()
+    # update_all_database()
     # list = ["23:42:23", "32:01:32"]
     # _update_city_database('toronto_on_canada')
+    _update_city_database('edmonton_ab_canada')
+    _update_city_database('vancouver_bc_canada')
+
     #
     # print(convert_time_string_to_int(list))
 

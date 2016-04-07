@@ -9,6 +9,7 @@ from rdp import rdp
 
 import util
 import config
+import polyline_en_de_coder as pl
 
 
 class Timer:
@@ -33,6 +34,7 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
     :param end_stop:
     :return:
     """
+    print("retrieving shape info")
 
     city_code = config.read_city_code_from_config(lat, lng) # find city code
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
@@ -64,7 +66,9 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
 
         df = pd.DataFrame(shape_lat_lng_small, columns=['lat', 'lng'])
 
-    return df.to_json()
+    tuples = [tuple(x) for x in df.values]
+    print(pl.encode_coords(tuples))
+    return tuples
 
 
 def find_accessiable_stops(lat, lng, ctime):
@@ -151,15 +155,21 @@ def _find_near_trips(near_stops, service_id, currenttime, con):
 
     trips=[]
 
-    st_trip_id=pd.read_sql("SELECT * FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
-    trips_trip_id=pd.read_sql("SELECT * FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
+    st_trip_id=pd.read_sql("SELECT trip_id,stop_id FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
+    trips_trip_id=pd.read_sql("SELECT trip_id,route_id FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
+
+    # this one performance is slow
+    # sql = "SELECT t.trip_id, st.stop_id, t.route_id FROM stop_times st, trips t " + \
+    #       "WHERE st.stop_id IN (" + ','.join("{0}".format(x) for x in near_stops) + ") " + \
+    #       "AND st.arrival_time>" + str(currenttime) + " "\
+    #       "AND st.trip_id = t.trip_id " + \
+    #       "AND t.service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")" + " " + \
+    #       "ORDER BY st.arrival_time"
+
+
 
     result = pd.merge(st_trip_id, trips_trip_id, on='trip_id')
-
-    # print(result)
-    # print(currenttime)
-
-    # result = result[result['arrival_time']>currenttime]
+    # result2 = pd.read_sql(sql, con)
 
     _ , unique_indices = np.unique(result['route_id'].values, return_index = True)
 
@@ -197,7 +207,7 @@ if __name__ == "__main__":
     lat = 51.135494 # calgary
     lng = -114.158389
     # current_time = datetime.datetime.now()
-    #
+    # #
     # ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
     # ctime = "2016-03-28|08:10:32"
     # print(find_accessiable_stops(lat, lng, ctime))
