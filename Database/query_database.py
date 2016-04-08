@@ -67,8 +67,10 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
         df = pd.DataFrame(shape_lat_lng_small, columns=['lat', 'lng'])
 
     tuples = [tuple(x) for x in df.values]
-    print(pl.encode_coords(tuples))
-    return tuples
+
+    encoded = pl.encode_coords(tuples)
+    print(encoded)
+    return encoded
 
 
 def find_accessiable_stops(lat, lng, ctime):
