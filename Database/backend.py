@@ -1,6 +1,5 @@
 
 import numpy as np
-# from scipy.spatial.distance import cdist
 import datetime
 
 import query_database
@@ -11,6 +10,13 @@ import util
 # todo return result should contain upcoming bus arrival time
 
 def get_shape_gps(lat, lng, trip_id, start_stop, end_stop):
+
+    lat = float(lat)
+    lng = float(lng)
+    trip_id = float(trip_id)
+    start_stop = float(start_stop)
+    end_stop = float(end_stop)
+
     return query_database.find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop)
 
 

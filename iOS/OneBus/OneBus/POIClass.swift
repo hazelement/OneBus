@@ -31,8 +31,8 @@ class POI: NSObject, MKAnnotation {
 
     let coordinate: CLLocationCoordinate2D
     
-    init(destName: String, address: String, image_url: String, yelp_url: String, review_count: Int, ratings_img_url: String, coordinate: CLLocationCoordinate2D, start_stop: String, end_stop: String,
-         trip_id: String, route_id: String) {
+    init(destName: String, address: String, image_url: String, yelp_url: String, review_count: Int, ratings_img_url: String, coordinate: CLLocationCoordinate2D, start_stop: Int, end_stop: Int,
+         trip_id: Int, route_id: Int) {
         
         self.destName = destName
         self.address = address
@@ -43,10 +43,10 @@ class POI: NSObject, MKAnnotation {
         
         self.coordinate = coordinate
         
-        self.start_stop = start_stop
-        self.end_stop = end_stop
-        self.trip_id = trip_id
-        self.route_id = route_id
+        self.start_stop = String(start_stop)
+        self.end_stop = String(end_stop)
+        self.trip_id = String(trip_id)
+        self.route_id = String(route_id)
         
         super.init()
     }

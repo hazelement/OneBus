@@ -17,7 +17,7 @@ public class API_Class{
     public init (){
         
         self._client = "http://162.246.156.126:8000"
-//        self._client = "http://localhost:8000"
+//        self._client = "http://localhost:5000"
 //        self._client = "http://192.168.0.10:8000"
         
     }
@@ -62,7 +62,7 @@ public class API_Class{
         
     }
     
-    public func get_trip_shape(trip_id: String, start_stop: String, end_stop:String, lat: String, lng: String, completionHandler: NSDictionary? -> ()){
+    public func get_trip_shape(trip_id: String, start_stop: String, end_stop: String, lat: String, lng: String, completionHandler: NSDictionary? -> ()){
         let api: String = "/api/route"
         let url: String = self._client + api
         

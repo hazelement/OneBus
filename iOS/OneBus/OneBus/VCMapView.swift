@@ -11,22 +11,54 @@ import MapKit
 
 extension ViewController {
     
-    func instanceFromNib(address: String, no_review: Int, yelp_url: String, ratings_img_url: String) -> UIView {
+    func instanceFromNib(poi: POI) -> UIView {
+//    func instanceFromNib(address: String, no_review: Int, yelp_url: String, ratings_img_url: String) -> UIView {
         let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
         let address_label = myview.viewWithTag(2) as! UILabel
         let review_count = myview.viewWithTag(1) as! UILabel
         let yelp_button = myview.viewWithTag(4) as! YelpUIButton
         let rating_image = myview.viewWithTag(3) as! UIImageView
+        let bus_button = myview.viewWithTag(5) as! BusUIButton
         
-        rating_image.downloadedFrom(link: ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
+        rating_image.downloadedFrom(link: poi.ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
         
-        yelp_button.urlString = yelp_url
+        yelp_button.urlString = poi.yelp_url
         yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        address_label.text = address
-        review_count.text = String(no_review)
+        bus_button.start_stop = poi.start_stop
+        bus_button.end_stop = poi.end_stop
+        bus_button.trip_id = poi.trip_id
+        
+        bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents:  UIControlEvents.TouchUpInside)
+        
+        address_label.text = poi.address
+        review_count.text = String(poi.review_count)
         
         return myview
+    }
+    
+    func busRouteButtonClicked(sender:BusUIButton){
+        api.get_trip_shape(sender.trip_id!, start_stop: sender.start_stop!, end_stop: sender.end_stop!, lat: self.lat, lng: self.lng)
+            {response in
+                if(response != nil){
+                    if(response!["success"]! as! Int==1){
+                        print(response!["message"])
+                        let raw_shape = response!["result"] as! String
+
+                        var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
+
+                        let polyline = MKPolyline(coordinates: &locations, count: locations.count)
+                        self.mapView.addOverlay(polyline)
+//                                self.centerOnUser()
+                    }
+                    else{
+                        print(response!["message"])
+                    }
+                }
+                else{
+                    print("nil")
+                }
+        }
     }
     
     func yelpButtonClicked(sender:YelpUIButton){
@@ -44,6 +76,17 @@ extension ViewController {
             UIView.animateWithDuration(0.5, animations: { () -> Void in myview.frame = endFrame })
             
         }
+    }
+    
+    func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
+        if overlay is MKPolyline {
+            let polylineRenderer = MKPolylineRenderer(overlay: overlay)
+            polylineRenderer.strokeColor = UIColor.blueColor()
+            polylineRenderer.lineWidth = 5
+            return polylineRenderer
+        }
+    
+        return nil
     }
     
 
@@ -66,10 +109,7 @@ extension ViewController {
                 
                 let poi = annotation as POI
                 
-                let myview = instanceFromNib(poi.address,
-                                            no_review: poi.review_count,
-                                            yelp_url: poi.yelp_url,
-                                            ratings_img_url: poi.ratings_img_url)
+                let myview = instanceFromNib(poi)
                 
                 let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
                 myview.addConstraint(widthConstraint)
@@ -80,6 +120,8 @@ extension ViewController {
                 view.detailCalloutAccessoryView = myview
                 
                 view.canShowCallout = true
+                
+
                 
             }
         

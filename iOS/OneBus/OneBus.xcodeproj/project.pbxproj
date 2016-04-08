@@ -18,7 +18,7 @@
 		5467442D1CA5E01300B1667A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5467442C1CA5E01300B1667A /* CoreLocation.framework */; };
 		546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546744301CA5FDAC00B1667A /* ApiClass.swift */; };
 		549177021CB225B7000855E3 /* POIView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 549177011CB225B7000855E3 /* POIView.xib */; };
-		549177151CB327D6000855E3 /* YelpUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177141CB327D6000855E3 /* YelpUIButton.swift */; };
+		549177151CB327D6000855E3 /* CustomizeUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177141CB327D6000855E3 /* CustomizeUIButton.swift */; };
 		5491771A1CB5B90F000855E3 /* SwfitSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177191CB5B90F000855E3 /* SwfitSpinner.swift */; };
 		54AF41C71CB8074E00BBF71B /* Polyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AF41C61CB8074D00BBF71B /* Polyline.swift */; };
 		54C57DDF1CA6D23E00392165 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C57DD01CA6D20000392165 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -136,7 +136,7 @@
 		5467442C1CA5E01300B1667A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		546744301CA5FDAC00B1667A /* ApiClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiClass.swift; sourceTree = "<group>"; };
 		549177011CB225B7000855E3 /* POIView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = POIView.xib; sourceTree = "<group>"; };
-		549177141CB327D6000855E3 /* YelpUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpUIButton.swift; sourceTree = "<group>"; };
+		549177141CB327D6000855E3 /* CustomizeUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizeUIButton.swift; sourceTree = "<group>"; };
 		549177191CB5B90F000855E3 /* SwfitSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwfitSpinner.swift; sourceTree = "<group>"; };
 		54AF41C61CB8074D00BBF71B /* Polyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polyline.swift; sourceTree = "<group>"; };
 		54C57DC51CA6D20000392165 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
@@ -277,7 +277,7 @@
 				546743FE1CA5D7D700B1667A /* ViewController.swift */,
 				54CA06BA1CA78FF100AD45A7 /* VCMapView.swift */,
 				549177011CB225B7000855E3 /* POIView.xib */,
-				549177141CB327D6000855E3 /* YelpUIButton.swift */,
+				549177141CB327D6000855E3 /* CustomizeUIButton.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -499,7 +499,7 @@
 				546744311CA5FDAC00B1667A /* ApiClass.swift in Sources */,
 				54CA06BB1CA78FF100AD45A7 /* VCMapView.swift in Sources */,
 				54CA06C51CAB7E0200AD45A7 /* util.swift in Sources */,
-				549177151CB327D6000855E3 /* YelpUIButton.swift in Sources */,
+				549177151CB327D6000855E3 /* CustomizeUIButton.swift in Sources */,
 				546743FF1CA5D7D700B1667A /* ViewController.swift in Sources */,
 				546743FD1CA5D7D700B1667A /* AppDelegate.swift in Sources */,
 			);

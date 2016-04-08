@@ -28,6 +28,8 @@ def route_port():
         lat = post_data['lat']
         lng = post_data['lng']
 
+        # print(trip_id, start_stop, end_stop, lat, lng)
+
     except:
         result={}
         result['results']={}

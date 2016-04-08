@@ -178,7 +178,7 @@ public func decodePolyline(encodedPolyline: String, precision: Double = 1e5) -> 
 /// - returns: A [CLLocation] representing the decoded polyline if valid, nil otherwise
 public func decodePolyline(encodedPolyline: String, precision: Double = 1e5) -> [CLLocation]? {
     
-    return decodePolyline(encodedPolyline, precision: precision).map(toLocations)
+    return decodePolyline(encodedPolyline, precision: precision)//.map(toLocations)
 }
 
 /// This function decodes a `String` to an `[UInt32]`

@@ -38,6 +38,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     var locationManager: CLLocationManager!
     var api = API_Class()
     
+    var annotationsPOI: Array = [POI]()
+    
+    
     var lat: String = "51.0454027"
     var lng: String = "-114.05651890000001"
     
@@ -97,6 +100,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                 }
                 else{
                     print("nil")
+                    let alertController = UIAlertController(title: "Server Error", message:
+                        "Oops, our server are being lazy. We are getting it to work.", preferredStyle: UIAlertControllerStyle.Alert)
+                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+                    
+                    self.presentViewController(alertController, animated: true, completion: nil)
                 }
                 SwiftSpinner.hide()
         }
@@ -123,13 +131,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                           review_count: detail["review_count"] as! Int,
                           ratings_img_url: extractString(detail["ratings_img"]),
                           coordinate: myLocation,
-                          start_stop: extractString(detail["start_stop"]),
-                          end_stop: extractString(detail["end_stop"]),
-                          trip_id: extractString(detail["trip_id"]),
-                          route_id: extractString(detail["route_id"]))
+                          start_stop: detail["start_stop"] as! Int,
+                          end_stop: detail["end_stop"] as! Int,
+                          trip_id: detail["trip_id"] as! Int,
+                          route_id: detail["route_id"] as! Int)
             
 //            usleep(useconds_t(500)) // todo drop down pins one after another like maps on iphone
-            self.mapView.addAnnotation(poi)
+            
+            annotationsPOI.append(poi)
+            
+            self.mapView.addAnnotations(annotationsPOI)
+//            self.mapView.addAnnotation(poi)
             
             print("Property: \"\(key as! String)\"")
         }
