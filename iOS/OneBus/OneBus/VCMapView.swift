@@ -21,7 +21,7 @@ extension ViewController {
         rating_image.downloadedFrom(link: ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
         
         yelp_button.urlString = yelp_url
-        yelp_button.addTarget(self, action: "yelpButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         address_label.text = address
         review_count.text = String(no_review)
@@ -65,17 +65,6 @@ extension ViewController {
                 view.calloutOffset = CGPoint(x: -5, y: 5)
                 
                 let poi = annotation as POI
-                
-//                let detailView = UIWebView()
-//                
-                var htmlString: String = ""
-//                htmlString = htmlString + "<b><font size = \"3\">" + poi.title! + "</font></b><br>"
-                htmlString = htmlString + "<img src=\"" + poi.ratings_img_url + "\"><br>"
-                htmlString = htmlString + "Number of Reviews: " + String(poi.review_count) + "<br>"
-                htmlString = htmlString + poi.address
-                htmlString = htmlString + "<br><a href=\"" + poi.yelp_url + "\" target=\"_blank\">" + "<img src=\"yelp_review_btn_light.png\"></a>" // todo this yelp image is not working
-                
-                print(htmlString)
                 
                 let myview = instanceFromNib(poi.address,
                                             no_review: poi.review_count,

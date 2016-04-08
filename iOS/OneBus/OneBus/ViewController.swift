@@ -28,7 +28,7 @@ extension UIView {
 
 
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UIWebViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UITableViewDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
@@ -40,7 +40,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     
     var lat: String = "51.0454027"
     var lng: String = "-114.05651890000001"
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +68,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.mapView.mapType = MKMapType(rawValue: 0)!
         self.mapView.userTrackingMode = MKUserTrackingMode(rawValue: 1)!
         
+//        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "customcell")
+
+        
 //        self.webView.delegate = self
 
     }
@@ -85,6 +89,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                     if(response!["success"]! as! Int==1){
                         print(response!["message"])
                         self.plotResult(response!["results"] as! NSDictionary)
+                        self.centerOnUser()
                     }
                     else{
                         print(response!["message"])
@@ -111,7 +116,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
             
             let myLocation = CLLocationCoordinate2DMake(lat, lng)
             
-            let poi = POI(destName: extractString(detail["dest_name"]), address: extractString(detail["address"]), image_url: extractString(detail["image_url"]), yelp_url: extractString(detail["yelp_url"]), review_count: detail["review_count"] as! Int, ratings_img_url: extractString(detail["ratings_img"]), coordinate: myLocation)
+            let poi = POI(destName: extractString(detail["dest_name"]),
+                          address: extractString(detail["address"]),
+                          image_url: extractString(detail["image_url"]),
+                          yelp_url: extractString(detail["yelp_url"]),
+                          review_count: detail["review_count"] as! Int,
+                          ratings_img_url: extractString(detail["ratings_img"]),
+                          coordinate: myLocation,
+                          start_stop: extractString(detail["start_stop"]),
+                          end_stop: extractString(detail["end_stop"]),
+                          trip_id: extractString(detail["trip_id"]),
+                          route_id: extractString(detail["route_id"]))
             
 //            usleep(useconds_t(500)) // todo drop down pins one after another like maps on iphone
             self.mapView.addAnnotation(poi)
@@ -121,6 +136,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
 
     }
     
+    @IBAction func btnCenter(sender: UIButton) {
+        
+        centerOnUser()
+
+    }
+    
+    func centerOnUser(){
+        
+        let center = CLLocationCoordinate2D(latitude: Double(self.lat)!, longitude: Double(self.lng)!)
+        
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
+        
+        self.mapView.setRegion(region, animated: true)
+    }
 
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate

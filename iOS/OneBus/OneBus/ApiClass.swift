@@ -58,9 +58,21 @@ public class API_Class{
                                            "home_gps": ["lat": lat, "lng": lng],
                                             "current_time": ct]
         
-        
         fetch_url(url, values: values, method: "POST", completionHandler: completionHandler)
         
+    }
+    
+    public func get_trip_shape(trip_id: String, start_stop: String, end_stop:String, lat: String, lng: String, completionHandler: NSDictionary? -> ()){
+        let api: String = "/api/route"
+        let url: String = self._client + api
+        
+        let values: [String: AnyObject] = ["trip_id": trip_id,
+                                           "start_stop": start_stop,
+                                           "end_stop": end_stop,
+                                           "lat": lat,
+                                           "lng": lng]
+        
+        fetch_url(url, values: values, method: "POST", completionHandler: completionHandler)
     }
     
     
