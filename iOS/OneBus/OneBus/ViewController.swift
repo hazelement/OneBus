@@ -33,8 +33,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
     
-//    @IBOutlet weak var webView: UIWebView!
-//    var webView: UIWebView!
     var locationManager: CLLocationManager!
     var api = API_Class()
     
@@ -81,10 +79,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     }
     
     func searchBarSearchButtonClicked( search_bar: UISearchBar){
+        
         let annotationsToRemove = self.mapView.annotations.filter { $0 !== self.mapView.userLocation }
         self.mapView.removeAnnotations( annotationsToRemove )
+        var overlaysToRemove = mapView.overlays
+        mapView.removeOverlays(overlaysToRemove)
+        
         let search_txt = search_bar.text!
-
+        
         SwiftSpinner.show("Looking around ...")
         api.search_results(search_txt, lat: self.lat, lng: self.lng)
             {response in
@@ -124,7 +126,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
             
             let myLocation = CLLocationCoordinate2DMake(lat, lng)
             
-            let poi = POI(destName: extractString(detail["dest_name"]),
+            let poi = POI(index: annotationsPOI.count,
+                          destName: extractString(detail["dest_name"]),
                           address: extractString(detail["address"]),
                           image_url: extractString(detail["image_url"]),
                           yelp_url: extractString(detail["yelp_url"]),
