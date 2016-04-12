@@ -34,10 +34,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     @IBOutlet weak var mapView: MKMapView!
     
     var locationManager: CLLocationManager!
+    
     var api = API_Class()
     
     var annotationsPOI: Array = [POI]()
-    
     
     var lat: String = "51.0454027"
     var lng: String = "-114.05651890000001"
@@ -45,6 +45,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        self.annotationsPOI = [POI]()
+        self.api = API_Class()
         
         self.searchBar.showsScopeBar = true
         self.searchBar.delegate = self
@@ -80,10 +83,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     
     func searchBarSearchButtonClicked( search_bar: UISearchBar){
         
+        // refresh data and annotaions
         let annotationsToRemove = self.mapView.annotations.filter { $0 !== self.mapView.userLocation }
         self.mapView.removeAnnotations( annotationsToRemove )
-        var overlaysToRemove = mapView.overlays
+        let overlaysToRemove = mapView.overlays
         mapView.removeOverlays(overlaysToRemove)
+        self.annotationsPOI = [POI]()
         
         let search_txt = search_bar.text!
         
@@ -174,15 +179,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         print("locations = \(locValue.latitude) \(locValue.longitude)")
     }
     
-
-
-    
     
     func centerMapOnLocation(location: CLLocation) {
         let regionRadius: CLLocationDistance = 1000
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
             regionRadius * 2.0, regionRadius * 2.0)
-        mapView.setRegion(coordinateRegion, animated: true)
+        self.mapView.setRegion(coordinateRegion, animated: true)
     }
     
     

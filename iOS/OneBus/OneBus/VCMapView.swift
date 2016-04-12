@@ -14,23 +14,23 @@ extension ViewController {
     func instanceFromNib(poi_index: Int) -> UIView {
         
         let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
-        let address_label = myview.viewWithTag(2) as! UILabel
+//        let address_label = myview.viewWithTag(2) as! UILabel
         let review_count = myview.viewWithTag(1) as! UILabel
-        let yelp_button = myview.viewWithTag(4) as! YelpUIButton
+//        let yelp_button = myview.viewWithTag(4) as! YelpUIButton
         let rating_image = myview.viewWithTag(3) as! UIImageView
-        let bus_button = myview.viewWithTag(5) as! BusUIButton
+//        let bus_button = myview.viewWithTag(5) as! BusUIButton
         
         rating_image.downloadedFrom(link: annotationsPOI[poi_index].ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
         
-        yelp_button.urlString = annotationsPOI[poi_index].yelp_url
-        yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        yelp_button.urlString = annotationsPOI[poi_index].yelp_url
+//        yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//        
+//        bus_button.poi_index = poi_index
+//        
+//        bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents:  UIControlEvents.TouchUpInside)
         
-        bus_button.poi_index = poi_index
-        
-        bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents:  UIControlEvents.TouchUpInside)
-        
-        address_label.text = annotationsPOI[poi_index].address
-        review_count.text = String(annotationsPOI[poi_index].review_count)
+//        address_label.text = annotationsPOI[poi_index].address
+        review_count.text = String(annotationsPOI[poi_index].review_count) + " reviews on yelp"
         
         return myview
     }
@@ -94,7 +94,7 @@ extension ViewController {
         }
     }
     
-    func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer! {
         if overlay is MKPolyline {
             let polylineRenderer = MKPolylineRenderer(overlay: overlay)
             polylineRenderer.strokeColor = UIColor.blueColor()
@@ -106,36 +106,62 @@ extension ViewController {
         return nil
     }
     
+    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!,
+                 calloutAccessoryControlTapped control: UIControl!) {
+        
+        if control == view.rightCalloutAccessoryView {
+            print("Right")
+        }
+        else if control == view.leftCalloutAccessoryView   {
+            print("Left")
+        }
+        
+    }
+    
 
     
     
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
         if let annotation = annotation as? POI {
             let identifier = "pin"
             var view: MKPinAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
-                as? MKPinAnnotationView { // 2
-                    dequeuedView.annotation = annotation
-                    view = dequeuedView
-            } else {
+//            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
+//                as? MKPinAnnotationView { // 2
+//                    dequeuedView.annotation = annotation
+//                    view = dequeuedView
+//            } else {
 //                 3
-                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                view.canShowCallout = true
-                view.calloutOffset = CGPoint(x: -5, y: 5)
-                
-                let myview = instanceFromNib(annotation.index)
-                
-                let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
-                myview.addConstraint(widthConstraint)
-                
-                let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)
-                myview.addConstraint(heightConstraint)
-                
-                view.detailCalloutAccessoryView = myview
-                
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view.canShowCallout = true
+            view.calloutOffset = CGPoint(x: -5, y: 5)
             
-            }
+            let bus_button = BusUIButton(type: .DetailDisclosure)
+            bus_button.poi_index = annotation.index
+            bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            view.rightCalloutAccessoryView = bus_button as UIView
+            
+            
+            let yelp_button = YelpUIButton(type: .ContactAdd)
+            yelp_button.urlString = annotation.yelp_url
+            yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            
+            view.leftCalloutAccessoryView = yelp_button as UIView
+            
+            
+            let myview = instanceFromNib(annotation.index)
+            
+            let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
+            myview.addConstraint(widthConstraint)
+            
+            let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20)
+            myview.addConstraint(heightConstraint)
+            
+//            view.detailCalloutAccessoryView = myview
+            
+            
+//            }
         
             
             return view
