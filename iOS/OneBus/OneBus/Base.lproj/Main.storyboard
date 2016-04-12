@@ -24,8 +24,8 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YPc-4Q-H7m">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                             </mapView>
-                            <button opaque="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVF-gQ-IuL">
-                                <rect key="frame" x="260" y="508" width="40" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVF-gQ-IuL">
+                                <rect key="frame" x="245" y="493" width="55" height="55"/>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Button" image="Maps-Center-Direction-icon.png"/>
                                 <connections>
@@ -57,6 +57,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Maps-Center-Direction-icon.png" width="80" height="80"/>
+        <image name="Maps-Center-Direction-icon.png" width="150" height="150"/>
     </resources>
 </document>

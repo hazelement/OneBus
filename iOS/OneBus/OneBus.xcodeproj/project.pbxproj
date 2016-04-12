@@ -21,7 +21,7 @@
 		549177151CB327D6000855E3 /* CustomizeUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177141CB327D6000855E3 /* CustomizeUIButton.swift */; };
 		5491771A1CB5B90F000855E3 /* SwfitSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 549177191CB5B90F000855E3 /* SwfitSpinner.swift */; };
 		54AF41C71CB8074E00BBF71B /* Polyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AF41C61CB8074D00BBF71B /* Polyline.swift */; };
-		54BBB63B1CBC8D0200A4FC36 /* Maps-Center-Direction-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BBB63A1CBC8D0200A4FC36 /* Maps-Center-Direction-icon.png */; };
+		54BBB6441CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 54BBB6431CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png */; };
 		54C57DDF1CA6D23E00392165 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C57DD01CA6D20000392165 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		54CA06AE1CA6EB8D00AD45A7 /* Toronto.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */; };
 		54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */; };
@@ -139,7 +139,7 @@
 		549177141CB327D6000855E3 /* CustomizeUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizeUIButton.swift; sourceTree = "<group>"; };
 		549177191CB5B90F000855E3 /* SwfitSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwfitSpinner.swift; sourceTree = "<group>"; };
 		54AF41C61CB8074D00BBF71B /* Polyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polyline.swift; sourceTree = "<group>"; };
-		54BBB63A1CBC8D0200A4FC36 /* Maps-Center-Direction-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Maps-Center-Direction-icon.png"; sourceTree = "<group>"; };
+		54BBB6431CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Maps-Center-Direction-icon.png"; sourceTree = "<group>"; };
 		54C57DC51CA6D20000392165 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		54CA06AD1CA6EB8D00AD45A7 /* Toronto.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Toronto.gpx; sourceTree = "<group>"; };
 		54CA06AF1CA6EBF100AD45A7 /* Calgary.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Calgary.gpx; sourceTree = "<group>"; };
@@ -239,7 +239,7 @@
 		549176F11CB0D85B000855E3 /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				54BBB63A1CBC8D0200A4FC36 /* Maps-Center-Direction-icon.png */,
+				54BBB6431CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png */,
 				54CA06CC1CAB89C300AD45A7 /* yelp_review_btn_light.png */,
 			);
 			name = resources;
@@ -465,7 +465,7 @@
 				54CA06AE1CA6EB8D00AD45A7 /* Toronto.gpx in Resources */,
 				549177021CB225B7000855E3 /* POIView.xib in Resources */,
 				546744041CA5D7D700B1667A /* Assets.xcassets in Resources */,
-				54BBB63B1CBC8D0200A4FC36 /* Maps-Center-Direction-icon.png in Resources */,
+				54BBB6441CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png in Resources */,
 				546744021CA5D7D700B1667A /* Main.storyboard in Resources */,
 				54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */,
 				54CA06CD1CAB89C300AD45A7 /* yelp_review_btn_light.png in Resources */,
