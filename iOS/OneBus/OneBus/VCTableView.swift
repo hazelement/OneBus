@@ -44,40 +44,61 @@ extension ViewController{
         return cell
     }
     
+    
+    
     func toggle_table(loading: Bool){
-        self.btnHideList.hidden=false
         
-        if(loading == false){
-            if(self.btnHideList.table_is_hidden == true){ // show table
-                self.btnHideList.table_is_hidden = false
-                self.btnHideList.setTitle("Hide List", forState: .Normal)
-                showPOITable()
+        
+//        if(loading == false){
+        if(self.btnHideList.table_is_hidden == true){ // show table
+            
+            showPOITable("Hide List")
+            
+        }
+        else if(self.btnHideList.table_is_hidden == false) { // hide table
+            
+            hidePOITable("Show List")
+        }
+//            }
+//        } else {  // hide table with loading label
+//            self.btnHideList.table_is_hidden = true
+//            self.btnHideList.setTitle("Loading...", forState: .Normal)
+//            hidePOITable(true)
+//        }
+    }
+    
+    func showPOITable(label: String){
+        if(self.btnHideList.table_is_hidden == true){
+            self.btnHideList.hidden=false
+            self.btnHideList.table_is_hidden = false
+            self.btnHideList.setTitle(label, forState: .Normal)
+            
+            UIView.animateWithDuration(ANIMATION_DURATION, delay: ANIMATION_DELAY, options: [.CurveEaseOut], animations: {
                 
-            } else { // hide table
-                self.btnHideList.table_is_hidden = true
-                self.btnHideList.setTitle("Show List", forState: .Normal)
-                hidePOITable(true)
-            }
-        } else {  // hide table with loading label
-            self.btnHideList.table_is_hidden = true
-            self.btnHideList.setTitle("Loading...", forState: .Normal)
-            hidePOITable(true)
+                self.tableBottomLocation.constant -= self.poiTable.frame.size.height
+                
+                self.view.layoutIfNeeded()
+                }, completion: { finished in
+                    print("Table show")
+            })
         }
     }
     
-    func showPOITable(){
-        UIView.animateWithDuration(ANIMATION_DURATION, delay: ANIMATION_DELAY, options: [.CurveEaseOut], animations: {
-            
-            self.tableBottomLocation.constant -= self.poiTable.frame.size.height
-            
-            self.view.layoutIfNeeded()
-            }, completion: { finished in
-                print("Table show")
-        })
+    func initHidePOITable(){
+        self.tableBottomLocation.constant += self.poiTable.frame.size.height
+        self.btnHideList.hidden=true
+        self.btnHideList.table_is_hidden=true
+        self.view.layoutIfNeeded()
     }
     
-    func hidePOITable(animated: Bool){
-        if(animated == true){
+    func hidePOITable(label: String){
+        self.btnHideList.setTitle(label, forState: .Normal)
+        self.btnHideList.hidden=false
+        if(self.btnHideList.table_is_hidden == false){
+            
+            self.btnHideList.table_is_hidden = true
+            
+            
             UIView.animateWithDuration(ANIMATION_DURATION, delay: ANIMATION_DELAY, options: [.CurveEaseOut], animations: {
                 
                 self.tableBottomLocation.constant += self.poiTable.frame.size.height
@@ -86,14 +107,7 @@ extension ViewController{
                 }, completion: { finished in
                     print("Table hide")
             })
-        } else {
-            
-            self.tableBottomLocation.constant += self.poiTable.frame.size.height
-            self.btnHideList.hidden=true
-            self.btnHideList.table_is_hidden=true
-            self.view.layoutIfNeeded()
         }
-        
     }
     
     

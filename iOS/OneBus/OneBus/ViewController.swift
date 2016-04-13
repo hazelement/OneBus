@@ -66,7 +66,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.poiTable.delegate = self
 //        self.poiTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.poiTable.registerNib(UINib(nibName: "CustomizeTableCell", bundle: nil), forCellReuseIdentifier: "CustomizeTableCellUnit")
-        self.hidePOITable(false)
+        self.initHidePOITable()
         
         self.annotationsPOI = [POI]()
         self.api = API_Class()
@@ -116,7 +116,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         // if is not first time, need to hide table first
         if(self.first_time_open == false){
 //            self.hidePOITable(true)
-            self.toggle_table(true)
+            self.hidePOITable("Loading...")
         } else {
             
         }
@@ -147,7 +147,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                 
                 self.poiTable.reloadData()
 //                self.showPOITable()
-                self.toggle_table(false)
+                self.showPOITable("Hide List")
                 self.centerOnUser()
                 self.first_time_open=false
         }
