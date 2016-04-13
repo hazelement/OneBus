@@ -11,6 +11,20 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "ViewController.(showPOITable() -&gt; ()).(closure #1):VCTableView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.btnCenter.frame.origin.y">
+            </PersistentString>
+            <PersistentString
+               value = "poiTableFrame.origin.x">
+            </PersistentString>
+            <PersistentString
+               value = "self.btnCenter">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "ViewController.plotResult(NSDictionary) -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -27,6 +41,9 @@
       <ContextState
          contextName = "ViewController.viewDidLoad() -&gt; ():ViewController.swift">
          <PersistentStrings>
+            <PersistentString
+               value = "self.poiTable.frame.origin.x">
+            </PersistentString>
             <PersistentString
                value = "self.webView.delegate">
             </PersistentString>
