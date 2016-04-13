@@ -28,12 +28,26 @@ extension UIView {
 
 
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UITableViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    
+    
+    @IBOutlet weak var btnHideList: HideListButton!
+   
+    @IBOutlet weak var btnCenter: UIButton!
+    
     @IBOutlet weak var searchBar: UISearchBar!
+    
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var poiTable: UITableView!
+    @IBOutlet weak var tableBottomLocation: NSLayoutConstraint!
+    
+    let ANIMATION_DURATION = 0.2
+    let ANIMATION_DELAY = 0.0
+    
     var locationManager: CLLocationManager!
+    var first_time_open = true
     
     var api = API_Class()
     
@@ -42,9 +56,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     var lat: String = "51.0454027"
     var lng: String = "-114.05651890000001"
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        self.poiTable.dataSource = self
+        self.poiTable.delegate = self
+//        self.poiTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.poiTable.registerNib(UINib(nibName: "CustomizeTableCell", bundle: nil), forCellReuseIdentifier: "CustomizeTableCellUnit")
+        self.hidePOITable(false)
         
         self.annotationsPOI = [POI]()
         self.api = API_Class()
@@ -71,15 +93,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.mapView.delegate = self
         self.mapView.mapType = MKMapType(rawValue: 0)!
         self.mapView.userTrackingMode = MKUserTrackingMode(rawValue: 1)!
-        
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "customcell")
-
-        
-//        self.webView.delegate = self
 
     }
+    
+    
+    @IBAction func btnHideListClicked(sender: AnyObject) {
+        toggle_table(false)
+    }
+    
     
     func searchBarSearchButtonClicked( search_bar: UISearchBar){
         
@@ -92,14 +113,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         
         let search_txt = search_bar.text!
         
-        SwiftSpinner.show("Looking around ...")
+        // if is not first time, need to hide table first
+        if(self.first_time_open == false){
+//            self.hidePOITable(true)
+            self.toggle_table(true)
+        }
+        
+//        SwiftSpinner.show("Looking around ...")
         api.search_results(search_txt, lat: self.lat, lng: self.lng)
             {response in
                 if(response != nil){
                     if(response!["success"]! as! Int==1){
                         print(response!["message"])
-                        self.plotResult(response!["results"] as! NSDictionary)
-                        self.centerOnUser()
+                        self.collectResults(response!["results"] as! NSDictionary)
+                        
+                        self.mapView.addAnnotations(self.annotationsPOI)
                     }
                     else{
                         print(response!["message"])
@@ -113,14 +141,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                     
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
-                SwiftSpinner.hide()
+//                SwiftSpinner.hide()
+                
+                self.poiTable.reloadData()
+//                self.showPOITable()
+                self.toggle_table(false)
+                self.centerOnUser()
+                self.first_time_open=false
         }
 
         
         self.searchBar.endEditing(true)
     }
     
-    func plotResult(result: NSDictionary){
+    func collectResults(result: NSDictionary){
         
         for (key, value) in result {
             
@@ -144,19 +178,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                           trip_id: detail["trip_id"] as! Int,
                           route_id: detail["route_id"] as! Int)
             
-//            usleep(useconds_t(500)) // todo drop down pins one after another like maps on iphone
-            
             annotationsPOI.append(poi)
-            
-            self.mapView.addAnnotations(annotationsPOI)
-//            self.mapView.addAnnotation(poi)
             
             print("Property: \"\(key as! String)\"")
         }
 
     }
     
-    @IBAction func btnCenter(sender: UIButton) {
+    
+    @IBAction func btnCenterClicked(sender: UIButton) {
         
         centerOnUser()
 

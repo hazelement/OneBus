@@ -3,10 +3,24 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "extractString(AnyObject?) -&gt; String:util.swift">
+         contextName = "ViewController.(showPOITable() -&gt; ()).(closure #1):VCTableView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "value as! Int">
+               value = "self.btnCenter">
+            </PersistentString>
+            <PersistentString
+               value = "poiTableFrame.origin.x">
+            </PersistentString>
+            <PersistentString
+               value = "self.btnCenter.frame.origin.y">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response[&quot;results&quot;]">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -28,10 +42,13 @@
          contextName = "ViewController.viewDidLoad() -&gt; ():ViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "self.webView.delegate">
+               value = "self">
             </PersistentString>
             <PersistentString
-               value = "self">
+               value = "self.poiTable.frame.origin.x">
+            </PersistentString>
+            <PersistentString
+               value = "self.webView.delegate">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -47,6 +64,14 @@
          contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #2):ViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "CustomizeTableCell.yelpButtonClicked(YelpUIButton) -&gt; ():CustomizeTableCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "sender.urlString!">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "static POIView.instanceFromNib(String, no_review : Int) -&gt; UIView:POIView.swift">
          <PersistentStrings>
             <PersistentString
@@ -58,10 +83,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "ViewController.(searchBarSearchButtonClicked(ViewController) -&gt; (UISearchBar) -&gt; ()).(closure #1):ViewController.swift">
+         contextName = "extractString(AnyObject?) -&gt; String:util.swift">
          <PersistentStrings>
             <PersistentString
-               value = "response[&quot;results&quot;]">
+               value = "value as! Int">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

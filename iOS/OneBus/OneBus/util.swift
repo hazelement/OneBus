@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import MapKit
 
 func extractString(value : AnyObject?) -> String {
     if value is NSNull {
@@ -15,6 +16,19 @@ func extractString(value : AnyObject?) -> String {
     } else {
         return (value as! String)
     }
+}
+
+func find_index_of_annoation(myanno: MKAnnotation, annotation_arrays: [POI]) -> Int{
+    for (index,anno) in annotation_arrays.enumerate(){
+        
+        if (myanno.title! == anno.title!){
+            return index
+        }
+    }
+    
+    return -1
+    
+    
 }
 
 
