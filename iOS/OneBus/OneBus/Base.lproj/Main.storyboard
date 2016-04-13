@@ -19,50 +19,68 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YPc-4Q-H7m">
-                                <rect key="frame" x="0.0" y="64" width="320" height="294"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="314"/>
                             </mapView>
                             <searchBar contentMode="redraw" placeholder="Search for places around" translatesAutoresizingMaskIntoConstraints="NO" id="fb7-FR-ilU">
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="search"/>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="35" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="C3R-bv-Cr6">
-                                <rect key="frame" x="-12" y="358" width="344" height="210"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="C3R-bv-Cr6">
+                                <rect key="frame" x="-12" y="378" width="344" height="190"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="210" id="lac-Dp-gcM"/>
+                                    <constraint firstAttribute="height" constant="190" id="lac-Dp-gcM"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="poiCell" rowHeight="35" id="XUp-AA-x60">
-                                        <rect key="frame" x="0.0" y="28" width="344" height="35"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="poiCell" rowHeight="60" id="XUp-AA-x60">
+                                        <rect key="frame" x="0.0" y="28" width="344" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XUp-AA-x60" id="i4o-vq-eXa">
-                                            <rect key="frame" x="0.0" y="0.0" width="344" height="34"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="344" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xVF-gQ-IuL">
-                                <rect key="frame" x="249" y="285" width="55" height="55"/>
+                                <rect key="frame" x="249" y="275" width="55" height="55"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="Hvf-FH-uaq"/>
                                     <constraint firstAttribute="width" constant="55" id="RVj-tI-ohy"/>
                                 </constraints>
                                 <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button" image="Maps-Center-Direction-icon.png"/>
+                                <size key="titleShadowOffset" width="3" height="3"/>
+                                <state key="normal" title="Button" image="Maps-Center-Direction-icon.png">
+                                    <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
                                 <connections>
                                     <action selector="btnCenterClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UKd-vH-NjC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sF9-kU-HPY" customClass="HideListButton" customModule="OneBus" customModuleProvider="target">
+                                <rect key="frame" x="-4" y="338" width="328" height="40"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="wVS-GH-bm4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Hide List"/>
+                                <connections>
+                                    <action selector="btnHideListClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Wp-Pd-BCH"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="YPc-4Q-H7m" secondAttribute="trailing" id="1Yv-Rq-Kzi"/>
+                            <constraint firstItem="sF9-kU-HPY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="9FN-b6-eWK"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sF9-kU-HPY" secondAttribute="trailing" constant="-20" id="9gv-nT-QVv"/>
                             <constraint firstAttribute="trailingMargin" secondItem="C3R-bv-Cr6" secondAttribute="trailing" constant="-28" id="CBU-Yr-OLw"/>
                             <constraint firstItem="YPc-4Q-H7m" firstAttribute="top" secondItem="fb7-FR-ilU" secondAttribute="bottom" id="FrM-eT-3ob"/>
+                            <constraint firstItem="C3R-bv-Cr6" firstAttribute="top" secondItem="sF9-kU-HPY" secondAttribute="bottom" id="JfF-EO-ouS"/>
                             <constraint firstItem="C3R-bv-Cr6" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-28" id="LLc-sA-AcY"/>
                             <constraint firstItem="xVF-gQ-IuL" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Myg-kt-dUA"/>
-                            <constraint firstItem="C3R-bv-Cr6" firstAttribute="top" secondItem="xVF-gQ-IuL" secondAttribute="bottom" constant="18" id="RJt-H2-poF"/>
+                            <constraint firstItem="C3R-bv-Cr6" firstAttribute="top" secondItem="xVF-gQ-IuL" secondAttribute="bottom" constant="48" id="RJt-H2-poF"/>
                             <constraint firstItem="YPc-4Q-H7m" firstAttribute="trailing" secondItem="fb7-FR-ilU" secondAttribute="trailing" id="b8U-hU-rag"/>
                             <constraint firstItem="YPc-4Q-H7m" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="jBb-o5-Nqp"/>
                             <constraint firstItem="C3R-bv-Cr6" firstAttribute="top" secondItem="YPc-4Q-H7m" secondAttribute="bottom" id="swJ-f6-jJZ"/>
@@ -75,6 +93,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="btnCenter" destination="xVF-gQ-IuL" id="D0Y-Km-XwG"/>
+                        <outlet property="btnHideList" destination="sF9-kU-HPY" id="ruW-pu-8GH"/>
                         <outlet property="mapView" destination="YPc-4Q-H7m" id="gv0-mR-gp6"/>
                         <outlet property="poiTable" destination="C3R-bv-Cr6" id="6R8-je-IWQ"/>
                         <outlet property="searchBar" destination="fb7-FR-ilU" id="6nx-wB-oDM"/>

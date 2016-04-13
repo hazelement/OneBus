@@ -30,6 +30,9 @@ extension UIView {
 
 class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource {
 
+    
+    
+    @IBOutlet weak var btnHideList: HideListButton!
    
     @IBOutlet weak var btnCenter: UIButton!
     
@@ -40,7 +43,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     @IBOutlet weak var poiTable: UITableView!
     @IBOutlet weak var tableBottomLocation: NSLayoutConstraint!
     
-    let ANIMATION_DURATION = 0.5
+    let ANIMATION_DURATION = 0.2
     let ANIMATION_DELAY = 0.0
     
     var locationManager: CLLocationManager!
@@ -61,7 +64,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         
         self.poiTable.dataSource = self
         self.poiTable.delegate = self
-        self.poiTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+//        self.poiTable.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.poiTable.registerNib(UINib(nibName: "CustomizeTableCell", bundle: nil), forCellReuseIdentifier: "CustomizeTableCellUnit")
         self.hidePOITable(false)
         
         self.annotationsPOI = [POI]()
@@ -89,15 +93,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         self.mapView.delegate = self
         self.mapView.mapType = MKMapType(rawValue: 0)!
         self.mapView.userTrackingMode = MKUserTrackingMode(rawValue: 1)!
-        
-//        tableView.dataSource = self
-//        tableView.delegate = self
-//        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "customcell")
-
-        
-//        self.webView.delegate = self
 
     }
+    
+    
+    @IBAction func btnHideListClicked(sender: AnyObject) {
+        toggle_table(false)
+    }
+    
     
     func searchBarSearchButtonClicked( search_bar: UISearchBar){
         
@@ -110,8 +113,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         
         let search_txt = search_bar.text!
         
-        if(!self.first_time_open){
-            self.hidePOITable(true)
+        // if is not first time, need to hide table first
+        if(self.first_time_open == false){
+//            self.hidePOITable(true)
+            self.toggle_table(true)
         }
         
 //        SwiftSpinner.show("Looking around ...")
@@ -139,7 +144,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
 //                SwiftSpinner.hide()
                 
                 self.poiTable.reloadData()
-                self.showPOITable()
+//                self.showPOITable()
+                self.toggle_table(false)
                 self.centerOnUser()
                 self.first_time_open=false
         }

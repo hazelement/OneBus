@@ -17,3 +17,6 @@ class BusUIButton: UIButton {
     var poi_index: Int?
 }
 
+class HideListButton: UIButton{
+    var table_is_hidden: Bool?
+}

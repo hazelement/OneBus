@@ -29,10 +29,40 @@ extension ViewController{
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // 3
-        let cell = tableView.dequeueReusableCellWithIdentifier("poiCell", forIndexPath: indexPath) as UITableViewCell
         
-        cell.textLabel!.text = annotationsPOI[indexPath.row].title
+        let cell = tableView.dequeueReusableCellWithIdentifier("CustomizeTableCellUnit", forIndexPath: indexPath) as! CustomizeTableCell
+
+        
+//        let cell = tableView.dequeueReusableCellWithIdentifier("poiCell", forIndexPath: indexPath) as UITableViewCell
+        
+//        cell.textLabel!.text = annotationsPOI[indexPath.row].title
+        
+        cell.name.text = annotationsPOI[indexPath.row].title
+        cell.no_reviews.text = String(annotationsPOI[indexPath.row].review_count) + " of reviews from yelp"
+        cell.review_image.downloadedFrom(link: annotationsPOI[indexPath.row].ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
+        cell.yelp_button.urlString = annotationsPOI[indexPath.row].yelp_url
         return cell
+    }
+    
+    func toggle_table(loading: Bool){
+        self.btnHideList.hidden=false
+        
+        if(loading == false){
+            if(self.btnHideList.table_is_hidden == true){ // show table
+                self.btnHideList.table_is_hidden = false
+                self.btnHideList.setTitle("Hide List", forState: .Normal)
+                showPOITable()
+                
+            } else { // hide table
+                self.btnHideList.table_is_hidden = true
+                self.btnHideList.setTitle("Show List", forState: .Normal)
+                hidePOITable(true)
+            }
+        } else {  // hide table with loading label
+            self.btnHideList.table_is_hidden = true
+            self.btnHideList.setTitle("Loading", forState: .Normal)
+            hidePOITable(true)
+        }
     }
     
     func showPOITable(){
@@ -47,7 +77,7 @@ extension ViewController{
     }
     
     func hidePOITable(animated: Bool){
-        if(animated){
+        if(animated == true){
             UIView.animateWithDuration(ANIMATION_DURATION, delay: ANIMATION_DELAY, options: [.CurveEaseOut], animations: {
                 
                 self.tableBottomLocation.constant += self.poiTable.frame.size.height
@@ -59,6 +89,8 @@ extension ViewController{
         } else {
             
             self.tableBottomLocation.constant += self.poiTable.frame.size.height
+            self.btnHideList.hidden=true
+            self.btnHideList.table_is_hidden=true
             self.view.layoutIfNeeded()
         }
         
