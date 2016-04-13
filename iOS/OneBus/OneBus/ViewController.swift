@@ -117,6 +117,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
         if(self.first_time_open == false){
 //            self.hidePOITable(true)
             self.toggle_table(true)
+        } else {
+            
         }
         
 //        SwiftSpinner.show("Looking around ...")
@@ -192,14 +194,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
 
     }
     
-    func centerOnUser(){
-        
-        let center = CLLocationCoordinate2D(latitude: Double(self.lat)!, longitude: Double(self.lng)!)
-        
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
-        
-        self.mapView.setRegion(region, animated: true)
-    }
+
 
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate

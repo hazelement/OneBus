@@ -23,59 +23,6 @@ extension ViewController {
         return myview
     }
     
-    func busRouteButtonClicked(sender:BusUIButton){
-        
-        show_bus_route_by_index(sender.poi_index!)
-    }
-    
-    func show_bus_route_by_index(index: Int){
-        
-        // remove existing bus routes
-        let overlaysToRemove = mapView.overlays
-        mapView.removeOverlays(overlaysToRemove)
-        
-        if(self.annotationsPOI[index].bus_shape==""){
-            
-            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, lat: self.lat, lng: self.lng)
-            {response in
-                if(response != nil){
-                    if(response!["success"]! as! Int==1){
-                        print(response!["message"])
-                        let raw_shape = response!["result"] as! String
-                        self.annotationsPOI[index].bus_shape = raw_shape
-                        
-                        var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
-                        
-                        let polyline = MKPolyline(coordinates: &locations, count: locations.count)
-                        self.mapView.addOverlay(polyline)
-                        //                                self.centerOnUser()
-                    }
-                    else{
-                        print(response!["message"])
-                    }
-                }
-                else{
-                    print("nil")
-                }
-            }
-        }
-        else{
-            let raw_shape = self.annotationsPOI[index].bus_shape as String!
-            
-            var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
-            
-            let polyline = MKPolyline(coordinates: &locations, count: locations.count)
-            self.mapView.addOverlay(polyline)
-            
-        }
-        
-    }
-    
-    func yelpButtonClicked(sender:YelpUIButton){
-        // open button url in safari
-        UIApplication.sharedApplication().openURL(NSURL(string: sender.urlString!)!)
-    }
-    
     func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
         for myview in views {
             let endFrame: CGRect = myview.frame
@@ -122,9 +69,10 @@ extension ViewController {
         let table_index = NSIndexPath(forRow: index, inSection: 0)
         self.poiTable.selectRowAtIndexPath(table_index, animated: true, scrollPosition: UITableViewScrollPosition.Middle)
         
+        zoom_on_two_location(CLLocationCoordinate2D(latitude: Double(self.lat)!, longitude: Double(self.lng)!), location2: (view.annotation?.coordinate)!)
+        
         
     }
-    
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -141,27 +89,27 @@ extension ViewController {
             view.canShowCallout = true
             view.calloutOffset = CGPoint(x: -5, y: 5)
             
-            let bus_button = BusUIButton(type: .DetailDisclosure)
-            bus_button.poi_index = annotation.index
-            bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            
-            view.rightCalloutAccessoryView = bus_button as UIView
-            
-            
-            let yelp_button = YelpUIButton(type: .ContactAdd)
-            yelp_button.urlString = annotation.yelp_url
-            yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-            
-            view.leftCalloutAccessoryView = yelp_button as UIView
+//            let bus_button = BusUIButton(type: .DetailDisclosure)
+//            bus_button.poi_index = annotation.index
+//            bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+//            
+//            view.rightCalloutAccessoryView = bus_button as UIView
             
             
-            let myview = instanceFromNib(annotation.index)
+//            let yelp_button = YelpUIButton(type: .ContactAdd)
+//            yelp_button.urlString = annotation.yelp_url
+//            yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             
-            let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
-            myview.addConstraint(widthConstraint)
+//            view.leftCalloutAccessoryView = yelp_button as UIView
             
-            let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20)
-            myview.addConstraint(heightConstraint)
+            
+//            let myview = instanceFromNib(annotation.index)
+//            
+//            let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
+//            myview.addConstraint(widthConstraint)
+//            
+//            let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20)
+//            myview.addConstraint(heightConstraint)
             
 //            view.detailCalloutAccessoryView = myview
             
@@ -172,5 +120,84 @@ extension ViewController {
             return view
         }
         return nil
+    }
+    
+    
+    func busRouteButtonClicked(sender:BusUIButton){
+        
+        show_bus_route_by_index(sender.poi_index!)
+    }
+    
+    func show_bus_route_by_index(index: Int){
+        
+        // remove existing bus routes
+        let overlaysToRemove = mapView.overlays
+        mapView.removeOverlays(overlaysToRemove)
+        
+        if(index == -1){
+            return
+        }
+        
+        if(self.annotationsPOI[index].bus_shape==""){
+            
+            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, lat: self.lat, lng: self.lng)
+            {response in
+                if(response != nil){
+                    if(response!["success"]! as! Int==1){
+                        print(response!["message"])
+                        let raw_shape = response!["result"] as! String
+                        self.annotationsPOI[index].bus_shape = raw_shape
+                        
+                        var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
+                        
+                        let polyline = MKPolyline(coordinates: &locations, count: locations.count)
+                        self.mapView.addOverlay(polyline)
+                        //                                self.centerOnUser()
+                    }
+                    else{
+                        print(response!["message"])
+                    }
+                }
+                else{
+                    print("nil")
+                }
+            }
+        }
+        else{
+            let raw_shape = self.annotationsPOI[index].bus_shape as String!
+            
+            var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
+            
+            let polyline = MKPolyline(coordinates: &locations, count: locations.count)
+            self.mapView.addOverlay(polyline)
+            
+        }
+        
+    }
+    
+    func yelpButtonClicked(sender:YelpUIButton){
+        // open button url in safari
+        UIApplication.sharedApplication().openURL(NSURL(string: sender.urlString!)!)
+    }
+    
+    func centerOnUser(){
+        
+        let center = CLLocationCoordinate2D(latitude: Double(self.lat)!, longitude: Double(self.lng)!)
+        
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03))
+        
+        self.mapView.setRegion(region, animated: true)
+    }
+    
+    func zoom_on_two_location(location1: CLLocationCoordinate2D, location2: CLLocationCoordinate2D){
+        
+        let center = CLLocationCoordinate2D(latitude: (location1.latitude + location2.latitude)/2,
+                                            longitude:(location1.longitude + location2.longitude)/2)
+        
+        let region = MKCoordinateRegion(center: center,
+                                        span: MKCoordinateSpan(latitudeDelta: fabs(location1.latitude - location2.latitude)*2,
+                                            longitudeDelta: fabs(location1.longitude - location2.longitude)*2))
+        self.mapView.setRegion(region, animated: true)
+        
     }
 }

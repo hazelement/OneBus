@@ -60,7 +60,7 @@ extension ViewController{
             }
         } else {  // hide table with loading label
             self.btnHideList.table_is_hidden = true
-            self.btnHideList.setTitle("Loading", forState: .Normal)
+            self.btnHideList.setTitle("Loading...", forState: .Normal)
             hidePOITable(true)
         }
     }
