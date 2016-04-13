@@ -14,22 +14,10 @@ extension ViewController {
     func instanceFromNib(poi_index: Int) -> UIView {
         
         let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
-//        let address_label = myview.viewWithTag(2) as! UILabel
         let review_count = myview.viewWithTag(1) as! UILabel
-//        let yelp_button = myview.viewWithTag(4) as! YelpUIButton
         let rating_image = myview.viewWithTag(3) as! UIImageView
-//        let bus_button = myview.viewWithTag(5) as! BusUIButton
         
         rating_image.downloadedFrom(link: annotationsPOI[poi_index].ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
-        
-//        yelp_button.urlString = annotationsPOI[poi_index].yelp_url
-//        yelp_button.addTarget(self, action: #selector(ViewController.yelpButtonClicked(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-//        
-//        bus_button.poi_index = poi_index
-//        
-//        bus_button.addTarget(self, action: #selector(ViewController.busRouteButtonClicked(_:)), forControlEvents:  UIControlEvents.TouchUpInside)
-        
-//        address_label.text = annotationsPOI[poi_index].address
         review_count.text = String(annotationsPOI[poi_index].review_count) + " reviews on yelp"
         
         return myview
@@ -37,37 +25,42 @@ extension ViewController {
     
     func busRouteButtonClicked(sender:BusUIButton){
         
+        show_bus_route_by_index(sender.poi_index!)
+    }
+    
+    func show_bus_route_by_index(index: Int){
+        
         // remove existing bus routes
         let overlaysToRemove = mapView.overlays
         mapView.removeOverlays(overlaysToRemove)
         
-        if(self.annotationsPOI[sender.poi_index!].bus_shape==""){
-        
-            api.get_trip_shape(self.annotationsPOI[sender.poi_index!].trip_id, start_stop: self.annotationsPOI[sender.poi_index!].start_stop, end_stop: self.annotationsPOI[sender.poi_index!].end_stop, lat: self.lat, lng: self.lng)
-                {response in
-                    if(response != nil){
-                        if(response!["success"]! as! Int==1){
-                            print(response!["message"])
-                            let raw_shape = response!["result"] as! String
-                            self.annotationsPOI[sender.poi_index!].bus_shape = raw_shape
-
-                            var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
-
-                            let polyline = MKPolyline(coordinates: &locations, count: locations.count)
-                            self.mapView.addOverlay(polyline)
-    //                                self.centerOnUser()
-                        }
-                        else{
-                            print(response!["message"])
-                        }
+        if(self.annotationsPOI[index].bus_shape==""){
+            
+            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, lat: self.lat, lng: self.lng)
+            {response in
+                if(response != nil){
+                    if(response!["success"]! as! Int==1){
+                        print(response!["message"])
+                        let raw_shape = response!["result"] as! String
+                        self.annotationsPOI[index].bus_shape = raw_shape
+                        
+                        var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
+                        
+                        let polyline = MKPolyline(coordinates: &locations, count: locations.count)
+                        self.mapView.addOverlay(polyline)
+                        //                                self.centerOnUser()
                     }
                     else{
-                        print("nil")
+                        print(response!["message"])
                     }
+                }
+                else{
+                    print("nil")
+                }
             }
         }
         else{
-            let raw_shape = self.annotationsPOI[sender.poi_index!].bus_shape as String!
+            let raw_shape = self.annotationsPOI[index].bus_shape as String!
             
             var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!
             
@@ -75,6 +68,7 @@ extension ViewController {
             self.mapView.addOverlay(polyline)
             
         }
+        
     }
     
     func yelpButtonClicked(sender:YelpUIButton){
@@ -119,6 +113,17 @@ extension ViewController {
     }
     
 
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView){
+        
+        let index = find_index_of_annoation(view.annotation!, annotation_arrays: self.annotationsPOI)
+        
+        self.show_bus_route_by_index(index)
+        
+        let table_index = NSIndexPath(forRow: index, inSection: 0)
+        self.poiTable.selectRowAtIndexPath(table_index, animated: true, scrollPosition: UITableViewScrollPosition.Middle)
+        
+        
+    }
     
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {

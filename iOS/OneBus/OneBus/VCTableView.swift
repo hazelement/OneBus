@@ -22,6 +22,10 @@ extension ViewController{
         return annotationsPOI.count
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        
+        self.mapView.selectAnnotation(self.annotationsPOI[indexPath.row], animated: true)
+    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // 3
