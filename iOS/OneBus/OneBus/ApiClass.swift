@@ -15,8 +15,8 @@ public class API_Class{
     private var _client: String = ""
     
     public init (){
-//        self._client = "https://68.144.232.22:7563"
-        self._client = "http://162.246.156.126:8000"
+        self._client = "https://www.yychub.com"
+//        self._client = "http://162.246.156.126:8000"
 //        self._client = "http://localhost:5000"
 //        self._client = "http://192.168.0.10:5000"
         

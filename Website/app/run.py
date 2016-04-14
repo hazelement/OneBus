@@ -11,7 +11,7 @@ from app import app
 if __name__ == "__main__":
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
 
-    cert = current_folder + "ssl/yychub.cert"
+    cert = current_folder + "ssl/yychub.csr"
     key = current_folder + "ssl/yychub.key"
 
     context = (cert, key)
