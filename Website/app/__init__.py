@@ -1,9 +1,11 @@
 
 from flask import Flask
+from flask_sslify import SSLify
 # from flask_googlemaps import GoogleMaps
 
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 # cache = Cache(config={'CACHE_TYPE': 'redis'})
 #
