@@ -18,6 +18,11 @@ def before_request():
         return redirect(url, code=code)
 
 
+@app.route('/www.yychub.com.html', methods=['GET', 'POST'])
+def ssl_check():
+
+    return render_template('www.yychub.com.html')
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
