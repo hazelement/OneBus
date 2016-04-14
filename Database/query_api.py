@@ -140,7 +140,7 @@ def yelp_loc_list(lat, lng, query):
     df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
 
     for i in range(0, 2):
-        response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='0', offset=str(i*20)) # meter
+        response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter='10000', sort='1', offset=str(i*20)) # meter
         for loc in response.businesses:
             df.loc[len(df)+1]=[loc.name,
                                ' '.join(loc.location.display_address),
