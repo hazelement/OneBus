@@ -175,7 +175,7 @@ function make_infobox(marker){
     retVal = retVal + "Number of Reviews: " + marker.review_count.toString() + "<br>";
 //    retVal = retVal + "<img src=\"" +
     retVal = retVal + marker.address;
-    retVal = retVal + "<br><a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"onebus\\static\\images\\yelp_review_btn_light.png\"></a>";
+    retVal = retVal + "<br><a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"onebus\\images\\yelp_review_btn_light.png\"></a>";
     return retVal;
 }
 

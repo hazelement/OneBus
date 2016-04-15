@@ -25,7 +25,7 @@ $("#frmSearch").submit(function( event ){
 //    $("#loading_hold").animate({ top: "0" }, 800);
     $.ajax({
         type: "POST",
-        url: "/api",
+        url: "/onebus/api",
         data: JSON.stringify({search_text: $("#txtSearch").val(),
                                 home_gps: home_gps,
                                 current_time: datetime}),
