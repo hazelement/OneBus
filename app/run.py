@@ -15,9 +15,9 @@ if __name__ == "__main__":
     key = current_folder + "ssl/yychub.key"
 
     context = (cert, key)
-    app.run(host='0.0.0.0', port=8080, threaded=True, debug=True, ssl_context=context)  # for deployment
+    # app.run(host='0.0.0.0', port=8080, threaded=True, debug=True, ssl_context=context)  # for deployment
     
-    # app.run(debug=True, port=8000, host='localhost')
+    app.run(debug=True, port=8000, host='localhost')
     # app.run(debug=True, port=8000, host='192.168.0.10')
     # app.run(debug=True, port=8000, host='0.0.0.0')
     # app.run(host='localhost', port=8000, ssl_context=context, threaded=True, debug=True)
