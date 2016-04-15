@@ -26,7 +26,7 @@ def onebus_index():
 # todo add loading bar on html
 # todo add list panel on html
 # todo check this api works
-@app.route('/api/route', methods=['POST'])
+@app.route('/onebus/api/route', methods=['POST'])
 def route_port():
     try:
         post_data = request.get_json()
@@ -56,7 +56,7 @@ def route_port():
     return jsonify(**result)
 
 
-@app.route('/api', methods=['POST'])
+@app.route('/onebus/api', methods=['POST'])
 def api_port():
 
     try:
