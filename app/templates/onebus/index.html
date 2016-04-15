@@ -21,21 +21,9 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header pull-left col-xs-6">
+    <div class="navbar-header pull-left">
       <a class="navbar-brand" href="">OneBus</a>
     </div>
-
-    <div class="navbar-header pull-left col-xs-6">
-        <form class="navbar-form" role="search" id="frmSearch">
-              <div class="input-group">
-                  <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
-                  <div class="input-group-btn">
-                      <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
-                  </div>
-              </div>
-          </form>
-    </div>
-
     <!--right collapsing items-->
     <div class="navbar-header pull-right">
       <ul class="nav">
@@ -46,6 +34,18 @@
         <span class="icon-bar"></span>
       </button>
       </ul>
+    </div>
+    <div class="navbar-header pull-left">
+        <form class="navbar-form" role="search" id="frmSearch">
+              <div class="input-group">
+                  <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+                  <div class="input-group-btn">
+                      <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
+                  </div>
+              </div>
+          </form>
+    </div>
+
 
       <!--collapsing items-->
     <div class="collapse navbar-collapse navbar-left" id="navigationbar">
@@ -57,7 +57,7 @@
     </div>
 
   </div><!-- /.container-fluid -->
-
+</nav>
     <!-- Modal -->
     <div id="modelAbout" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -102,9 +102,6 @@
 
       </div>
     </div>
-
-
-</nav>
 
     <div id="map" ></div>
 
