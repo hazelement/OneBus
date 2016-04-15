@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OneBus</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="HandheldFriendly" content="true" />
+
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='yychub/img/portfolio/onebus_small.png') }}"/>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='onebus/styles/index.css') }}" media="screen" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header pull-left col-xs-6">
+      <a class="navbar-brand" href="">OneBus</a>
+    </div>
+
+    <div class="navbar-header pull-left col-xs-6">
+        <form class="navbar-form" role="search" id="frmSearch">
+              <div class="input-group">
+                  <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+                  <div class="input-group-btn">
+                      <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
+                  </div>
+              </div>
+          </form>
+    </div>
+
+    <!--right collapsing items-->
+    <div class="navbar-header pull-right">
+      <ul class="nav">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      </ul>
+
+      <!--collapsing items-->
+    <div class="collapse navbar-collapse navbar-left" id="navigationbar">
+      <ul class="nav navbar-nav">
+        <li><a href="" data-toggle="modal" data-target="#modelAbout">About</a></li>
+        <li><a href="" data-toggle="modal" data-target="#modelFeedBack">Feedback</a></li>
+        <li><a href="https://www.yychub.com">YYC Hub</a></li>
+      </ul>
+    </div>
+
+  </div><!-- /.container-fluid -->
+
+    <!-- Modal -->
+    <div id="modelAbout" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">About OneBus</h4>
+          </div>
+          <div class="modal-body">
+            <p>Feeling tired of bus transfers? When was last time that you got strangled at a transfer stop? Summer is alright, but what about winter? We know it sucks to wait for a bus outside. That's why we came up OneBus. <br><b>With OneBus, it takes you to destinations with only one bus ride, transfer free!</b></b> <br>
+                        It works like Google Maps or any other Point of Interest app you know of. Entering places you want to go, OneBus will show you a few destinations around you with a single bus' ride. Wherever you want
+                        to go is up to you, but don't forget to give our bus drivers a big smile!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="modelFeedBack" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Feedback</h4>
+          </div>
+          <div class="modal-body">
+            <p>Sorry we are still working on this.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+</nav>
+
+    <div id="map" ></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+    <script src="{{ url_for('static', filename='onebus/script/map.js') }}"></script>
+    <script src="{{ url_for('static', filename='onebus/script/control.js') }}"></script>
+    <script>
+        initMap();
+    </script>
+
+</body>
+</html>

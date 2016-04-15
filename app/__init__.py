@@ -1,10 +1,12 @@
-
 from flask import Flask
 from flask_sslify import SSLify
+
+import config
+
 # from flask_googlemaps import GoogleMaps
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_path="", static_folder="static")
 sslify = SSLify(app)
 
 # cache = Cache(config={'CACHE_TYPE': 'redis'})
@@ -14,11 +16,10 @@ sslify = SSLify(app)
 #
 #
 # app.config.from_object('config')
-app.config.from_object('config')
+app.config.from_object(config)
 
 # GoogleMaps(app)
 
 
-from app import views
-
-
+from app.views import onebus_views
+from app.views import yychub_views
