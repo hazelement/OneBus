@@ -121,7 +121,7 @@ function add_marker(target, is_home) {
         path: target.path
         });
 //        marker.setIcon(myIcon);
-        marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+        marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
 
         google.maps.event.addListener(
             marker,
