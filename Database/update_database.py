@@ -24,9 +24,11 @@ def update_all_database():
             print "Garbage collection: ", gc.collect()
             print "unreachable garbage: ", gc.collect()
             _update_city_database(city)
-        except:
+        except Exception,e:
+            print(e)
             pass
 
+# tody maybe put downloader into a class, create one for each city when run
 
 def _update_city_database(city_province_country):
 
@@ -36,7 +38,7 @@ def _update_city_database(city_province_country):
     z = ZipFile(BytesIO(request.content))
     print("download finished")
     
-    file_names=['agency', 'shapes', 'stops', 'stop_times', 'routes']
+    file_names=['agency', 'shapes', 'stops'] #, 'stop_times'] # 'routes']
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
@@ -45,7 +47,7 @@ def _update_city_database(city_province_country):
         for fname in file_names:
             print("processing " + fname)
             try:
-                data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
+                data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
                 util.save_dataframe_to_db(data, fname, con)
             except KeyError:
                 print(fname + " not in the data catalog")
@@ -53,7 +55,7 @@ def _update_city_database(city_province_country):
 
         fname = 'calendar'
         print("processing " + fname)
-        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
+        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
 
         service_id_replacement=0
         if(type(data['service_id'].values[0]) is str): # convert service id to int if it is read in as string
@@ -75,7 +77,7 @@ def _update_city_database(city_province_country):
 
         fname = 'trips'
         print("processing " + fname)
-        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"))
+        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
 
         if(service_id_replacement==1):
             data.replace({"service_id": service_dict}, inplace=True)
@@ -88,8 +90,9 @@ def _update_city_database(city_province_country):
     print("finished")
 
 if __name__ == "__main__":
-    update_all_database()
+    # update_all_database()
     # list = ["23:42:23", "32:01:32"]
+    _update_city_database('calgary_ab_canada')
     # _update_city_database('toronto_on_canada')
     # _update_city_database('edmonton_ab_canada')
     # _update_city_database('vancouver_bc_canada')

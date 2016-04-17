@@ -9,15 +9,13 @@ import util
 
 # todo return result should contain upcoming bus arrival time
 
-def get_shape_gps(lat, lng, trip_id, start_stop, end_stop):
+def get_shape_gps(city_code, trip_id, start_stop, end_stop):
 
-    lat = float(lat)
-    lng = float(lng)
-    trip_id = float(trip_id)
-    start_stop = float(start_stop)
-    end_stop = float(end_stop)
+    trip_id = int(trip_id)
+    start_stop = int(start_stop)
+    end_stop = int(end_stop)
 
-    return query_database.find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop)
+    return query_database.find_shape_lat_lng(city_code, trip_id, start_stop, end_stop)
 
 
 def get_destinations(lat, lng, query, ctime):
@@ -40,7 +38,7 @@ def get_destinations(lat, lng, query, ctime):
     print("Number of raw destinations: " + str(len(df_targets)))
 
     if(len(df_targets)>0):
-        df_stops = query_database.find_accessiable_stops(lat, lng, ctime)
+        df_stops, city_code = query_database.find_accessiable_stops(lat, lng, ctime)
 
         stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
         target_gps = df_targets[['lat', 'lon']].as_matrix().astype(float)
@@ -54,24 +52,30 @@ def get_destinations(lat, lng, query, ctime):
         df_targets = df_targets[target_filter_index]
         df_stops = df_stops.ix[stop_filter_index]
 
-
-
         print("Transit friendly results: " + str(len(df_targets)))
         print(df_targets['name'].values)
 
+
+        # trip heading, stop id location
         for i in range(0, len(df_targets)):
             dest_dict[df_targets.iloc[i]['name']]={"dest_name": df_targets.iloc[i]['name'],
-                                                     "address": df_targets.iloc[i]['address'],
-                                                     "lat": df_targets.iloc[i]['lat'],
-                                                     "lng": df_targets.iloc[i]['lon'],
-                                                     "image_url": df_targets.iloc[i]['image_url'],
-                                                     "yelp_url": df_targets.iloc[i]['yelp_url'],
-                                                     "review_count": df_targets.iloc[i]['review_count'],
-                                                     "ratings_img": df_targets.iloc[i]['ratings_img_url'],
-                                                     "start_stop": df_stops.iloc[i]['start_stop_id'],
-                                                     "end_stop": df_stops.iloc[i]['stop_id'],
-                                                     "trip_id": df_stops.iloc[i]['trip_id'],
-                                                     "route_id": df_stops.iloc[i]['route_id']}
+                                                   "address": df_targets.iloc[i]['address'],
+                                                   "lat": float(df_targets.iloc[i]['lat']),
+                                                   "lng": float(df_targets.iloc[i]['lon']),
+                                                   "image_url": df_targets.iloc[i]['image_url'],
+                                                   "yelp_url": df_targets.iloc[i]['yelp_url'],
+                                                   "review_count": int(df_targets.iloc[i]['review_count']),
+                                                   "ratings_img": df_targets.iloc[i]['ratings_img_url'],
+                                                   "start_stop": int(df_stops.iloc[i]['start_stop_id']),
+                                                   "start_stop_time": int(df_stops.iloc[i]['start_stop_time']),
+                                                   "start_stop_name": df_stops.iloc[i]['start_stop_name'],
+                                                   "end_stop": int(df_stops.iloc[i]['stop_id']),
+                                                   "end_stop_time": int(df_stops.iloc[i]['stop_time']),
+                                                   "end_stop_name": df_stops.iloc[i]['stop_name'],
+                                                   "trip_id": int(df_stops.iloc[i]['trip_id']),
+                                                   "trip_headsign": df_stops.iloc[i]['trip_headsign'],
+                                                   "route_id": int(df_stops.iloc[i]['route_id']),
+                                                   "city_code": city_code}
 
         retVal={}
         retVal['results']=dest_dict

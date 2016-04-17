@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import re
+import config
 
 
 def result_filter_by_distance(stops, targets):
@@ -73,7 +74,6 @@ def distance_calc(array1, array2):
 
     return np.sqrt(retVal)
 
-
 def convert_time_string_to_int(time_as_array):
     """
     convert 'hh:mm:ss' time array to int array
@@ -94,18 +94,10 @@ def convert_time_string_to_int(time_as_array):
     return retVal
 
 
-def remove_char_convert_to_int(data_array):
-
-    if(type(data_array[0])!=str):return data_array
-
-    retVal = np.empty_like(data_array, dtype=int)
-    for i in range(0, len(data_array)):
-        retVal[i] = int(re.sub("[^0-9]+", '', data_array[i]))
-
-    return retVal
 
 
-def convert_csv_to_dataframe(csvfile):
+
+def convert_csv_to_dataframe(csvfile, city_code):
 
     chunksize = 1000
 
@@ -113,7 +105,7 @@ def convert_csv_to_dataframe(csvfile):
 
     chunklist=[]
     for chunk in pd.read_csv(csvfile, chunksize=chunksize):
-        chunklist.append(_clean_data(chunk))
+        chunklist.append(_clean_data(chunk, city_code))
 
     data = pd.concat(chunklist, ignore_index=True)
 
@@ -128,17 +120,23 @@ def save_dataframe_to_db(dataframe, tablename, con):
         dataframe.to_sql(tablename, con, if_exists='replace', chunksize=1000)
 
 
-def _clean_data(dataframe):
+def _clean_data(dataframe, city_code):
     must_drop_col = ['shape_dist_traveled']  # todo use must keep column header list instead ?
     for col_name in dataframe.columns.values.tolist():
         if(col_name in must_drop_col):
             dataframe.drop(col_name, axis=1, inplace=True)
 
-    must_convert_col = ['trip_id', 'route_id', 'stop_id'] # service id?
+    must_convert_col = ['trip_id', 'stop_id'] # service id?
 
     for col_name in dataframe.columns.values.tolist():
         if(col_name in must_convert_col):
-            dataframe[col_name]=remove_char_convert_to_int(dataframe[col_name])
+            dataframe[col_name]=_remove_char_convert_to_int(dataframe[col_name])
+
+    must_convert_col = ['route_id']
+    for col_name in dataframe.columns.values.tolist():
+        if(col_name in must_convert_col):
+            dataframe[col_name]=_process_route_id(dataframe[col_name], city_code)
+
 
     must_convert_col = ['arrival_time', 'departure_time']
 
@@ -147,3 +145,22 @@ def _clean_data(dataframe):
             dataframe[col_name]=convert_time_string_to_int(dataframe[col_name])
 
     return dataframe
+
+def _process_route_id(data_array, city_code):
+    if(type(data_array[0])!=str):return data_array
+
+    retVal = np.empty_like(data_array, dtype=int)
+    for i in range(0, len(data_array)):
+        retVal[i] = int(data_array[i].split(config.read_route_id_process_key(city_code))[0])
+
+    return retVal
+
+def _remove_char_convert_to_int(data_array):
+
+    if(type(data_array[0])!=str):return data_array
+
+    retVal = np.empty_like(data_array, dtype=int)
+    for i in range(0, len(data_array)):
+        retVal[i] = int(re.sub("[^0-9]+", '', data_array[i]))
+
+    return retVal

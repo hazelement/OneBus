@@ -26,7 +26,7 @@ class Timer:
         print(self.name + " took " + str(self.interval) + " sec.")
 
 
-def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
+def find_shape_lat_lng(city_code, trip_id, start_stop, end_stop):
     """
     find the shape points between start_stop, end_stop, along trip_id
     :param trip_id:
@@ -36,7 +36,6 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
     """
     print("retrieving shape info")
 
-    city_code = config.read_city_code_from_config(lat, lng) # find city code
     db_location = os.path.dirname(os.path.realpath(__file__)) + '/SQLData/' +city_code + '.sqlite'
 
     with sqlite3.connect(db_location) as con:
@@ -47,12 +46,20 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
         shape = pd.read_sql(sql_query, con)
         shape_lat_lng = shape[['shape_pt_lat', 'shape_pt_lon']].as_matrix().astype(float)
 
-        sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(start_stop)
-        start_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+        # is group by inroder of start stop and end stop
+        sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id IN (" + str(start_stop) + "," + str(end_stop) +") GROUP BY stop_id"
+        gps_data =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
+        start_lat_lng = np.array([gps_data[0]])
+        end_lat_lng = np.array([gps_data[1]])
 
-        sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(end_stop)
-        end_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+        # old approach
+        # sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(start_stop)
+        # start_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+        #
+        #
+        # sql_query = "SELECT stop_lat,stop_lon FROM stops WHERE stop_id=" + str(end_stop)
+        # end_lat_lng =pd.read_sql(sql_query, con)[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
         start_loc = np.argmin(util.distance_calc(start_lat_lng, shape_lat_lng), axis=1)[0]
         end_loc = np.argmin(util.distance_calc(end_lat_lng, shape_lat_lng), axis=1)[0]
@@ -71,6 +78,7 @@ def find_shape_lat_lng(lat, lng, trip_id, start_stop, end_stop):
     encoded = pl.encode_coords(tuples)
     print(encoded)
     return encoded
+
 
 
 def find_accessiable_stops(lat, lng, ctime):
@@ -95,7 +103,7 @@ def find_accessiable_stops(lat, lng, ctime):
         myLocation=np.array([[lat, lng]])
 
         with Timer("find stops around me"):
-            sql_query = "SELECT stop_lat, stop_lon, stop_id from stops;"
+            sql_query = "SELECT stop_lat, stop_lon, stop_id, stop_name from stops;"
             df_stops = pd.read_sql(sql_query, con)
             stop_loc=df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
@@ -111,36 +119,68 @@ def find_accessiable_stops(lat, lng, ctime):
             today = dt_today.strftime("%Y%m%d") #today = '20160124'
             dayofthweek = dt_today.strftime("%A").lower()  # saturday
 
-            service_id = _find_current_serviceID(today, dayofthweek, con)
+            service_id = _find_current_service_id(today, dayofthweek, con)
 
         with Timer("find trips from these stops"):
             currenttime=util.convert_time_string_to_int([current_time])[0]
-            trips, routes, start_stopIDs=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
+            trip_ids, routes, start_stop_ids, start_stop_times, trip_headsign, df_trips=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
 
         with Timer("find stops along trips"):
-            stop_ids = _find_stopID_along_strips(trips, con)
+            stop_ids, stop_times = _find_stop_id_along_strips(trip_ids, con)
 
         with Timer("generate dataframe"):
             long_routes = []
-            long_start_stopIDs = []
-            long_stop_ids = np.array([])
+
+            long_start_stop_ids = []
+            long_start_stop_times = []
+            long_start_stop_names = []
+
+            long_stop_ids = []
+            long_stop_times = []
+            # long_stop_ids = np.array([])
+            # long_stop_times = np.array([])
+            long_stop_names = []
+
             long_trips = []
+            long_trips_headsign = []
 
             for i in range(0, len(stop_ids)):
                 long_routes.extend([routes[i]] * len(stop_ids[i]))
-                long_start_stopIDs.extend([start_stopIDs[i]] * len(stop_ids[i]))
-                long_trips.extend([trips[i]] * len(stop_ids[i]))
-                long_stop_ids = np.append(long_stop_ids, stop_ids[i])
 
-            df = pd.DataFrame({'route_id': long_routes, 'start_stop_id': long_start_stopIDs, 'stop_id': long_stop_ids, 'trip_id': long_trips})
+                long_trips.extend([trip_ids[i]] * len(stop_ids[i]))
+                long_trips_headsign.extend([trip_headsign[i]] * len(stop_ids[i]))
+
+                long_start_stop_ids.extend([start_stop_ids[i]] * len(stop_ids[i]))
+                long_start_stop_times.extend([start_stop_times[i]] * len(stop_times[i]))
+                long_start_stop_names.extend([df_stops[df_stops['stop_id']==start_stop_ids[i]]['stop_name'].values[0]] * len(stop_ids[i]))
+
+                # long_stop_ids = np.append(long_stop_ids, stop_ids[i])
+                # long_stop_times = np.append(long_stop_times, stop_times[i])
+                long_stop_ids.extend(stop_ids[i].tolist())
+                long_stop_times.extend(stop_times[i].tolist())
+
+            df = pd.DataFrame({'route_id': long_routes,
+                               'start_stop_id': long_start_stop_ids,
+                               'start_stop_time': long_start_stop_times,
+                               'start_stop_name': long_start_stop_names,
+                               'stop_id': long_stop_ids,
+                               'stop_time': long_stop_times,
+                               'trip_id': long_trips,
+                               'trip_headsign': long_trips_headsign
+                               })
 
             df = df.merge(df_stops, on='stop_id')
+
+            df[['route_id']] = df[['route_id']].astype(int)
+            df[['start_stop_id']] = df[['start_stop_id']].astype(int)
             df[['stop_id']] = df[['stop_id']].astype(int)
+            df[['start_stop_time']] = df[['start_stop_time']].astype(int)
+            df[['stop_time']] = df[['stop_time']].astype(int)
 
-    return df
+    return df, city_code
 
 
-def _find_current_serviceID(currDate, dayofthweek, con):
+def _find_current_service_id(currDate, dayofthweek, con):
 
     sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
 
@@ -157,8 +197,8 @@ def _find_near_trips(near_stops, service_id, currenttime, con):
 
     trips=[]
 
-    st_trip_id=pd.read_sql("SELECT trip_id,stop_id FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
-    trips_trip_id=pd.read_sql("SELECT trip_id,route_id FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
+    st_trip_id=pd.read_sql("SELECT trip_id,stop_id,arrival_time FROM stop_times WHERE stop_id IN" + "(" + ','.join("{0}".format(x) for x in near_stops) + ") AND arrival_time>" +str(currenttime) + " ORDER BY arrival_time", con)
+    trips_trip_id=pd.read_sql("SELECT trip_id,route_id,trip_headsign FROM trips WHERE service_id IN " +"(" + ','.join("{0}".format(x) for x in service_id) + ")", con)
 
     # this one performance is slow
     # sql = "SELECT t.trip_id, st.stop_id, t.route_id FROM stop_times st, trips t " + \
@@ -178,27 +218,45 @@ def _find_near_trips(near_stops, service_id, currenttime, con):
     trips = result['trip_id'].values[unique_indices]
     routes = result['route_id'].values[unique_indices]
     start_stops = result['stop_id'].values[unique_indices]
+    start_stop_times = result['arrival_time'].values[unique_indices]
+    trip_headsign = result['trip_headsign'].values[unique_indices]
+
+    df_trips = result['trip_id'].values[unique_indices]
 
 
-    return trips, routes, start_stops
+    return trips, routes, start_stops, start_stop_times, trip_headsign, df_trips
 
 
-def _find_stopID_along_strips(trips, con):
+def _find_stop_id_along_strips(trips, con):
 
     # t2 = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
     # t = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ") GROUP BY trip_id" , con)
     # stop_ids = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)['stop_id'].values
 
-    all_stop_ids = pd.read_sql("SELECT stop_id,trip_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
+    all_stop_ids = pd.read_sql("SELECT stop_id,trip_id,arrival_time FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
 
     stop_ids=[]
+    stop_times=[]
     for trip_id in trips:
-        stop_id = all_stop_ids[all_stop_ids['trip_id']==trip_id]['stop_id'].values#  pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id=" + str(trip_id) , con)['stop_id'].values
-        stop_ids.append(stop_id)
-
+        stop_item = all_stop_ids[all_stop_ids['trip_id']==trip_id]
+        stop_ids.append(stop_item['stop_id'].values)
+        stop_times.append(stop_item['arrival_time'].values)
     # stop_ids = np.unique(stop_ids)
 
-    return stop_ids
+    return stop_ids, stop_times
+
+
+    #
+    # all_stop_ids = pd.read_sql("SELECT stop_id,trip_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
+    #
+    # stop_ids=[]
+    # for trip_id in trips:
+    #     stop_id = all_stop_ids[all_stop_ids['trip_id']==trip_id]['stop_id'].values#  pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id=" + str(trip_id) , con)['stop_id'].values
+    #     stop_ids.append(stop_id)
+    #
+    # # stop_ids = np.unique(stop_ids)
+    #
+    # return stop_ids
 
 
 
@@ -208,15 +266,15 @@ if __name__ == "__main__":
     # lng = -79.4000
     lat = 51.135494 # calgary
     lng = -114.158389
-    # current_time = datetime.datetime.now()
-    # #
-    # ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    # ctime = "2016-03-28|08:10:32"
-    # print(find_accessiable_stops(lat, lng, ctime))
+    current_time = datetime.datetime.now()
+    #
+    ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
+    ctime = "2016-03-28|08:10:32"
+    print(find_accessiable_stops(lat, lng, ctime))
 
     # cProfile.run('foo() -s time')
 
-    print(find_shape_lat_lng(lat, lng, 32252846, 3698, 3844))
+    print(find_shape_lat_lng("calgary_ab_canada", 32252846, 3698, 3844))
 
 
 

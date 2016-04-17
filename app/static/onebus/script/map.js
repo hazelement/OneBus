@@ -2,10 +2,8 @@
 var map;
 var infowindow;
 var home;
-var directionsDisplay;
-var directionsService;
 var markers = [];
-var shapes = []
+var shape;
 var home_gps;
 
 var set_center = 0;
@@ -31,10 +29,6 @@ function initMap(){
 
     }
 
-
-
-    directionsDisplay = new google.maps.DirectionsRenderer;
-    directionsService = new google.maps.DirectionsService;
     infowindow = new google.maps.InfoWindow({
         content: '',
         maxWidth: 200
@@ -45,14 +39,17 @@ function initMap(){
         'click',
         function(){
                 infowindow.close();
-//                directionsDisplay.setMap(null);
         }
     );
 
         // setup map
-    directionsDisplay.setMap(map);
-    directionsDisplay.setOptions( { suppressMarkers: true } );
-//    directionsDisplay.setPanel(document.getElementById('direction-panel'));
+    shape = new google.maps.Polyline({
+        geodesic: true,
+        strokeColor: '#0000FF ',
+        strokeOpacity: 0.5,
+        strokeWeight: 6
+    });
+    shape.setMap(map);
 
 }
 
@@ -92,20 +89,7 @@ function refreshMap(data) {
 
 }
 
-//function add_shape(shape_gps){
-//
-//    var shape = new google.maps.Polyline({
-//        path: shape_gps,
-//        geodesic: true,
-//        strokeColor: '#ff4d4d ',
-//        strokeOpacity: 0.7,
-//        strokeWeight: 4
-//    });
-//
-//    shape.setMap(map);  // add loop to load multiple shapes
-//    shapes.push(shape);
-//
-//}
+
 
 function add_marker(target, is_home) {
     var lat_lng = {lat: target.lat, lng: target.lng};
@@ -146,7 +130,18 @@ function add_marker(target, is_home) {
         yelp_url: target.yelp_url,
         review_count: target.review_count,
         ratings_img: target.ratings_img,
-        path: target.path
+        path: target.path,
+        start_stop: target.start_stop,
+        start_stop_time: target.start_stop_time,
+        start_stop_name: target.start_stop_name,
+        end_stop: target.end_stop,
+        end_stop_time: target.end_stop_time,
+        end_stop_name: target.end_stop_name,
+        trip_id: target.trip_id,
+        trip_headsign: target.trip_headsign,
+        route_id: target.route_id,
+        city_code: target.city_code,
+        shape: ""
         });
 
         google.maps.event.addListener(
@@ -154,13 +149,10 @@ function add_marker(target, is_home) {
             'click',
             function(){
                 infowindow.close();
-//                infowindow.setContent(target.dest_name + "\n" +marker.description);
+                clear_polyline();
                 infowindow.setContent(make_infobox(marker))
                 infowindow.open(map, marker);
-                directionsDisplay.setMap(map)
-                calculateAndDisplayRoute(marker);
-//                document.getElementById("direction-panel-background").style.backgroundColor='white'
-
+                get_trip_shape(marker);
             }
         );
         markers.push(marker);
@@ -170,36 +162,80 @@ function add_marker(target, is_home) {
 
 function make_infobox(marker){
     retVal = "<b><font size=\"3\">";
-    retVal = retVal + marker.title +"</font></b><br>" ;
-    retVal = retVal + "<img src=\"" + marker.ratings_img + "\"><br>";
-    retVal = retVal + "Number of Reviews: " + marker.review_count.toString() + "<br>";
+    retVal += marker.title +"</font></b><br>" ;
+    retVal += "<img src=\"" + marker.ratings_img + "\"><br>";
+    retVal += "Number of Reviews: " + marker.review_count.toString() + "<br>";
 //    retVal = retVal + "<img src=\"" +
-    retVal = retVal + marker.address;
-    retVal = retVal + "<br><a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"onebus\\images\\yelp_review_btn_light.png\"></a>";
+    retVal += marker.address + "<br>";
+    retVal += "<a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"onebus\\images\\yelp_review_btn_light.png\"></a><br>";
+    retVal += "<hr>"
+    retVal += "<b>Bus No.: " + marker.route_id + " " + marker.trip_headsign + "</b><br>";
+    retVal += "<b>" + convert_timeint_to_time(marker.start_stop_time) + "</b> from " + marker.start_stop_name + "<br>";
+    retVal += "<b>" + convert_timeint_to_time(marker.end_stop_time) + "</b> arrive at " + marker.end_stop_name;
     return retVal;
 }
 
-function calculateAndDisplayRoute(dest) {
-  var selectedMode = 'TRANSIT';
-  directionsService.route({
-    origin: {lat: home_gps.lat, lng: home_gps.lng},  // Haight.
-    destination: {lat: dest.position.lat(), lng: dest.position.lng()},  // Ocean Beach.
-    // Note that Javascript allows us to access the constant
-    // using square brackets and a string value as its
-    // "property."
-    travelMode: google.maps.TravelMode[selectedMode],
-     transitOptions: {
-    modes: [google.maps.TransitMode.BUS],
-    routingPreference: google.maps.TransitRoutePreference.FEWER_TRANSFERS
-    },
-  }, function(response, status) {
-    if (status == google.maps.DirectionsStatus.OK) {
+function convert_timeint_to_time(time_int_string){
+    var number = parseInt(time_int_string);
+    var hour = Math.floor(number/3600);
+    var minute = Math.floor((number % 3600) / 60);
 
-      directionsDisplay.setDirections(response);
-    } else {
-      window.alert('Directions request failed due to ' + status);
+    var a_pm = "AM";
+    if(hour >= 12){
+        a_pm = "PM";
+
+        if(hour > 12){
+            hour -= 12;
+        }
     }
-  });
+
+    return FormatNumberLength(hour, 2) + ":" + FormatNumberLength(minute, 2) + " " + a_pm
+}
+
+function FormatNumberLength(num, length) {
+    var r = "" + num;
+    while (r.length < length) {
+        r = "0" + r;
+    }
+    return r;
+}
+
+
+function get_trip_shape(marker){
+    // if shape is requested, just request
+    if(marker.shape!=""){
+        add_shape(marker.shape);
+        return
+    }
+
+    $.ajax({
+    type: "POST",
+    url: "/onebus/api/route",
+    data: JSON.stringify({trip_id: marker.trip_id,
+                            start_stop: marker.start_stop,
+                            end_stop: marker.end_stop,
+                            city_code: marker.city_code
+                            }),
+    success: function(response){ marker.shape = plot_shape(response); },
+    contentType: "application/json",
+    dataType:'json'})
+
+}
+
+function plot_shape(data, marker){
+    if(data["success"] == "0"){
+        return ""
+    }
+
+    var encoded_shape = data["results"];
+    add_shape(encoded_shape);
+
+    return encoded_shape
+}
+
+function add_shape(encoded_shape){
+    var decoded_path = google.maps.geometry.encoding.decodePath(encoded_shape)
+    shape.setPath(decoded_path);
 }
 
 // Sets the map on all markers in the array.
@@ -209,18 +245,14 @@ function setMapOnAll(map) {
   }
 }
 
-// Removes the markers from the map, but keeps them in the array.
-//function clearMarkers() {
-//  setMapOnAll(null);
-//  deleteMarkers(); // clear all old markers
-//}
-
+function clear_polyline(){
+  shape.setPath([]);
+}
 
 // Deletes all markers and bus routes in the array by removing references to them.
 function clearMap() {
   setMapOnAll(null);
+  clear_polyline();
 //  clearMarkers();
   markers = [];
-  directionsDisplay.setMap(null);
-
 }

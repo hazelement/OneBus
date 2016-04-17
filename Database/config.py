@@ -5,6 +5,10 @@ import numpy as np
 import util
 # from scipy.spatial.distance import cdist
 
+def read_route_id_process_key(city):
+    config = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + '/city_url.config')
+    return config[config['city']==city].values[0][4]
+
 def read_city_url_from_config(city):
     config = pd.read_csv(os.path.dirname(os.path.realpath(__file__)) + '/city_url.config')
     return config[config['city']==city].values[0][1]

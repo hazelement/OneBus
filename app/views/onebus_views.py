@@ -10,15 +10,6 @@ from flask import render_template, request, jsonify, redirect
 from Database import backend
 
 
-# @app.before_request
-# def before_request():
-#     if request.url.startswith('http://'):
-#         print("redirect to https")
-#         url = request.url.replace('http://', 'https://', 1)
-#         code = 301
-#         return redirect(url, code=code)
-
-
 @app.route('/onebus', methods=['GET', 'POST'])
 def onebus_index():
     return render_template('onebus/index.html')
@@ -35,8 +26,7 @@ def route_port():
         trip_id = post_data['trip_id']
         start_stop = post_data['start_stop']  # it has gps data
         end_stop = post_data['end_stop']
-        lat = post_data['lat']
-        lng = post_data['lng']
+        city_code = post_data['city_code']
 
         # print(trip_id, start_stop, end_stop, lat, lng)
 
@@ -46,14 +36,14 @@ def route_port():
         result['success']=0
         result['message']='posting data error'
 
-        return jsonify(**result)
+        return jsonify(result)
 
     result={}
-    result['result'] = backend.get_shape_gps(lat, lng, trip_id, start_stop, end_stop)
+    result['results'] = backend.get_shape_gps(city_code, trip_id, start_stop, end_stop)
     result['success'] = 1
     result['message'] = 'success'
 
-    return jsonify(**result)
+    return jsonify(result)
 
 
 @app.route('/onebus/api', methods=['POST'])
@@ -77,7 +67,7 @@ def api_port():
         result['success']=0
         result['message']='posting data error'
 
-        return jsonify(**result)
+        return jsonify(result)
 
     try:
         result = backend.get_destinations(home_lat, home_lng, txtSearch, ctime) # yyyy-mm-dd|hh:mm:ss
@@ -94,5 +84,4 @@ def api_port():
         result['success']=0
         result['message']=str(exc_info)
 
-        
-    return jsonify(**result)
+    return jsonify(result)
