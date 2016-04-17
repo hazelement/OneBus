@@ -85,8 +85,6 @@ function refreshMap(data) {
         add_marker(destinations[key], false);
     }
 
-//    add_shape(data['shape']);
-
 }
 
 
@@ -253,6 +251,5 @@ function clear_polyline(){
 function clearMap() {
   setMapOnAll(null);
   clear_polyline();
-//  clearMarkers();
   markers = [];
 }
