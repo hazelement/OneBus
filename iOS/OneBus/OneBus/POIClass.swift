@@ -33,11 +33,12 @@ class POI: NSObject, MKAnnotation {
     var bus_shape: String
 
     let coordinate: CLLocationCoordinate2D
+    let city_code: String
     
     
     
     init(index: Int, destName: String, address: String, image_url: String, yelp_url: String, review_count: Int, ratings_img_url: String, coordinate: CLLocationCoordinate2D, start_stop: Int, end_stop: Int,
-         trip_id: Int, route_id: Int) {
+         trip_id: Int, route_id: Int, city_code: String) {
         
         self.index = index
         
@@ -49,6 +50,7 @@ class POI: NSObject, MKAnnotation {
         self.ratings_img_url = ratings_img_url
         
         self.coordinate = coordinate
+        self.city_code = city_code
         
         self.start_stop = String(start_stop)
         self.end_stop = String(end_stop)

@@ -29,7 +29,7 @@ $("#frmSearch").submit(function( event ){
         data: JSON.stringify({search_text: $("#txtSearch").val(),
                                 home_gps: home_gps,
                                 current_time: datetime}),
-        success: function(response){ refreshMap(response); },
+        success: function(response){ refreshMap(response); $btn.button('reset');},
         contentType: "application/json",
         dataType:'json'})
 

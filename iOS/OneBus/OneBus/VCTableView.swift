@@ -48,8 +48,6 @@ extension ViewController{
     
     func toggle_table(loading: Bool){
         
-        
-//        if(loading == false){
         if(self.btnHideList.table_is_hidden == true){ // show table
             
             showPOITable("Hide List")
@@ -59,12 +57,6 @@ extension ViewController{
             
             hidePOITable("Show List")
         }
-//            }
-//        } else {  // hide table with loading label
-//            self.btnHideList.table_is_hidden = true
-//            self.btnHideList.setTitle("Loading...", forState: .Normal)
-//            hidePOITable(true)
-//        }
     }
     
     func showPOITable(label: String){

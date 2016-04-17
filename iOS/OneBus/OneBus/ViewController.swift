@@ -55,6 +55,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
     
     var lat: String = "51.0454027"
     var lng: String = "-114.05651890000001"
+    var city_code: String = ""
     
     
     override func viewDidLoad() {
@@ -118,7 +119,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
 //            self.hidePOITable(true)
             self.hidePOITable("Loading...")
         } else {
-            
+            self.btnHideList.setTitle("Loading...", forState: .Normal)
+            self.btnHideList.hidden=false
         }
         
 //        SwiftSpinner.show("Looking around ...")
@@ -178,7 +180,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                           start_stop: detail["start_stop"] as! Int,
                           end_stop: detail["end_stop"] as! Int,
                           trip_id: detail["trip_id"] as! Int,
-                          route_id: detail["route_id"] as! Int)
+                          route_id: detail["route_id"] as! Int,
+                          city_code: extractString(detail["city_code"]))
             
             annotationsPOI.append(poi)
             

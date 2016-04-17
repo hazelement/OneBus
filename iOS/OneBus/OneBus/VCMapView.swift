@@ -62,6 +62,10 @@ extension ViewController {
 
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView){
         
+        if(view.annotation?.isKindOfClass(MKUserLocation) == true){
+            return
+        }
+        
         let index = find_index_of_annoation(view.annotation!, annotation_arrays: self.annotationsPOI)
         
         self.show_bus_route_by_index(index)
@@ -140,12 +144,12 @@ extension ViewController {
         
         if(self.annotationsPOI[index].bus_shape==""){
             
-            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, lat: self.lat, lng: self.lng)
+            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, city_code: self.annotationsPOI[index].city_code)
             {response in
                 if(response != nil){
                     if(response!["success"]! as! Int==1){
                         print(response!["message"])
-                        let raw_shape = response!["result"] as! String
+                        let raw_shape = response!["results"] as! String
                         self.annotationsPOI[index].bus_shape = raw_shape
                         
                         var locations: [CLLocationCoordinate2D] = decodePolyline(raw_shape)!

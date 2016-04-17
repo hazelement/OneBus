@@ -155,11 +155,13 @@ public func decodePolyline(encodedPolyline: String, precision: Double = 1e5) -> 
     while position < length {
         
         do {
+            let resultingLat = try decodeSingleCoordinate(byteArray: byteArray, length: length, position: &position, precision: precision)
+            lat += resultingLat
+            
             let resultingLon = try decodeSingleCoordinate(byteArray: byteArray, length: length, position: &position, precision: precision)
             lon += resultingLon
             
-            let resultingLat = try decodeSingleCoordinate(byteArray: byteArray, length: length, position: &position, precision: precision)
-            lat += resultingLat
+
         } catch {
             return nil
         }
