@@ -9,10 +9,11 @@
 
     <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='yychub/img/portfolio/onebus_small.png') }}"/>
 
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='onebus/styles/index.css') }}" media="screen" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </head>
@@ -40,7 +41,9 @@
     <div class="navbar-header pull-left">
         <form class="navbar-form" role="search" id="frmSearch">
               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+                  <div id="default-suggestions">
+                      <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+                  </div>
                   <div class="input-group-btn">
                       <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
                   </div>
@@ -134,15 +137,14 @@
 
     <div id="map" ></div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>
-    <!--<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>-->
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
     <script src="{{ url_for('static', filename='onebus/script/map.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/control.js') }}"></script>
-<script src="{{ url_for('static', filename='onebus/script/polyline.js') }}"></script>
-    <script>
-        initMap();
-    </script>
+    <script src="{{ url_for('static', filename='onebus/script/polyline.js') }}"></script>
+
+
 
 </body>
 </html>

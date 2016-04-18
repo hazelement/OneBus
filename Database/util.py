@@ -19,9 +19,9 @@ def result_filter_by_distance(stops, targets):
     min_target_distance = np.amin(distance_matrix, axis=0)
 
     if(len(targets) > 20):
-        threshold = 0.003
+        threshold = 0.004
     else:
-        threshold = 0.005
+        threshold = 0.006
 
     # find targets are closest to stops
     target_mapping = min_target_distance<threshold
