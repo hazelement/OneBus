@@ -80,6 +80,9 @@ function refreshMap(data) {
     // add home marker
     add_marker(home_gps, true);
 
+    if(Object.keys(destinations).length == 0){
+        $('#modelNoResult').modal('show');
+    }
     // add result markers
     for( var key in destinations ){
         add_marker(destinations[key], false);
@@ -99,7 +102,7 @@ function add_marker(target, is_home) {
         map: map,
         animation: google.maps.Animation.DROP,
         title: 'Home',
-        description: 'Home Location',
+        description: 'My Location',
         path: target.path
         });
 //        marker.setIcon(myIcon);

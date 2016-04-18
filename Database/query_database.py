@@ -69,7 +69,7 @@ def find_shape_lat_lng(city_code, trip_id, start_stop, end_stop):
 
         shape_lat_lng = shape.ix[lower:upper][['shape_pt_lat', 'shape_pt_lon']].as_matrix().astype(float)
 
-        shape_lat_lng_small = rdp(shape_lat_lng, epsilon=0.0001)  # reduce size using Ramer-Douglas-Peucker algorithm
+        shape_lat_lng_small = rdp(shape_lat_lng, epsilon=0.000002)  # reduce size using Ramer-Douglas-Peucker algorithm
 
         df = pd.DataFrame(shape_lat_lng_small, columns=['lat', 'lng'])
 
@@ -126,7 +126,7 @@ def find_accessiable_stops(lat, lng, ctime):
             trip_ids, routes, start_stop_ids, start_stop_times, trip_headsign, df_trips=_find_near_trips(nearestStopLocations, service_id, currenttime, con)
 
         with Timer("find stops along trips"):
-            stop_ids, stop_times = _find_stop_id_along_strips(trip_ids, con)
+            stop_ids, stop_times = _find_stop_id_along_strips(trip_ids, start_stop_ids, con)
 
         with Timer("generate dataframe"):
             long_routes = []
@@ -227,7 +227,7 @@ def _find_near_trips(near_stops, service_id, currenttime, con):
     return trips, routes, start_stops, start_stop_times, trip_headsign, df_trips
 
 
-def _find_stop_id_along_strips(trips, con):
+def _find_stop_id_along_strips(trips, start_stop_ids, con):
 
     # t2 = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ")" , con)
     # t = pd.read_sql("SELECT stop_id FROM stop_times WHERE trip_id IN " + "(" + ','.join("{0}".format(x) for x in trips) + ") GROUP BY trip_id" , con)
@@ -237,11 +237,23 @@ def _find_stop_id_along_strips(trips, con):
 
     stop_ids=[]
     stop_times=[]
-    for trip_id in trips:
+
+    for i in range(0, len(trips)):
+        trip_id = trips[i]
+        start_stop_id = start_stop_ids[i]
+
         stop_item = all_stop_ids[all_stop_ids['trip_id']==trip_id]
-        stop_ids.append(stop_item['stop_id'].values)
-        stop_times.append(stop_item['arrival_time'].values)
-    # stop_ids = np.unique(stop_ids)
+
+        start_index = stop_item[stop_item['stop_id']==start_stop_id].index.tolist()[0]
+
+        # get all stops from start stop
+        stop_ids.append(stop_item.ix[start_index:]['stop_id'].values)
+        stop_times.append(stop_item.ix[start_index:]['arrival_time'].values)
+
+    # for trip_id in trips:
+    #     stop_item = all_stop_ids[all_stop_ids['trip_id']==trip_id]
+    #     stop_ids.append(stop_item['stop_id'].values)
+    #     stop_times.append(stop_item['arrival_time'].values)
 
     return stop_ids, stop_times
 
@@ -264,12 +276,16 @@ def _find_stop_id_along_strips(trips, con):
 if __name__ == "__main__":
     # lat = 43.7000  # toronto
     # lng = -79.4000
-    lat = 51.135494 # calgary
-    lng = -114.158389
+    # lat = 51.135494 # calgary downtown
+    # lng = -114.158389
+
+    lat = 51.1699364 # calgary
+    lng = -114.12192089999999
+
     current_time = datetime.datetime.now()
     #
     ctime = str(current_time.year) + "-" + str(current_time.month) + "-" + str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    ctime = "2016-03-28|08:10:32"
+    ctime = "2016-04-17|09:30:32"
     print(find_accessiable_stops(lat, lng, ctime))
 
     # cProfile.run('foo() -s time')

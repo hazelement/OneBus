@@ -96,18 +96,20 @@ if __name__ == "__main__":
     lat = 51.0454027
     lng = -114.05651890000001
 
-    lat = 51.174280200000005
-    lng = -114.121324
+    # lat = 51.174280200000005
+    # lng = -114.121324
+
 
     # query = 'chinese restaurant calgary'
-    query = 'restaurant'
+    query = 'pub'
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
     current_time = datetime.datetime.now()
 
     ctime = str(current_time.year) + "-" + str(current_time.month) + "-" +str(current_time.day) + "|" + str(current_time.hour) + ":" +str(current_time.minute) + ":" + str(current_time.second)
-    # ctime = "2016-03-16|08:10:32"
+    # ctime = "2016-03-16|08:10:32
+    ctime = "2016-04-17|09:30:00"
     test = get_destinations(lat, lng, query, ctime)
 
     # test = yelp_loc_list(lat, lng, query)
