@@ -23,5 +23,5 @@ if __name__ == "__main__":
     # app.run(host='localhost', port=8000, ssl_context=context, threaded=True, debug=True)
     # app.run(host='localhost', threaded=True, debug=True)
     # app.run(host='192.168.0.4', port=8080, threaded=True, debug=True, ssl_context='adhoc')
-    app.run(host='192.168.0.4', port=443, threaded=True, debug=True, ssl_context=context)
+    app.run(host='192.168.0.10', port=443, threaded=True, debug=True, ssl_context=context)
     # app.run(host='0.0.0.0', port=7563, threaded=True, debug=True, ssl_context=context)

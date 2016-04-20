@@ -192,7 +192,6 @@ class GtfsRawDataParser():
                 count+=1
 
         data.replace({'route_id': self._route_id_mapping}, inplace=True)
-        data[['route_id']]=data[['route_id']].astype(int)
 
         return data
 
@@ -232,7 +231,7 @@ def update_all_database():
         try:
             print "Garbage collection: ", gc.collect()
             print "unreachable garbage: ", gc.collect()
-            ds = GtfsRawDataParser('city')
+            ds = GtfsRawDataParser(city)
             ds.fetch_new_data()
         except Exception,e:
             print(e)
@@ -240,9 +239,9 @@ def update_all_database():
 
 if __name__ == "__main__":
 
-    # ds = DataBaseParser('calgary_ab_canada')
-    # ds.fetch_new_data()
-    update_all_database()
+    ds = GtfsRawDataParser('sanfranciso_ca_us')
+    ds.fetch_new_data()
+    # update_all_database()
     # list = ["23:42:23", "32:01:32"]
     # _update_city_database('calgary_ab_canada')
     # _update_city_database('toronto_on_canada')
