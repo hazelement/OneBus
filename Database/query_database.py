@@ -181,23 +181,46 @@ def find_accessiable_stops(lat, lng, ctime):
 
 def _find_current_service_id(currDate, dayofthweek, con):
 
-
+    try:
+        sql_query = "SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
+        df1 = pd.read_sql(sql_query, con)
+    except:
+        df1 = pd.DataFrame(columns=['service_id'])
 
     try:
-        sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1 ".format(currDate, currDate, dayofthweek)
-        sql_query+="UNION SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=1 ".format(currDate, currDate, dayofthweek)
-        sql_query+="EXCEPT SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=2;".format(currDate, currDate, dayofthweek)
+        sql_query = "SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=1;".format(currDate, currDate, dayofthweek)
+        df2 = pd.read_sql(sql_query, con)
+    except:
+        df2 = pd.DataFrame(columns=['service_id'])
 
-        df = pd.read_sql(sql_query, con)
+    try:
+        sql_query = "SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=2;".format(currDate, currDate, dayofthweek)
+        df3 = pd.read_sql(sql_query, con)
+    except:
+        df3 = pd.DataFrame(columns=['service_id'])
+
+    df = pd.merge(df1, df2, on='service_id', how='outer')
+
+    mask = df['service_id'].isin(df3['service_id'].values)
+    df = df[~mask]
 
 
-    except Exception, e:
-        sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
-        df = pd.read_sql(sql_query, con)
-        print(e)
-        if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
-            sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
-            df = pd.read_sql(sql_query, con)
+    #
+    # try:
+    #     sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1 ".format(currDate, currDate, dayofthweek)
+    #     sql_query+="UNION SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=1 ".format(currDate, currDate, dayofthweek)
+    #     sql_query+="EXCEPT SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=2;".format(currDate, currDate, dayofthweek)
+    #
+    #     df = pd.read_sql(sql_query, con)
+    #
+    #
+    # except Exception, e:
+    #     sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
+    #     df = pd.read_sql(sql_query, con)
+    #     print(e)
+    #     if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
+    #         sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
+    #         df = pd.read_sql(sql_query, con)
 
     return df['service_id'].tolist()
 
