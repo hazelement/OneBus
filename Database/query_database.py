@@ -179,8 +179,29 @@ def find_accessiable_stops(lat, lng, ctime):
 
     return df, city_code
 
-
 def _find_current_service_id(currDate, dayofthweek, con):
+
+
+
+    try:
+        sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1 ".format(currDate, currDate, dayofthweek)
+        sql_query+="UNION SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=1 ".format(currDate, currDate, dayofthweek)
+        sql_query+="EXCEPT SELECT service_id FROM calendar_dates WHERE date = '{}' AND exception_type=2;".format(currDate, currDate, dayofthweek)
+
+        df = pd.read_sql(sql_query, con)
+
+
+    except Exception, e:
+        sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
+        df = pd.read_sql(sql_query, con)
+        print(e)
+        if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
+            sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
+            df = pd.read_sql(sql_query, con)
+
+    return df['service_id'].tolist()
+
+def _find_current_service_id_bak(currDate, dayofthweek, con):
 
     sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
 

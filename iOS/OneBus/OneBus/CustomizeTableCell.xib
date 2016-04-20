@@ -17,6 +17,10 @@
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJL-a1-Fdo">
                         <rect key="frame" x="18" y="-2" width="227" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="0kf-I8-T0f"/>
+                            <constraint firstAttribute="width" constant="227" id="Cgd-S3-C9C"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -24,11 +28,16 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kF7-CT-HKe">
                         <rect key="frame" x="28" y="21" width="64" height="18"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="64" id="vS0-Yy-PEu"/>
+                            <constraint firstAttribute="height" constant="18" id="2ro-k4-I8P"/>
+                            <constraint firstAttribute="width" constant="64" id="3hu-7X-Yn4"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="000 of reviews from yelp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c6I-8c-gwI">
                         <rect key="frame" x="94" y="19" width="151" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="151" id="Yz5-16-weG"/>
+                            <constraint firstAttribute="height" constant="22" id="f72-oP-xfd"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -36,8 +45,8 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g4Q-6X-AM7" customClass="YelpUIButton" customModule="OneBus" customModuleProvider="target">
                         <rect key="frame" x="253" y="10" width="22" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="22" id="Yel-JR-7N3"/>
-                            <constraint firstAttribute="width" constant="22" id="nfc-l0-UXI"/>
+                            <constraint firstAttribute="width" constant="22" id="jHZ-Os-JPw"/>
+                            <constraint firstAttribute="height" constant="22" id="yjq-pL-l7T"/>
                         </constraints>
                         <connections>
                             <action selector="yelpButtonClicked:" destination="sC1-8B-516" eventType="touchUpInside" id="5wL-27-diY"/>
@@ -45,18 +54,14 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="trailing" secondItem="Cdf-9G-b8p" secondAttribute="trailingMargin" constant="-20" id="6eC-9X-vzX"/>
-                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="top" secondItem="Cdf-9G-b8p" secondAttribute="topMargin" constant="2" id="8t7-gF-FH5"/>
-                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="leading" secondItem="c6I-8c-gwI" secondAttribute="trailing" constant="8" id="9Ob-FR-wrD"/>
-                    <constraint firstItem="kF7-CT-HKe" firstAttribute="leading" secondItem="Cdf-9G-b8p" secondAttribute="leadingMargin" constant="20" id="AfR-pO-FRe"/>
-                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="leading" secondItem="bJL-a1-Fdo" secondAttribute="trailing" constant="8" id="N5g-gq-Prm"/>
-                    <constraint firstItem="kF7-CT-HKe" firstAttribute="bottom" secondItem="Cdf-9G-b8p" secondAttribute="bottomMargin" constant="5" id="OFd-bK-Yse"/>
-                    <constraint firstItem="bJL-a1-Fdo" firstAttribute="top" secondItem="Cdf-9G-b8p" secondAttribute="topMargin" constant="-10" id="PXo-Cv-lre"/>
-                    <constraint firstItem="bJL-a1-Fdo" firstAttribute="leading" secondItem="Cdf-9G-b8p" secondAttribute="leadingMargin" constant="10" id="iFw-Xr-KO2"/>
-                    <constraint firstItem="kF7-CT-HKe" firstAttribute="top" secondItem="bJL-a1-Fdo" secondAttribute="bottom" constant="2" id="j2d-wc-hoB"/>
-                    <constraint firstItem="c6I-8c-gwI" firstAttribute="top" secondItem="bJL-a1-Fdo" secondAttribute="bottom" id="sv2-xy-06P"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="g4Q-6X-AM7" secondAttribute="bottom" constant="2" id="y7J-wg-tDw"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="c6I-8c-gwI" secondAttribute="bottom" constant="-7" id="yeX-W2-2Xq"/>
+                    <constraint firstItem="c6I-8c-gwI" firstAttribute="top" secondItem="bJL-a1-Fdo" secondAttribute="bottom" id="3Dt-Af-2LM"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="g4Q-6X-AM7" secondAttribute="trailing" constant="20" id="Gs9-fi-dn1"/>
+                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="leading" secondItem="c6I-8c-gwI" secondAttribute="trailing" constant="8" id="S1Y-ry-c12"/>
+                    <constraint firstItem="bJL-a1-Fdo" firstAttribute="top" secondItem="Cdf-9G-b8p" secondAttribute="topMargin" constant="-10" id="WGc-g4-f9z"/>
+                    <constraint firstItem="g4Q-6X-AM7" firstAttribute="top" secondItem="Cdf-9G-b8p" secondAttribute="topMargin" constant="2" id="YnB-uA-EAe"/>
+                    <constraint firstItem="kF7-CT-HKe" firstAttribute="top" secondItem="bJL-a1-Fdo" secondAttribute="bottom" constant="2" id="alf-KM-WRw"/>
+                    <constraint firstItem="bJL-a1-Fdo" firstAttribute="leading" secondItem="Cdf-9G-b8p" secondAttribute="leadingMargin" constant="10" id="ejX-xv-taw"/>
+                    <constraint firstItem="kF7-CT-HKe" firstAttribute="leading" secondItem="Cdf-9G-b8p" secondAttribute="leadingMargin" constant="20" id="yTL-Gu-G0C"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

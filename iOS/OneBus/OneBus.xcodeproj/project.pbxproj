@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5464D7481CC6FBB800D18AD5 /*  onebus_icon_5s.png in Resources */ = {isa = PBXBuildFile; fileRef = 5464D7441CC6FBB800D18AD5 /*  onebus_icon_5s.png */; };
+		5464D7491CC6FBB800D18AD5 /*  onebus_icon_6s.png in Resources */ = {isa = PBXBuildFile; fileRef = 5464D7451CC6FBB800D18AD5 /*  onebus_icon_6s.png */; };
+		5464D74A1CC6FBB800D18AD5 /*  onebus_icon_app_store.png in Resources */ = {isa = PBXBuildFile; fileRef = 5464D7461CC6FBB800D18AD5 /*  onebus_icon_app_store.png */; };
+		5464D74B1CC6FBB800D18AD5 /*  onebus.png in Resources */ = {isa = PBXBuildFile; fileRef = 5464D7471CC6FBB800D18AD5 /*  onebus.png */; };
+		5464D7531CC7001D00D18AD5 /* VCSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D7521CC7001D00D18AD5 /* VCSearchBar.swift */; };
 		546743FD1CA5D7D700B1667A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546743FC1CA5D7D700B1667A /* AppDelegate.swift */; };
 		546743FF1CA5D7D700B1667A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546743FE1CA5D7D700B1667A /* ViewController.swift */; };
 		546744021CA5D7D700B1667A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546744001CA5D7D700B1667A /* Main.storyboard */; };
@@ -122,6 +127,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5464D7441CC6FBB800D18AD5 /*  onebus_icon_5s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " onebus_icon_5s.png"; sourceTree = "<group>"; };
+		5464D7451CC6FBB800D18AD5 /*  onebus_icon_6s.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " onebus_icon_6s.png"; sourceTree = "<group>"; };
+		5464D7461CC6FBB800D18AD5 /*  onebus_icon_app_store.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " onebus_icon_app_store.png"; sourceTree = "<group>"; };
+		5464D7471CC6FBB800D18AD5 /*  onebus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = " onebus.png"; sourceTree = "<group>"; };
+		5464D7521CC7001D00D18AD5 /* VCSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCSearchBar.swift; sourceTree = "<group>"; };
 		546743F91CA5D7D700B1667A /* OneBus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneBus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		546743FC1CA5D7D700B1667A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		546743FE1CA5D7D700B1667A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -245,6 +255,10 @@
 		549176F11CB0D85B000855E3 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				5464D7441CC6FBB800D18AD5 /*  onebus_icon_5s.png */,
+				5464D7451CC6FBB800D18AD5 /*  onebus_icon_6s.png */,
+				5464D7461CC6FBB800D18AD5 /*  onebus_icon_app_store.png */,
+				5464D7471CC6FBB800D18AD5 /*  onebus.png */,
 				54BBB6431CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png */,
 				54CA06CC1CAB89C300AD45A7 /* yelp_review_btn_light.png */,
 			);
@@ -287,6 +301,7 @@
 				549177011CB225B7000855E3 /* POIView.xib */,
 				549177141CB327D6000855E3 /* CustomizeUIButton.swift */,
 				54BBB6461CBD9E0A00A4FC36 /* VCTableView.swift */,
+				5464D7521CC7001D00D18AD5 /* VCSearchBar.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -475,10 +490,14 @@
 				54CA06AE1CA6EB8D00AD45A7 /* Toronto.gpx in Resources */,
 				549177021CB225B7000855E3 /* POIView.xib in Resources */,
 				546744041CA5D7D700B1667A /* Assets.xcassets in Resources */,
+				5464D74A1CC6FBB800D18AD5 /*  onebus_icon_app_store.png in Resources */,
 				54BBB6441CBCAE6D00A4FC36 /* Maps-Center-Direction-icon.png in Resources */,
+				5464D74B1CC6FBB800D18AD5 /*  onebus.png in Resources */,
+				5464D7491CC6FBB800D18AD5 /*  onebus_icon_6s.png in Resources */,
 				546744021CA5D7D700B1667A /* Main.storyboard in Resources */,
 				54CA06B01CA6EBF100AD45A7 /* Calgary.gpx in Resources */,
 				54CA06CD1CAB89C300AD45A7 /* yelp_review_btn_light.png in Resources */,
+				5464D7481CC6FBB800D18AD5 /*  onebus_icon_5s.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,6 +522,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5464D7531CC7001D00D18AD5 /* VCSearchBar.swift in Sources */,
 				54AF41C71CB8074E00BBF71B /* Polyline.swift in Sources */,
 				54CA06B31CA78AE200AD45A7 /* POIClass.swift in Sources */,
 				5491771A1CB5B90F000855E3 /* SwfitSpinner.swift in Sources */,

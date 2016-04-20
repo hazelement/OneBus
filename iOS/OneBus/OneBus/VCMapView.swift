@@ -13,12 +13,62 @@ extension ViewController {
     
     func instanceFromNib(poi_index: Int) -> UIView {
         
-        let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
-        let review_count = myview.viewWithTag(1) as! UILabel
-        let rating_image = myview.viewWithTag(3) as! UIImageView
+        let myannotation = annotationsPOI[poi_index]
         
-        rating_image.downloadedFrom(link: annotationsPOI[poi_index].ratings_img_url, contentMode: UIViewContentMode.ScaleAspectFill)
-        review_count.text = String(annotationsPOI[poi_index].review_count) + " reviews on yelp"
+        let myview = UINib(nibName: "POIView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! UIView
+        
+        let bus_no = myview.viewWithTag(1) as! UILabel
+        let depart_time = myview.viewWithTag(2) as! UILabel
+        let depart_loc = myview.viewWithTag(3) as! UILabel
+        let arrival_time = myview.viewWithTag(4) as! UILabel
+        let arrival_loc = myview.viewWithTag(5) as! UILabel
+        
+        bus_no.text = myannotation.route_id + " " + myannotation.trip_headsign
+        depart_time.text = myannotation.start_stop_time
+        depart_loc.text = myannotation.start_stop_name
+        arrival_time.text = myannotation.end_stop_time
+        arrival_loc.text = myannotation.end_stop_name
+        
+        let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 205)
+        myview.addConstraint(widthConstraint)
+        
+        let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 55)
+        myview.addConstraint(heightConstraint)
+        
+        return myview
+    }
+    
+    func instanceFromUIWebView(poi_index: Int) -> UIView {
+        
+        let myannotation = annotationsPOI[poi_index]
+        
+        let myview = UIWebView()
+
+        var htmlString: String = ""
+        
+        htmlString = "<html><head>"
+        htmlString = htmlString + "<style type='text/css'>"
+        htmlString = htmlString + "p {font-size:10pt;font-family:Arial, Helvetica, sans-serif;}"
+        htmlString = htmlString + "</style>"
+        htmlString = htmlString + "</head>"
+        
+        htmlString = htmlString + "<body leftmargin='0' topmargin='0' rightmargin='0' bottommargin='0'>"
+        htmlString = htmlString + "<p>"
+        htmlString = htmlString + "<b>Bus No.: " + myannotation.route_id + " - " + myannotation.trip_headsign + "</b><br>"
+        htmlString = htmlString + "<b>" + myannotation.start_stop_time + "</b> from " + myannotation.start_stop_name + "<br>"
+        htmlString = htmlString + "<b>" + myannotation.end_stop_time + "</b> arrive at " + myannotation.end_stop_name + "<br>"
+        htmlString = htmlString + "</p>"
+        htmlString = htmlString + "</body>"
+        htmlString = htmlString + "</html>"
+        
+        myview.loadHTMLString(htmlString, baseURL: nil)
+    
+        
+        let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
+        myview.addConstraint(widthConstraint)
+        
+        let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 100)
+        myview.addConstraint(heightConstraint)
         
         return myview
     }
@@ -106,15 +156,13 @@ extension ViewController {
             
 //            view.leftCalloutAccessoryView = yelp_button as UIView
             
+
+        let myview = instanceFromUIWebView(annotation.index)
+        view.detailCalloutAccessoryView = myview
+            
             
 //            let myview = instanceFromNib(annotation.index)
 //            
-//            let widthConstraint = NSLayoutConstraint(item: myview, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 200)
-//            myview.addConstraint(widthConstraint)
-//            
-//            let heightConstraint = NSLayoutConstraint(item: myview, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 20)
-//            myview.addConstraint(heightConstraint)
-            
 //            view.detailCalloutAccessoryView = myview
             
             
@@ -144,7 +192,7 @@ extension ViewController {
         
         if(self.annotationsPOI[index].bus_shape==""){
             
-            api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, city_code: self.annotationsPOI[index].city_code)
+            self.api.get_trip_shape(self.annotationsPOI[index].trip_id, start_stop: self.annotationsPOI[index].start_stop, end_stop: self.annotationsPOI[index].end_stop, city_code: self.annotationsPOI[index].city_code)
             {response in
                 if(response != nil){
                     if(response!["success"]! as! Int==1){

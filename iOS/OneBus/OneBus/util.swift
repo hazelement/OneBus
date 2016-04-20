@@ -27,8 +27,27 @@ func find_index_of_annoation(myanno: MKAnnotation, annotation_arrays: [POI]) -> 
     }
     
     return -1
+}
+
+func convert_time_int_to_string(time_in_int: Int) -> String{
+    // convert time in int value, hour * 3600 + minute * 60 + seconds
+    // to hour:minute AM/PM
     
+    var hour = time_in_int/3600
+    let minute = (time_in_int - hour * 3600)/60
     
+    var a_pm = " AM"
+    
+    if(hour>=12){
+        a_pm = " PM"
+        if(hour > 12){
+            hour -= 12
+        }
+    }
+    
+    let retVal = String(hour) + ":" + String(format:"%02d", minute) + a_pm
+ 
+    return retVal
 }
 
 

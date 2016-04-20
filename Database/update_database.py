@@ -38,7 +38,7 @@ def _update_city_database(city_province_country):
     z = ZipFile(BytesIO(request.content))
     print("download finished")
     
-    file_names=['agency', 'shapes', 'stops'] #, 'stop_times'] # 'routes']
+    file_names=['agency', 'shapes', 'stops', 'stop_times'] # 'routes']
 
     current_folder = os.path.dirname(os.path.realpath(__file__)) + "/"
     db_name = current_folder + "SQLData/" +city_province_country + ".sqlite"
@@ -52,7 +52,7 @@ def _update_city_database(city_province_country):
             except KeyError:
                 print(fname + " not in the data catalog")
 
-
+        # calendar file
         fname = 'calendar'
         print("processing " + fname)
         data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
@@ -61,7 +61,7 @@ def _update_city_database(city_province_country):
         if(type(data['service_id'].values[0]) is str): # convert service id to int if it is read in as string
             service_ids = np.unique(data['service_id'].values)
             service_id_replacement=1
-            service_dict = {}
+            service_dict = {}           # maping service id string to integers in trips, route_id to intergers
 
             count = 0
             for service_id in service_ids:
@@ -73,8 +73,20 @@ def _update_city_database(city_province_country):
 
         util.save_dataframe_to_db(data, fname, con)
 
-        # maping service id string to integers in trips, route_id to intergers
+        # calendar dates file
+        fname = 'calendar_dates'
+        print("processing " + fname)
+        data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
 
+        if(service_id_replacement==1): # convert service id to int if it is read in as string
+            data.replace({"service_id": service_dict}, inplace=True)
+            data[['service_id']]=data[['service_id']].astype(int)
+
+        util.save_dataframe_to_db(data, fname, con)
+
+
+
+        # trips file
         fname = 'trips'
         print("processing " + fname)
         data = util.convert_csv_to_dataframe(z.open(fname + ".txt"), city_province_country)
@@ -92,10 +104,11 @@ def _update_city_database(city_province_country):
 if __name__ == "__main__":
     # update_all_database()
     # list = ["23:42:23", "32:01:32"]
-    _update_city_database('calgary_ab_canada')
+    # _update_city_database('calgary_ab_canada')
     # _update_city_database('toronto_on_canada')
     # _update_city_database('edmonton_ab_canada')
     # _update_city_database('vancouver_bc_canada')
+    _update_city_database('sanfranciso_ca_us')
 
     #
     # print(convert_time_string_to_int(list))

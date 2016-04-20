@@ -14,11 +14,24 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image=" onebus_icon_6s.png" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-hZ-hk4">
+                                <rect key="frame" x="98" y="244" width="180" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="2A8-25-6y7"/>
+                                    <constraint firstAttribute="height" constant="180" id="l4r-ft-fk1"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="HNQ-hZ-hk4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="NiJ-Eb-8tj"/>
+                            <constraint firstItem="HNQ-hZ-hk4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="r3A-RD-EqK"/>
+                        </constraints>
                     </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="edy-5j-oFc" id="cUQ-MZ-djq"/>
                     </connections>
@@ -36,4 +49,7 @@
             <point key="canvasLocation" x="60" y="381"/>
         </scene>
     </scenes>
+    <resources>
+        <image name=" onebus_icon_6s.png" width="180" height="180"/>
+    </resources>
 </document>

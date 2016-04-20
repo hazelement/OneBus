@@ -176,11 +176,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UISearchBarDe
                           yelp_url: extractString(detail["yelp_url"]),
                           review_count: detail["review_count"] as! Int,
                           ratings_img_url: extractString(detail["ratings_img"]),
-                          coordinate: myLocation,
+                          
                           start_stop: detail["start_stop"] as! Int,
+                          start_stop_time: detail["start_stop_time"] as!Int,
+                          start_stop_name: extractString(detail["start_stop_name"]),
+                          
                           end_stop: detail["end_stop"] as! Int,
+                          end_stop_time: detail["end_stop_time"] as! Int,
+                          end_stop_name: extractString(detail["end_stop_name"]),
+                          
                           trip_id: detail["trip_id"] as! Int,
+                          trip_headsign: extractString(detail["trip_headsign"]),
                           route_id: detail["route_id"] as! Int,
+                          coordinate: myLocation,
                           city_code: extractString(detail["city_code"]))
             
             annotationsPOI.append(poi)

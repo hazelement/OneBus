@@ -99,8 +99,6 @@ def convert_time_string_to_int(time_as_array):
 
 
 
-
-
 def convert_csv_to_dataframe(csvfile, city_code):
 
     chunksize = 1000
@@ -153,9 +151,13 @@ def _clean_data(dataframe, city_code):
 def _process_route_id(data_array, city_code):
     if(type(data_array[0])!=str):return data_array
 
-    retVal = np.empty_like(data_array, dtype=int)
-    for i in range(0, len(data_array)):
-        retVal[i] = int(data_array[i].split(config.read_route_id_process_key(city_code))[0])
+    try:
+        retVal = np.empty_like(data_array, dtype=int)
+        for i in range(0, len(data_array)):
+            # retVal[i] = int(data_array[i].split(config.read_route_id_process_key(city_code))[0])
+            retVal[i] = data_array[i].split(config.read_route_id_process_key(city_code))[0]
+    except ValueError:
+        pass
 
     return retVal
 
@@ -165,6 +167,6 @@ def _remove_char_convert_to_int(data_array):
 
     retVal = np.empty_like(data_array, dtype=int)
     for i in range(0, len(data_array)):
-        retVal[i] = int(re.sub("[^0-9]+", '', data_array[i]))
+        retVal[i] = int(re.sub("[^0-9]+", '', data_array[i].split('-')[0]))
 
     return retVal
