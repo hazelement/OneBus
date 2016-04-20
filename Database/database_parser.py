@@ -39,14 +39,17 @@ class GtfsRawDataParser():
 
         self._download_zip()
 
-        self._process_agency()
-        self._process_calendar()
-        self._process_calendar_dates()
-        self._process_routes()
-        self._process_trips()
-        self._process_stops()
-        self._process_stop_times()
-        self._process_shapes()
+        file_list = ['agency', 'calendar', 'calendar_dates',
+                     'routes', 'trips', 'stops',
+                     'stop_times', 'shapes']
+
+        for file in file_list:
+            func_name = '_process_' + file
+            try:
+                getattr(self, func_name)()
+            except KeyError, e:
+                print(e)  # if file does not exist
+                pass
 
         return
 
@@ -239,7 +242,7 @@ def update_all_database():
 
 if __name__ == "__main__":
 
-    ds = GtfsRawDataParser('sanfranciso_ca_us')
+    ds = GtfsRawDataParser('toronto_on_canada')
     ds.fetch_new_data()
     # update_all_database()
     # list = ["23:42:23", "32:01:32"]
