@@ -232,8 +232,8 @@ def update_all_database():
 
     for city in city_codes:
         try:
-            print "Garbage collection: ", gc.collect()
-            print "unreachable garbage: ", gc.collect()
+            print("Garbage collection: ", gc.collect())
+            print("unreachable garbage: ", gc.collect())
             ds = GtfsRawDataParser(city)
             ds.fetch_new_data()
         except Exception,e:

@@ -112,6 +112,9 @@ def find_accessiable_stops(lat, lng, ctime):
 
         print nearestStopLocations
 
+        if(len(nearestStopLocations == 0)):
+            return []
+
 
         with Timer("find today service id"):
             dt_today = datetime.datetime.strptime(current_day, "%Y-%m-%d") # yyyy-mm-dd to datetime object
