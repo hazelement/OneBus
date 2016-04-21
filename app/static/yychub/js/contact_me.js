@@ -21,14 +21,14 @@ $(function() {
                 firstName = name.split(' ').slice(0, -1).join(' ');
             }
             $.ajax({
-                url: "././mail/contact_me.php",
+                url: "/email/contact_me",
                 type: "POST",
-                data: {
+                data: JSON.stringify({
                     name: name,
                     phone: phone,
                     email: email,
                     message: message
-                },
+                }),
                 cache: false,
                 success: function() {
                     // Enable button & show success message
@@ -54,6 +54,8 @@ $(function() {
                     //clear all fields
                     $('#contactForm').trigger("reset");
                 },
+                contentType: "application/json",
+                dataType:'json'
             })
         },
         filter: function() {
