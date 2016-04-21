@@ -102,11 +102,11 @@ if __name__ == "__main__":
     # lat = 51.0454027
     # lng = -114.05651890000001
 
-    # lat = 51.174280200000005
-    # lng = -114.121324
+    lat = 51.174280200000005
+    lng = -114.121324
     #
-    lat = 37.983730
-    lng = -122.524635  # san franciso
+    # lat = 37.983730
+    # lng = -122.524635  # san franciso
 
     # query = 'chinese restaurant calgary'
     query = 'pub'

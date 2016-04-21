@@ -112,8 +112,8 @@ def find_accessiable_stops(lat, lng, ctime):
 
         print nearestStopLocations
 
-        if(len(nearestStopLocations == 0)):
-            return []
+        if(len(nearestStopLocations) == 0):
+            return [], city_code
 
 
         with Timer("find today service id"):
