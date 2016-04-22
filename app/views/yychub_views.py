@@ -43,7 +43,8 @@ def email():
         result['success']=1
         result['message']='success'
 
-    except:
+    except Exception, e:
+        print(e, file=sys.stderr)
         abort(500)
 
 
