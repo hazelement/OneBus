@@ -17,18 +17,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image=" onebus_icon_6s.png" translatesAutoresizingMaskIntoConstraints="NO" id="HNQ-hZ-hk4">
-                                <rect key="frame" x="98" y="244" width="180" height="180"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="onebus_loading.png" translatesAutoresizingMaskIntoConstraints="NO" id="akS-rI-kr1">
+                                <rect key="frame" x="35" y="61" width="304" height="545"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="180" id="2A8-25-6y7"/>
-                                    <constraint firstAttribute="height" constant="180" id="l4r-ft-fk1"/>
+                                    <constraint firstAttribute="width" constant="304" id="9sb-CO-QEF"/>
+                                    <constraint firstAttribute="height" constant="545" id="S9y-kh-Gda"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="HNQ-hZ-hk4" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="NiJ-Eb-8tj"/>
-                            <constraint firstItem="HNQ-hZ-hk4" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="r3A-RD-EqK"/>
+                            <constraint firstItem="akS-rI-kr1" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="5r8-Gm-qbB"/>
+                            <constraint firstItem="akS-rI-kr1" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="IJy-rE-g83"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -46,10 +46,10 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="60" y="381"/>
+            <point key="canvasLocation" x="-100.5" y="264.5"/>
         </scene>
     </scenes>
     <resources>
-        <image name=" onebus_icon_6s.png" width="180" height="180"/>
+        <image name="onebus_loading.png" width="640" height="1136"/>
     </resources>
 </document>

@@ -1,14 +1,11 @@
 
 $("#frmSearch").submit(function( event ){
     event.preventDefault();
+    if($("#txtSearch").val()==""){
+        return;
+    }
     clearMap();
-    
-//    $("#divSearch").animate({ top: "5%" }, 800);
-//    $("#background").slideUp("normal", function() { $(this).remove(); } );
-//    $("#logo").slideUp("normal", function() { $(this).remove(); } );
-//    $("#intro").slideUp("normal", function() { $(this).remove(); } );
-//    $("#txtSearch").blur()
-//    disable_inputs();
+
 
     var currentdate = new Date();
     var datetime =  currentdate.getFullYear() + "-"
@@ -20,9 +17,6 @@ $("#frmSearch").submit(function( event ){
 
     var $btn = $('#btnSubmit').button('loading')
 
-
-
-//    $("#loading_hold").animate({ top: "0" }, 800);
     $.ajax({
         type: "POST",
         url: "/onebus/api",
@@ -35,3 +29,57 @@ $("#frmSearch").submit(function( event ){
 
 });
 
+
+$("#frmFeedback").submit(function( event ){
+    event.preventDefault();
+
+    if($("#onebuscomment").val()==""){
+        $('#submitsuccess').removeClass('label-success').addClass('label-warning');
+        $('#submitsuccess').text("Please enter your comment below.");
+        return;
+    }
+
+    var name = "anonymous";
+    var email = "anonymous";
+    var phone = "anonymous";
+    var message = $("#onebuscomment").val();
+
+//    var $btn = $('#btnSubmit').button('loading')
+    var $btn = $('#onebusReview');
+    $btn.button('loading');
+
+    $.ajax({
+        url: "/email/contact_me",
+        type: "POST",
+        data: JSON.stringify({
+            name: name,
+            phone: phone,
+            email: email,
+            message: message
+        }),
+        cache: false,
+        success: function() {
+            // Enable button & show success message
+            $btn.button('reset');
+            //clear all fields
+            $('#onebuscomment').val('');
+            $('#submitsuccess').removeClass('label-warning').addClass('label-success');
+            $('#submitsuccess').text("Thank you!");
+        },
+        error: function() {
+            // Fail message
+
+            //clear all fields
+            $btn.button('reset');
+            $('#submitsuccess').removeClass('label-success').addClass('label-warning');
+            $('#submitsuccess').text("Sorry looks like our email server is down!");
+        },
+        contentType: "application/json",
+        dataType:'json'
+    })
+});
+
+$( "#feedbackClose" ).click(function() {
+  $('#submitsuccess').text('');
+  $('#onebuscomment').val('');
+});

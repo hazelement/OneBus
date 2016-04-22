@@ -4,7 +4,7 @@ import smtplib
 import pandas as pd
 
 from app import app
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, abort
 
 
 
@@ -34,6 +34,9 @@ def email():
         message = post_data['message']
 
         print(name, file=sys.stderr)
+        print(email, file=sys.stderr)
+        print(phone, file=sys.stderr)
+        print(message, file=sys.stderr)
 
         send_email(name, email, phone, message)
 
@@ -41,7 +44,7 @@ def email():
         result['message']='success'
 
     except:
-        pass
+        abort(500)
 
 
     return jsonify(result)
