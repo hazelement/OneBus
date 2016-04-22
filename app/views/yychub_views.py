@@ -7,11 +7,21 @@ import os
 from app import app
 from flask import render_template, jsonify, request, abort
 
-
+#######
+# functional urls
 
 @app.route('/www.yychub.com.html', methods=['GET', 'POST'])
 def ssl_check():
     return render_template('www.yychub.com.html')
+
+@app.route('/site_map', methods=['GET', 'POST'])
+def sitemap():
+    print('getting sitemap', file=sys.stderr)
+    return app.send_static_file('sitemap.xml')
+
+#######
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
