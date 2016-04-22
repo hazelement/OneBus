@@ -2,6 +2,7 @@ from __future__ import print_function
 import sys
 import smtplib
 import pandas as pd
+import os
 
 from app import app
 from flask import render_template, jsonify, request, abort
@@ -64,7 +65,9 @@ def send_email(name, email, phone_number, message):
                       "Phone_number: " + phone_number,
                       message
                       ])
-    email_config = pd.read_csv('email.config')
+
+    email_config_file = os.path.dirname(os.path.realpath(__file__)) + '/email.config'
+    email_config = pd.read_csv(email_config_file)
     user_email = email_config['email'].values[0]
     password = email_config['password'].values[0]
 
