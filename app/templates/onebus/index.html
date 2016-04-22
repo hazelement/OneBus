@@ -153,15 +153,36 @@
       </div>
     </div>
 
+    <!--welcome modal-->
+    <div id="modelWelcome" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Welcome to OneBus</h4>
+          </div>
+          <div class="modal-body">
+            <p> OneBus is a tool to search for places around you that are easily accessible via the bus network.
+                Do a quick search in the search bar and see what is around you with a bus ride. Some examples are
+                restaurants, gyms, and groceries. Check it out!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div id="map" ></div>
 
     <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>-->
-    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
-
     <script src="{{ url_for('static', filename='onebus/script/map.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/control.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/polyline.js') }}"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
 
 </body>
