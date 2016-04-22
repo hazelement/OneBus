@@ -17,7 +17,7 @@ def index():
 
     return render_template('yychub/index.html')
 
-@app.route('/email/contact_me', methods=['POST'])
+@app.route('/email/contact_me', methods=['GET', 'POST'])
 def email():
 
     result={}
