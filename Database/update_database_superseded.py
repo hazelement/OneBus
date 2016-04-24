@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # _update_city_database('toronto_on_canada')
     # _update_city_database('edmonton_ab_canada')
     # _update_city_database('vancouver_bc_canada')
-    _update_city_database('sanfranciso_ca_us')
+    _update_city_database('sanfrancisco_ca_us')
 
     #
     # print(convert_time_string_to_int(list))
