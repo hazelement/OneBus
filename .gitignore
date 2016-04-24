@@ -58,6 +58,8 @@ Temporary Items
 api.config
 *.csr
 *.key
+*.sqlite
+*.sqlite3
 iOS/OneBus/Alamofire
 
 onebus.dynu.com.cert
