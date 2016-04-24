@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load staticfiles %}
+    {% csrf_token %}
     <meta charset="UTF-8">
     <title>OneBus</title>
 
@@ -180,6 +181,7 @@
     <div id="map" ></div>
 
     <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>-->
+<script src="{% static 'OneBus/images/yelp_review_btn_light.png' %}"></script>
     <script src="{% static 'OneBus/script/map.js' %}"></script>
     <script src="{% static 'OneBus/script/control.js' %}"></script>
     <script src="{% static 'OneBus/script/polyline.js' %}"></script>

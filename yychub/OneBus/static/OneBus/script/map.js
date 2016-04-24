@@ -168,7 +168,7 @@ function make_infobox(marker){
     retVal += "Number of Reviews: " + marker.review_count.toString() + "<br>";
 //    retVal = retVal + "<img src=\"" +
     retVal += marker.address + "<br>";
-    retVal += "<a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"onebus\\images\\yelp_review_btn_light.png\"></a><br>";
+    retVal += "<a href=\"" + marker.yelp_url + "\" target=\"_blank\">" + "<img src=\"OneBus\\images\\yelp_review_btn_light.png\"></a><br>";
     retVal += "<hr>"
     retVal += "<b>Bus No.: " + marker.route_id + " " + marker.trip_headsign + "</b><br>";
     retVal += "<b>" + convert_timeint_to_time(marker.start_stop_time) + "</b> from " + marker.start_stop_name + "<br>";
