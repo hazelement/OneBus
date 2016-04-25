@@ -5,6 +5,7 @@ var home;
 var markers = [];
 var shape;
 var home_gps;
+var bounds;
 
 var set_center = 0;
 
@@ -117,11 +118,13 @@ function add_marker(target, is_home) {
                 infowindow.open(map, marker);
             }
         );
+        home = marker;
         markers.push(marker);
 
     } else {
 
         var marker = new google.maps.Marker({
+        index: markers.length,
         position: lat_lng,
         map: map,
         animation: google.maps.Animation.DROP,
@@ -153,10 +156,13 @@ function add_marker(target, is_home) {
                 clear_polyline();
                 infowindow.setContent(make_infobox(marker))
                 infowindow.open(map, marker);
+                highlight_item(marker);
                 get_trip_shape(marker);
+                fit_map(marker);
             }
         );
         markers.push(marker);
+        populate_table(marker);
     }
 
 }
@@ -223,6 +229,13 @@ function get_trip_shape(marker){
 
 }
 
+function fit_map(marker){
+    bounds = new google.maps.LatLngBounds();
+    bounds.extend(home.position);
+    bounds.extend(marker.position);
+    map.fitBounds(bounds);
+}
+
 function plot_shape(data, marker){
     if(data["success"] == "0"){
         return ""
@@ -256,3 +269,5 @@ function clearMap() {
   clear_polyline();
   markers = [];
 }
+
+

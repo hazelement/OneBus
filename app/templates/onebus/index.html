@@ -19,54 +19,80 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header pull-left">
-      <a class="navbar-brand" href="">OneBus</a>
-    </div>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header pull-left">
+          <a class="navbar-brand" href="">OneBus</a>
+        </div>
 
-    <!--right collapsing items-->
-    <div class="navbar-header pull-right">
-      <ul class="nav">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      </ul>
-    </div>
+        <!--right collapsing items-->
+        <div class="navbar-header pull-right">
+          <ul class="nav">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigationbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          </ul>
+        </div>
 
-    <div class="navbar-header pull-left">
-        <form class="navbar-form" role="search" id="frmSearch">
-              <div class="input-group">
-                  <div id="default-suggestions">
-                      <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+        <div class="navbar-header pull-left">
+            <form class="navbar-form" role="search" id="frmSearch">
+                  <div class="input-group">
+                      <div id="default-suggestions">
+                          <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
+                      </div>
+                      <div class="input-group-btn">
+                          <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
+                      </div>
                   </div>
-                  <div class="input-group-btn">
-                      <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
-                  </div>
-              </div>
-          </form>
+              </form>
+        </div>
+
+
+
+          <!--collapsing items-->
+        <div class="collapse navbar-collapse navbar-left" id="navigationbar">
+          <ul class="nav navbar-nav">
+            <li><a href="" data-toggle="modal" data-target="#modelAbout">About</a></li>
+            <li><a href="" data-toggle="modal" data-target="#modelFeedBack">Feedback</a></li>
+          </ul>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-right" id="navigationbar">
+          <ul class="nav navbar-nav">
+            <li><a href="/">YYC Hub</a></li>
+          </ul>
+        </div>
+
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="my-container">
+    <!--<div class="container">-->
+        <div class="my-row">
+            <div class="col-md-2 list-group left" id="poi-list">
+              <li class="list-group-item">
+                <h4 class="list-group-item-heading" align="center"><b>Welcome to OneBus</b></h4>
+                <p class="list-group-item-text">Take a quick search above and see what's around you!.</p>
+              </li>
+              <!--<a href="#" class="list-group-item active">-->
+                <!--<h4 class="list-group-item-heading">List group item heading</h4>-->
+                <!--<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+              <!--</a>-->
+              <!--<a href="#" class="list-group-item">-->
+                <!--<h4 class="list-group-item-heading">List group item heading</h4>-->
+                <!--<p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>-->
+              <!--</a>-->
+            </div>
+
+            <div id="map" class="col-md-10t right" ></div>
+        </div>
+    <!--</div>-->
     </div>
 
-      <!--collapsing items-->
-    <div class="collapse navbar-collapse navbar-left" id="navigationbar">
-      <ul class="nav navbar-nav">
-        <li><a href="" data-toggle="modal" data-target="#modelAbout">About</a></li>
-        <li><a href="" data-toggle="modal" data-target="#modelFeedBack">Feedback</a></li>
-      </ul>
-    </div>
-
-    <div class="collapse navbar-collapse navbar-right" id="navigationbar">
-      <ul class="nav navbar-nav">
-        <li><a href="/">YYC Hub</a></li>
-      </ul>
-    </div>
-
-  </div><!-- /.container-fluid -->
-</nav>
     <!-- Modal -->
     <div id="modelAbout" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -176,9 +202,10 @@
       </div>
     </div>
 
-    <div id="map" ></div>
+
 
     <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>-->
+    <script src="{{ url_for('static', filename='onebus/script/table.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/map.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/control.js') }}"></script>
     <script src="{{ url_for('static', filename='onebus/script/polyline.js') }}"></script>

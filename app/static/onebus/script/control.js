@@ -5,6 +5,7 @@ $("#frmSearch").submit(function( event ){
         return;
     }
     clearMap();
+    $("#poi-list").empty();
 
 
     var currentdate = new Date();
