@@ -143,7 +143,6 @@ def yelp_loc_list(lat, lng, query):
                                    loc.location.coordinate.latitude,
                                    loc.location.coordinate.longitude]
 
-
         for i in range(0, 2):
             response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='1', offset=str(i*20)) # meter
             for loc in response.businesses:
