@@ -1,7 +1,37 @@
 
+.collapse-non-md {
+    height: 0;
+    display: none;
+}
+.collapse-non-md.collapsing {
+    display: block;
+}
+
+@media (min-width: 992px) {
+    .collapse-non-md {
+        height: auto;
+        display: block;
+    }
+}
+
+.collapse-button{
+    position: absolute;
+    bottom:0;
+    left:0;
+    width: 20%;
+}
 
 
-.my-container
+.small-container
+{
+    max-height: 200px;
+    background: #253354;
+    z-index:999;
+    overflow-y: scroll;
+    opacity: 0.9;
+}
+
+.md-container
 {
     height: auto;
     width: auto;
@@ -11,12 +41,14 @@
     top:0;
     left:0;
     right:0;
-    margin-top:50px;
+    margin-top: 50px;
     background: #253354;
     padding: 0 0 0 0; /*set left/right padding according to needs*/
+    z-index: -1;
+
 }
 
-.my-row
+.md-row
 {
     height: 100%;
 }
@@ -24,34 +56,15 @@
 .left
 {
     height: 97%;
-    
     overflow-y: scroll;
+    background: #253354;
 }
+
 .right
 {
     height: 100%;
-    background: yellow;
+    background: white;
 }
-
-
-/* .list-format{
-    height: 50px;
-    overflow-y: scroll;
-} */
-
-#map2 {
-    height: auto;
-    width: auto;
-    opacity: 1.0;
-    position: absolute;
-    bottom:0;
-    top:0;
-    left:0;
-    right:0;
-    margin-top:50px;
-    z-index: -1;
-}
-
 
 
 .navbar .navbar-form{

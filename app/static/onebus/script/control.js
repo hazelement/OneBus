@@ -6,6 +6,7 @@ $("#frmSearch").submit(function( event ){
     }
     clearMap();
     $("#poi-list").empty();
+    $("#poi-list-small").empty();
 
 
     var currentdate = new Date();
