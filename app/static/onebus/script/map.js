@@ -14,6 +14,8 @@ function initMap(){
 
     map = new google.maps.Map(mapDiv, {
         zoom: 12,
+        streetViewControl: false,
+        mapTypeControl: false,
     });
 
     var geo_options = {
