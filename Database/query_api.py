@@ -144,6 +144,7 @@ def yelp_loc_list(lat, lng, query):
                                    loc.location.coordinate.longitude]
         return df
 
+
     df = get_yelp('10000')
     if(len(df)<20):
         df = get_yelp('20000')
