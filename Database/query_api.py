@@ -142,7 +142,23 @@ def yelp_loc_list(lat, lng, query):
                                    loc.rating_img_url,
                                    loc.location.coordinate.latitude,
                                    loc.location.coordinate.longitude]
+
+
+        for i in range(0, 2):
+            response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='1', offset=str(i*20)) # meter
+            for loc in response.businesses:
+                df.loc[len(df)+1]=[loc.name,
+                                   ' '.join(loc.location.display_address),
+                                   loc.image_url, loc.url,
+                                   loc.review_count,
+                                   loc.rating_img_url,
+                                   loc.location.coordinate.latitude,
+                                   loc.location.coordinate.longitude]
+
+        df.drop_duplicates('name', inplace = True)
         return df
+
+
 
     df = get_yelp('10000')
     if(len(df)<20):
@@ -155,5 +171,5 @@ def yelp_loc_list(lat, lng, query):
 if __name__=="__main__":
     lat = 51.0454027
     lng = -114.05651890000001
-    query = "restaurant"
+    query = "gym"
     print(yelp_loc_list(lat, lng, query))
