@@ -109,7 +109,7 @@ if __name__ == "__main__":
     # lng = -122.524635  # san franciso
 
     # query = 'chinese restaurant calgary'
-    query = 'pub'
+    query = 'restaurant'
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
