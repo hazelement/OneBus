@@ -83,6 +83,7 @@ function refreshMap(data) {
     // add home marker
     add_marker(home_gps, true);
 
+    // handles now result
     if(Object.keys(destinations).length == 0){
         $('#noResultContent').empty();
 
