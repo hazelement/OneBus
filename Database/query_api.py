@@ -150,7 +150,7 @@ def yelp_batch(lat_lng_pairs, query):
         df.drop_duplicates('name', inplace = True)
 
 
-        print("no of raw results " + str(len(df)))
+        print("Total no of raw results " + str(len(df)))
         return df
 
 
@@ -188,7 +188,7 @@ def yelp_loc_list(lat, lng, query):
                                    loc.location.coordinate.longitude]
 
         # df.drop_duplicates('name', inplace = True)
-        print("no of raw results " + str(len(df)))
+        # print("no of raw results " + str(len(df)))
         return df
 
     df = get_yelp('3000')
