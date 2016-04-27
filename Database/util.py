@@ -21,7 +21,7 @@ def result_filter_by_distance(stops, targets, bus_stop):
     if(bus_stop):
         threshold = 0.005
     else:
-        threshold = 0.010
+        threshold = 0.005
 
     # if(len(targets) > 20):
     #     threshold = 0.008
