@@ -6,6 +6,7 @@ var markers = [];
 var shape;
 var home_gps;
 var bounds;
+var current_marker;
 
 var set_center = 0;
 
@@ -118,7 +119,9 @@ function add_marker(target, is_home) {
         path: target.path
         });
 //        marker.setIcon(myIcon);
-        marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+//        marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
+//        marker.setIcon('http://www.clker.com/cliparts/m/u/A/B/A/b/icon-pin-336699-hi.png');
+        marker.setIcon("onebus\\images\\home.png");
 
         google.maps.event.addListener(
             marker,
@@ -159,17 +162,20 @@ function add_marker(target, is_home) {
         shape: ""
         });
 
+        marker.setIcon("onebus\\images\\pin.png");
+
         google.maps.event.addListener(
             marker,
             'click',
             function(){
+                current_marker = marker;
                 infowindow.close();
                 clear_polyline();
-                infowindow.setContent(make_infobox(marker))
+                infowindow.setContent(make_infobox(marker));
                 infowindow.open(map, marker);
                 highlight_item(marker);
                 get_trip_shape(marker);
-                fit_map(marker);
+//                fit_map(marker);
             }
         );
         markers.push(marker);

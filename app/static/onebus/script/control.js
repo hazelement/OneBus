@@ -31,7 +31,7 @@ $("#frmSearch").submit(function( event ){
 
 });
 
-
+//sumbit feedback
 $("#frmFeedback").submit(function( event ){
     event.preventDefault();
 
@@ -46,7 +46,6 @@ $("#frmFeedback").submit(function( event ){
     var phone = "anonymous";
     var message = $("#onebuscomment").val();
 
-//    var $btn = $('#btnSubmit').button('loading')
     var $btn = $('#onebusReview');
     $btn.button('loading');
 
@@ -87,6 +86,7 @@ $( "#feedbackClose" ).click(function() {
 });
 
 
+//welcome screen for first time visitor
 $( document ).ready(function() {
         if (document.cookie.indexOf('visited=true') == -1) {
             var fifteenDays = 1000*60*60*24*15;
@@ -96,3 +96,12 @@ $( document ).ready(function() {
         }
 });
 
+// toggle show list button
+$("#btnToggleList").click(function () {
+  $(this).text(function(i, text){
+
+      return ($('#poi-list-small').hasClass('in')) ? "Show List" : "Hide List";
+
+//      return text === "Hide List" ? "Show List" : "Hide List";
+  })
+});

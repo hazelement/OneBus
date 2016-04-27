@@ -60,3 +60,10 @@ $('#poi-list-small').on('click', '.list-group-item', function(e) {
     var index = parseInt(e.currentTarget.id);
     google.maps.event.trigger(markers[index], 'click');
 });
+
+$('#poi-list-small').on('shown.bs.collapse', function() {
+    if(current_marker){
+        highlight_item(current_marker);
+    }
+}).on('show.bs.collapse', function() {
+});

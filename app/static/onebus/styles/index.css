@@ -14,17 +14,21 @@
     }
 }
 
-.collapse-button{
+.collapse-button-style{
     position: absolute;
-    bottom:0;
-    left:0;
-    width: 20%;
+    bottom:15px;
+    left:30%;
+    width: 40%;
+    border: 2px solid #253354;
+    border-radius: 10px;
+    font-weight: bold;
 }
-
 
 .small-container
 {
-    max-height: 200px;
+    border: 8px solid #253354;
+    border-radius: 10px;
+    max-height: 250px;
     background: #253354;
     z-index:999;
     overflow-y: scroll;
