@@ -5,7 +5,7 @@ import re
 import config
 
 
-def result_filter_by_distance(stops, targets):
+def result_filter_by_distance(stops, targets, bus_stop):
     """
     return filtered index of stops, and targets
     :param stops: array of stops to reference from
@@ -18,10 +18,15 @@ def result_filter_by_distance(stops, targets):
 
     min_target_distance = np.amin(distance_matrix, axis=0)
 
-    if(len(targets) > 20):
-        threshold = 0.008
+    if(bus_stop):
+        threshold = 0.005
     else:
-        threshold = 0.016
+        threshold = 0.010
+
+    # if(len(targets) > 20):
+    #     threshold = 0.008
+    # else:
+    #     threshold = 0.016
 
     # find targets are closest to stops
     target_mapping = min_target_distance<threshold
