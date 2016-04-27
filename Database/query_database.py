@@ -107,7 +107,7 @@ def find_accessiable_stops(lat, lng, ctime):
             df_stops = pd.read_sql(sql_query, con)
             stop_loc=df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
-            _, location_mapping = util.result_filter_by_distance(myLocation, stop_loc)
+            _, location_mapping = util.result_filter_by_distance(myLocation, stop_loc, True)
             nearestStopLocations = df_stops.ix[location_mapping]['stop_id'].values
 
         print nearestStopLocations

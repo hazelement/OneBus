@@ -50,7 +50,7 @@ def get_destinations(lat, lng, query, ctime):
 
             target_gps = df_targets[['lat', 'lon']].as_matrix().astype(float)
 
-            stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, target_gps)
+            stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, target_gps, False)
 
             dest_dict = {}
 
