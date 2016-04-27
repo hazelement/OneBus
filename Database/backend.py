@@ -44,6 +44,8 @@ def get_destinations(lat, lng, query, ctime):
 
         stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
+        all_route_ids = ",".join([str(x) for x in np.unique(df_stops['route_id'].values).tolist()])
+
         df_targets = api.yelp_batch(stop_gps[::5], query)  # search around every 5 stops
         print("Number of raw destinations: " + str(len(df_targets)))
         if(len(df_targets)>0):
@@ -90,9 +92,12 @@ def get_destinations(lat, lng, query, ctime):
             retVal={}
             retVal['results']={}
 
+        retVal['routes']=all_route_ids
+
     else:
         retVal={}
         retVal['results']={}
+        retVal['routes']=""
 
 
     return retVal
