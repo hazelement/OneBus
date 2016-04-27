@@ -31,8 +31,14 @@ function highlight_item(marker){
         current_selection.classList.remove('active');
     }
 
+    var scroll_speed = 300;
+
+
     current_selection = $('#' + marker.index.toString())[0];
     current_selection.classList.add('active');
+//    current_selection.focus()
+    var offset = -$("#poi-list").height()/3;
+    $("#poi-list").scrollTo(current_selection, scroll_speed, {offset: offset});
 
 
     if(current_selection_small){
@@ -41,6 +47,8 @@ function highlight_item(marker){
 
     current_selection_small = $('#' + marker.index.toString() + '_sm')[0];
     current_selection_small.classList.add('active');
+//    current_selection_small.focus()
+    $("#poi-list-small").scrollTo(current_selection_small, scroll_speed);
 }
 
 $('#poi-list').on('click', '.list-group-item', function(e) {
