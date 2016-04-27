@@ -3,11 +3,31 @@ import urllib
 import json
 import numpy as np
 import pandas as pd
+import multiprocessing
+from multiprocessing.pool import ThreadPool
+from functools import partial
+import time
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
 import config as cf
+
+
+class Timer:
+    def __init__(self, fnname):
+        self.name = fnname
+
+    def __enter__(self):
+        self.start = time.clock()
+        return self
+
+    def __exit__(self, *args):
+        self.end = time.clock()
+        self.interval = self.end - self.start
+        print(self.name + " took " + str(self.interval) + " sec.")
+
+
 
 def _fetch_url(url):
     f = urllib.urlopen(url)
@@ -113,6 +133,30 @@ def go_loc_list(lat, lng, query):
     return gps_array, name, address
 
 
+def yelp_batch(lat_lng_pairs, query):
+    print("using yelp")
+    with Timer("yelp query"):
+        partial_yelp = partial(_yelp_batch_indivitual, query=query)
+        workers = multiprocessing.cpu_count()
+        # p=multiprocessing.Pool(workers)
+        p=ThreadPool(100)
+
+        result = p.map(partial_yelp, lat_lng_pairs)
+
+        p.close()
+        p.join()
+
+        df = pd.concat(result, ignore_index=True)
+        df.drop_duplicates('name', inplace = True)
+
+
+        print("no of raw results " + str(len(df)))
+        return df
+
+
+def _yelp_batch_indivitual(lat_lng, query):
+    return yelp_loc_list(lat_lng[0], lat_lng[1], query)
+
 def yelp_loc_list(lat, lng, query):
     """
     return yelp results based on user lat and lng, search query
@@ -121,8 +165,6 @@ def yelp_loc_list(lat, lng, query):
     :param query:
     :return: dataframe object, columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon']
     """
-    print("using yelp")
-
     auth = Oauth1Authenticator( consumer_key=cf.read_api_config('yelp_consumer_key'),
                                 consumer_secret=cf.read_api_config('yelp_consumer_secret'),
                                 token=cf.read_api_config('yelp_token'),
@@ -132,7 +174,7 @@ def yelp_loc_list(lat, lng, query):
     def get_yelp(radius_filter):
         df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
 
-        for i in range(0, 2):
+        for i in range(0, 1):
             response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='0', offset=str(i*20)) # meter
             for loc in response.businesses:
                 df.loc[len(df)+1]=[loc.name,
@@ -143,32 +185,34 @@ def yelp_loc_list(lat, lng, query):
                                    loc.location.coordinate.latitude,
                                    loc.location.coordinate.longitude]
 
-        for i in range(0, 2):
-            response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='1', offset=str(i*20)) # meter
-            for loc in response.businesses:
-                df.loc[len(df)+1]=[loc.name,
-                                   ' '.join(loc.location.display_address),
-                                   loc.image_url, loc.url,
-                                   loc.review_count,
-                                   loc.rating_img_url,
-                                   loc.location.coordinate.latitude,
-                                   loc.location.coordinate.longitude]
+        # for i in range(0, 2):
+        #     response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='1', offset=str(i*20)) # meter
+        #     for loc in response.businesses:
+        #         df.loc[len(df)+1]=[loc.name,
+        #                            ' '.join(loc.location.display_address),
+        #                            loc.image_url, loc.url,
+        #                            loc.review_count,
+        #                            loc.rating_img_url,
+        #                            loc.location.coordinate.latitude,
+        #                            loc.location.coordinate.longitude]
 
-        df.drop_duplicates('name', inplace = True)
+        # df.drop_duplicates('name', inplace = True)
         return df
 
-
-
-    df = get_yelp('10000')
-    if(len(df)<20):
-        df = get_yelp('20000')
+    df = get_yelp('5000')
+    # if(len(df)<20):
+    #     df = get_yelp('20000')
 
     df[['review_count']] = df[['review_count']].astype(int)
+
+    # print("no of raw results " + str(len(df)))
     return df
 
 
 if __name__=="__main__":
     lat = 51.0454027
     lng = -114.05651890000001
-    query = "gym"
-    print(yelp_loc_list(lat, lng, query))
+    query = "restaurant"
+    # print(yelp_loc_list(lat, lng, query))
+
+    print(yelp_batch([[51.0454027, -114.05652], [51.0230, -114.123]], query))
