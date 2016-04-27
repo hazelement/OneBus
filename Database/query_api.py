@@ -174,7 +174,9 @@ def yelp_loc_list(lat, lng, query):
     def get_yelp(radius_filter):
         df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
 
-        for i in range(0, 1):
+        for i in range(0, 2):
+            if(len(df) < 20 and len(df) != 0):
+                break
             response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='0', offset=str(i*20)) # meter
             for loc in response.businesses:
                 df.loc[len(df)+1]=[loc.name,
@@ -185,21 +187,11 @@ def yelp_loc_list(lat, lng, query):
                                    loc.location.coordinate.latitude,
                                    loc.location.coordinate.longitude]
 
-        # for i in range(0, 2):
-        #     response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='1', offset=str(i*20)) # meter
-        #     for loc in response.businesses:
-        #         df.loc[len(df)+1]=[loc.name,
-        #                            ' '.join(loc.location.display_address),
-        #                            loc.image_url, loc.url,
-        #                            loc.review_count,
-        #                            loc.rating_img_url,
-        #                            loc.location.coordinate.latitude,
-        #                            loc.location.coordinate.longitude]
-
         # df.drop_duplicates('name', inplace = True)
+        print("no of raw results " + str(len(df)))
         return df
 
-    df = get_yelp('5000')
+    df = get_yelp('3000')
     # if(len(df)<20):
     #     df = get_yelp('20000')
 

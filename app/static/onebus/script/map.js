@@ -83,7 +83,16 @@ function refreshMap(data) {
     // add home marker
     add_marker(home_gps, true);
 
+    // handles now result
     if(Object.keys(destinations).length == 0){
+        $('#noResultContent').empty();
+
+        if(data['routes'].length == 0){
+            $('#noResultContent').after("<p>Looks like there is no accessible bus around you in our database. We apologize. Please leave us a feedback and we can make improvements.</p>");
+        } else {
+            $('#noResultContent').after("<p>It looks like there is nothing around accessible by OneBus. Try to search a more generalized key word. Bus routes around you are: " + data['routes'] + "</p>");
+        }
+
         $('#modelNoResult').modal('show');
     }
     // add result markers
