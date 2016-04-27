@@ -33,16 +33,21 @@ def get_destinations(lat, lng, query, ctime):
     """
     lat = float(lat)
     lng = float(lng)
-    df_targets = api.yelp_loc_list(lat, lng, query)
+    # df_targets = api.yelp_loc_list(lat, lng, query)
 
-    print("Number of raw destinations: " + str(len(df_targets)))
+    # print("Number of raw destinations: " + str(len(df_targets)))
 
-    if(len(df_targets)>0):
-        df_stops, city_code = query_database.find_accessiable_stops(lat, lng, ctime)
 
-        if(len(df_stops)>0):
+    df_stops, city_code = query_database.find_accessiable_stops(lat, lng, ctime)
 
-            stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+    if(len(df_stops)>0):
+
+        stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
+
+        df_targets = api.yelp_batch(stop_gps[::5], query)  # search around every 5 stops
+        print("Number of raw destinations: " + str(len(df_targets)))
+        if(len(df_targets)>0):
+
             target_gps = df_targets[['lat', 'lon']].as_matrix().astype(float)
 
             stop_filter_index, target_filter_index = util.result_filter_by_distance(stop_gps, target_gps)
@@ -81,13 +86,14 @@ def get_destinations(lat, lng, query, ctime):
 
             retVal={}
             retVal['results']=dest_dict
-
         else:
             retVal={}
             retVal['results']={}
+
     else:
         retVal={}
         retVal['results']={}
+
 
     return retVal
 
@@ -102,14 +108,20 @@ if __name__ == "__main__":
     # lat = 51.0454027
     # lng = -114.05651890000001
 
-    lat = 51.174280200000005
-    lng = -114.121324
+    # lat = 51.174280200000005
+    # lng = -114.121324
     #
     # lat = 37.983730
     # lng = -122.524635  # san franciso
 
+    lat = 51.1382372
+    lng = -114.1371632
+
+    lat = 51.0794168
+    lng = -114.1348398
+
     # query = 'chinese restaurant calgary'
-    query = 'restaurant'
+    query = 'bowness community association'
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 
