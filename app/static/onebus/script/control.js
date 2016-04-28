@@ -27,7 +27,7 @@ $("#frmSearch").submit(function( event ){
                                 current_time: datetime}),
         success: function(response){ refreshMap(response); $btn.button('reset');},
         error: function(response){ ajax_fail(response); $btn.button('reset');},
-        timeout: 10000,
+        timeout: 20000,
         contentType: "application/json",
         dataType:'json'})
 

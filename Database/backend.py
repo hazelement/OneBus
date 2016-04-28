@@ -107,8 +107,8 @@ def get_destinations(lat, lng, query, ctime):
 if __name__ == "__main__":
 
     # toronto
-    # lat = 43.7000
-    # lng = -79.4000
+    lat = 43.7000
+    lng = -79.4000
 
     # calgary
     # lat = 51.0454027
@@ -120,8 +120,8 @@ if __name__ == "__main__":
     # lat = 37.983730
     # lng = -122.524635  # san franciso
 
-    lat = 51.1382372
-    lng = -114.1371632
+    # lat = 51.1382372
+    # lng = -114.1371632
 
     # lat = 51.0794168
     # lng = -114.1348398
