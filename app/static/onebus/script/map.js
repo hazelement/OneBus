@@ -84,6 +84,8 @@ function refreshMap(data) {
 //    map.setCenter({lat: home_gps.lat, lng:home_gps.lng})
 
     // add home marker
+    bounds = new google.maps.LatLngBounds();
+
     add_marker(home_gps, true);
 
     // handles now result
@@ -99,7 +101,7 @@ function refreshMap(data) {
         $('#modelNoResult').modal('show');
     }
     // add result markers
-    bounds = new google.maps.LatLngBounds();
+
 
     for( var key in destinations ){
         add_marker(destinations[key], false);

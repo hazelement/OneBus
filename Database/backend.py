@@ -46,7 +46,7 @@ def get_destinations(lat, lng, query, ctime):
 
         all_route_ids = ",".join([str(x) for x in np.unique(df_stops['route_id'].values).tolist()])
 
-        step = min(10, len(stop_gps/50)) # tweak this threadshold
+        step = min(5, len(stop_gps/50)) # tweak this threadshold
         print("Step used for stops: " + str(step))
         batch_to_search = np.append(stop_gps[::step], [stop_gps[-1]], axis=0)
         df_targets = api.yelp_batch(batch_to_search, query)  # search around every 5 stops
