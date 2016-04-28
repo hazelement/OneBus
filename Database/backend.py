@@ -46,9 +46,12 @@ def get_destinations(lat, lng, query, ctime):
 
         all_route_ids = ",".join([str(x) for x in np.unique(df_stops['route_id'].values).tolist()])
 
-        batch_to_search = np.append(stop_gps[::5], [stop_gps[-1]], axis=0)
+        step = min(10, len(stop_gps/50)) # tweak this threadshold
+        print("Step used for stops: " + str(step))
+        batch_to_search = np.append(stop_gps[::step], [stop_gps[-1]], axis=0)
         df_targets = api.yelp_batch(batch_to_search, query)  # search around every 5 stops
         print("Number of raw destinations: " + str(len(df_targets)))
+
         if(len(df_targets)>0):
 
             target_gps = df_targets[['lat', 'lon']].as_matrix().astype(float)
@@ -107,8 +110,8 @@ def get_destinations(lat, lng, query, ctime):
 if __name__ == "__main__":
 
     # toronto
-    lat = 43.7000
-    lng = -79.4000
+    # lat = 43.7000
+    # lng = -79.4000
 
     # calgary
     # lat = 51.0454027
@@ -123,11 +126,11 @@ if __name__ == "__main__":
     # lat = 51.1382372
     # lng = -114.1371632
 
-    # lat = 51.0794168
-    # lng = -114.1348398
+    lat = 51.0794168
+    lng = -114.1348398
 
     # query = 'chinese restaurant calgary'
-    query = 'tea'
+    query = 'chinese tea'
 
     # gps, name, address = loc_list(lat, lng, stop_query)
 

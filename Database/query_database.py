@@ -174,13 +174,38 @@ def find_accessiable_stops(lat, lng, ctime):
 
             df = df.merge(df_stops, on='stop_id')
 
-            df[['route_id']] = df[['route_id']].astype(int)
+            df = _convert_route_id_to_route_short_name(df, con)
+            try:
+                df[['route_id']] = df[['route_id']].astype(int)
+            except:
+                pass
             df[['start_stop_id']] = df[['start_stop_id']].astype(int)
             df[['stop_id']] = df[['stop_id']].astype(int)
             df[['start_stop_time']] = df[['start_stop_time']].astype(int)
             df[['stop_time']] = df[['stop_time']].astype(int)
 
     return df, city_code
+
+
+def _convert_route_id_to_route_short_name(df, con):
+
+    sql_query = "SELECT route_id,route_short_name FROM routes"
+    route_df = pd.read_sql(sql_query, con)
+    route_df[['route_id']] = route_df[['route_id']].astype(int)
+
+    # mapping = route_df.to_dict("records")
+    mapping = dict(zip(route_df['route_id'], route_df['route_short_name']))
+
+    df[['route_id']] = df[['route_id']].astype(int)
+
+    try:
+        df.replace({'route_id': mapping}, inplace=True)
+    except Exception, e:
+        print(e)
+        pass
+
+    return df
+
 
 def _find_current_service_id(currDate, dayofthweek, con):
 
