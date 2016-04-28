@@ -246,9 +246,14 @@ def _find_current_service_id(currDate, dayofthweek, con):
     #     sql_query="SELECT service_id FROM calendar WHERE start_date <= '{}' AND end_date >= {} and {}=1;".format(currDate, currDate, dayofthweek)
     #     df = pd.read_sql(sql_query, con)
     #     print(e)
-    #     if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
-    #         sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
-    #         df = pd.read_sql(sql_query, con)
+    if(len(df)==0):  # if no service is available due to date problem, select any service id matches day of the week
+        try:
+            print("proper service id not available, using rough service id instead.")
+            sql_query="SELECT service_id FROM calendar WHERE {}=1;".format(dayofthweek)
+            df = pd.read_sql(sql_query, con)
+        except Exception, e:
+            print(e)
+            pass
 
     return df['service_id'].tolist()
 
