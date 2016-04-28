@@ -242,9 +242,9 @@ def update_all_database():
 
 if __name__ == "__main__":
 
-    ds = GtfsRawDataParser('sanfrancisco_ca_us')
-    ds.fetch_new_data()
-    # update_all_database()
+    # ds = GtfsRawDataParser('sanfrancisco_ca_us')
+    # ds.fetch_new_data()
+    update_all_database()
     # list = ["23:42:23", "32:01:32"]
     # _update_city_database('calgary_ab_canada')
     # _update_city_database('toronto_on_canada')
