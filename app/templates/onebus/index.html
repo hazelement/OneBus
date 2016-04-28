@@ -97,16 +97,6 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
     <!-- Modal about -->
     <div id="modelAbout" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -134,7 +124,6 @@
 
       </div>
     </div>
-
 
     <!--feed back modal-->
     <div id="modelFeedBack" class="modal fade" role="dialog">
@@ -216,7 +205,26 @@
       </div>
     </div>
 
+    <!--no result warning-->
+    <div id="modelAjaxFail" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Oops! Something went wrong!</h4>
+          </div>
+          <div class="modal-body">
+            <p> We can't get results from the server. Refresh the page and try again. If the problem persists, please leave us a feedback. Thank you!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
 
+      </div>
+    </div>
 
     <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAR25mYeAFjfXw_kvB_pucemA-0IJ-6e4w&callback=initMap" async defer></script>-->
     <script src="{{ url_for('static', filename='onebus/script/jquery.scrollTo.min.js') }}"></script>

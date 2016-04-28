@@ -26,10 +26,16 @@ $("#frmSearch").submit(function( event ){
                                 home_gps: home_gps,
                                 current_time: datetime}),
         success: function(response){ refreshMap(response); $btn.button('reset');},
+        error: function(response){ ajax_fail(response); $btn.button('reset');},
+        timeout: 10000,
         contentType: "application/json",
         dataType:'json'})
 
 });
+
+function ajax_fail(response){
+    $('#modelAjaxFail').modal("show");
+}
 
 //sumbit feedback
 $("#frmFeedback").submit(function( event ){

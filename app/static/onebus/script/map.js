@@ -14,10 +14,12 @@ function initMap(){
     var mapDiv = document.getElementById('map');
 
     map = new google.maps.Map(mapDiv, {
-        zoom: 12,
+        zoom: 13,
         streetViewControl: false,
         mapTypeControl: false,
     });
+
+    map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
 
     var geo_options = {
         enableHighAccuracy: true,
@@ -63,7 +65,7 @@ function location_success(position) {
         map.setCenter(home_gps);
         set_center=1;
     }
-
+    add_marker(home_gps, true);
 }
 
 function location_error() {
@@ -79,7 +81,7 @@ function refreshMap(data) {
     // define map elements
     destinations = data['results']
 
-    map.setCenter({lat: home_gps.lat, lng:home_gps.lng})
+//    map.setCenter({lat: home_gps.lat, lng:home_gps.lng})
 
     // add home marker
     add_marker(home_gps, true);
@@ -97,15 +99,25 @@ function refreshMap(data) {
         $('#modelNoResult').modal('show');
     }
     // add result markers
+    bounds = new google.maps.LatLngBounds();
+
     for( var key in destinations ){
         add_marker(destinations[key], false);
     }
 
+    map.fitBounds(bounds);
 }
 
-
+function add_marker_to_bounds(marker){
+    if(bounds){
+        bounds.extend(marker.position);
+    }
+}
 
 function add_marker(target, is_home) {
+
+
+
     var lat_lng = {lat: target.lat, lng: target.lng};
     if(is_home){
 
@@ -134,6 +146,7 @@ function add_marker(target, is_home) {
         );
         home = marker;
         markers.push(marker);
+        add_marker_to_bounds(marker);
 
     } else {
 
@@ -179,6 +192,7 @@ function add_marker(target, is_home) {
             }
         );
         markers.push(marker);
+        add_marker_to_bounds(marker);
         populate_table(marker);
     }
 
