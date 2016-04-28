@@ -1,9 +1,9 @@
 
 var map;
 var infowindow;
-var home;
 var markers = [];
 var shape;
+var home;
 var home_gps;
 var bounds;
 var current_marker;
@@ -59,32 +59,30 @@ function initMap(){
 
 }
 
+
 function location_success(position) {
     home_gps = {lat: position.coords.latitude, lng: position.coords.longitude};
     if(set_center==0){
         map.setCenter(home_gps);
+        add_marker(home_gps, true);
         set_center=1;
     }
-    add_marker(home_gps, true);
+
+    if(home){
+        home.position = new google.maps.LatLng({lat: position.coords.latitude, lng: position.coords.longitude}); // update home position
+    }
+
 }
 
 function location_error() {
     home_gps = {lat: 51.0486151, lng:-114.0708459}
-    if(set_center==0){
-        map.setCenter(home_gps);
-        set_center=1;
-    }
+    // don't add my position label in this case
 }
 
 function refreshMap(data) {
 
     // define map elements
     destinations = data['results']
-
-//    map.setCenter({lat: home_gps.lat, lng:home_gps.lng})
-
-    // add home marker
-    add_marker(home_gps, true);
 
     // handles now result
     if(Object.keys(destinations).length == 0){
@@ -100,6 +98,7 @@ function refreshMap(data) {
     }
     // add result markers
     bounds = new google.maps.LatLngBounds();
+    bounds.extend(home.position);
 
     for( var key in destinations ){
         add_marker(destinations[key], false);
@@ -116,8 +115,6 @@ function add_marker_to_bounds(marker){
 
 function add_marker(target, is_home) {
 
-
-
     var lat_lng = {lat: target.lat, lng: target.lng};
     if(is_home){
 
@@ -130,9 +127,7 @@ function add_marker(target, is_home) {
         description: 'My Location',
         path: target.path
         });
-//        marker.setIcon(myIcon);
-//        marker.setIcon('https://maps.google.com/mapfiles/ms/icons/green-dot.png');
-//        marker.setIcon('http://www.clker.com/cliparts/m/u/A/B/A/b/icon-pin-336699-hi.png');
+
         marker.setIcon("onebus\\images\\home.png");
 
         google.maps.event.addListener(
@@ -145,8 +140,6 @@ function add_marker(target, is_home) {
             }
         );
         home = marker;
-        markers.push(marker);
-        add_marker_to_bounds(marker);
 
     } else {
 
