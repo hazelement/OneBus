@@ -7,6 +7,7 @@ import requests
 from zipfile import ZipFile
 from io import BytesIO
 import gc
+import string
 
 import config
 import util
@@ -60,6 +61,14 @@ class GtfsRawDataParser():
         request = requests.get(config.read_city_url_from_config(self._city_code))
         self._zipfile = ZipFile(BytesIO(request.content))
         print("download finished")
+
+    def _remove_non_acii_char_from_header(self, df):
+
+        header = df.columns.tolist()
+        printable = set(string.printable)
+        df.columns = [filter(lambda x: x in printable, t) for t in header]
+
+        return df
 
     def _process_agency(self):
         fname = 'agency'
@@ -217,7 +226,7 @@ class GtfsRawDataParser():
         return data
 
     def _save_dataframe_to_db(self, dataframe, tablename):
-
+        dataframe = self._remove_non_acii_char_from_header(dataframe)
         try:
             dataframe.to_sql(tablename, self.con, if_exists='replace')
         except MemoryError:
@@ -242,7 +251,7 @@ def update_all_database():
 
 if __name__ == "__main__":
 
-    # ds = GtfsRawDataParser('sanfrancisco_ca_us')
+    # ds = GtfsRawDataParser('vancouver_bc_canada')
     # ds.fetch_new_data()
     update_all_database()
     # list = ["23:42:23", "32:01:32"]
