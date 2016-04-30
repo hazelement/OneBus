@@ -64,6 +64,7 @@ iOS/OneBus/Alamofire
 
 onebus.dynu.com.cert
 onebus.dynu.com.key
+*.psd
 
 
 ## Build generated
