@@ -11,6 +11,8 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='onebus/styles/index.css') }}" media="screen" />
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='onebus/styles/spinner.css') }}" />-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>-->
@@ -45,6 +47,7 @@
                           <input type="text" class="form-control" placeholder="I'm looking for ..." name="srch-term" id="txtSearch">
                       </div>
                       <div class="input-group-btn">
+                          <!--<button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text=" <i class='fa fa-spinner fa-spin' style='font-size:24px'></i>">Search</button>-->
                           <button class="btn btn-default" type="submit" id="btnSubmit" data-loading-text="Loading...">Search</button>
                       </div>
                   </div>

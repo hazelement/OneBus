@@ -5,6 +5,7 @@ import datetime
 import query_database
 import query_api as api
 import util
+import rectangle_gen
 
 
 # todo return result should contain upcoming bus arrival time
@@ -44,13 +45,21 @@ def get_destinations(lat, lng, query, ctime):
 
         stop_gps = df_stops[['stop_lat', 'stop_lon']].as_matrix().astype(float)
 
+
+        test = rectangle_gen.get_search_rectangles(stop_gps)
+
+        df_targets = api.yelp_rec_batch(test, query) # check out this, only a few results got returned
+
+
         all_route_ids = ",".join([str(x) for x in np.unique(df_stops['route_id'].values).tolist()])
 
-        step = min(5, len(stop_gps/50)) # tweak this threadshold
-        print("Step used for stops: " + str(step))
-        batch_to_search = np.append(stop_gps[::step], [stop_gps[-1]], axis=0)
-        df_targets = api.yelp_batch(batch_to_search, query)  # search around every 5 stops
-        print("Number of raw destinations: " + str(len(df_targets)))
+
+        # yelp search around stops method
+        # step = min(5, len(stop_gps/50)) # tweak this threadshold
+        # print("Step used for stops: " + str(step))
+        # batch_to_search = np.append(stop_gps[::step], [stop_gps[-1]], axis=0)
+        # df_targets = api.yelp_batch(batch_to_search, query)  # search around every 5 stops
+        # print("Number of raw destinations: " + str(len(df_targets)))
 
         if(len(df_targets)>0):
 
@@ -132,6 +141,7 @@ if __name__ == "__main__":
     # query = 'chinese restaurant calgary'
     query = 'chinese tea'
 
+    # query = 'restaurant'
     # gps, name, address = loc_list(lat, lng, stop_query)
 
     current_time = datetime.datetime.now()
