@@ -5,3 +5,4 @@ With OneBus, it shows you destinations with only one bus ride required, no trans
 It works like Google Maps or any other Point of Interest app you know of. Entering places you want to go, OneBus will show you a few destinations around you with a single bus' ride. Wherever you want to go is up to you, but don't forget to give our bus drivers a big smile! 
 
 You can find the web application at https://www.yychub.com/onebus
+iOS development can be found here https://github.com/FiniteElementries/OneBusiOS
