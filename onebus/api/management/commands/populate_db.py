@@ -52,6 +52,7 @@ class Command(BaseCommand):
 
     @atomic
     def _load_stop(self):
+        print("Loading stops")
         df = pd.read_csv(self._get_file('stops.txt'))
 
         Stop.objects.all().delete()
@@ -64,6 +65,7 @@ class Command(BaseCommand):
 
     @atomic
     def _load_calender(self):
+        print("Loading calendar")
         df = pd.read_csv(self._get_file('calendar.txt'), dtype=str)
 
         Calender.objects.all().delete()
@@ -82,6 +84,7 @@ class Command(BaseCommand):
 
     @atomic
     def _load_route(self):
+        print("Loading routes")
         df = pd.read_csv(self._get_file('routes.txt'), dtype=str)
 
         Route.objects.all().delete()
@@ -92,6 +95,7 @@ class Command(BaseCommand):
 
     @atomic
     def _load_shape(self):
+        print("Loading shapes")
         df = pd.read_csv(self._get_file('shapes.txt'), dtype=str)
 
         Shape.objects.all().delete()
@@ -102,7 +106,9 @@ class Command(BaseCommand):
                           shape_pt_sequence=row['shape_pt_sequence'])
             shape.save()
 
+    @atomic
     def _load_trip(self):
+        print("Loading trips")
         df = pd.read_csv(self._get_file('trips.txt'), dtype=str)
 
         Trip.objects.all().delete()
@@ -114,7 +120,9 @@ class Command(BaseCommand):
                         trip_headsign=row['trip_headsign'],)
             trip.save()
 
+    @atomic
     def _load_stop_time(self):
+        print("Loading stop_times")
         df = pd.read_csv(self._get_file('stop_times.txt'), dtype=str)
 
         StopTime.objects.all().delete()
