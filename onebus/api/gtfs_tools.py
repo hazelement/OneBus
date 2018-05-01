@@ -1,5 +1,7 @@
 from math import cos, pi
 from datetime import datetime, timedelta
+
+import pandas as pd
 from models import Calender, Stop, StopTime, Trip
 
 dayofweek_mapping = {0: 'monday',
@@ -62,21 +64,33 @@ def get_available_services(date):
     return Calender.objects.filter(**kwargs).all()
 
 
-def get_nearby_trips(stops, services, current_time, time_scope=1):
+def get_following_stops(stops, services, current_time, time_scope=1):
     """
 
     :param stops: list of Stop object, nearby stops
     :param services: list of Calender object, available services
     :param current_time: datetime object, current time
     :param time_scope: int, how many hours to look into in the future for trips
-    :return: list of StopTime object which contains trips, time and stop id
+    :return: pandas dataframe containing trip_id, route_id, stop_id, stop_lat, stop_lon, time, stop_sequence as columns
     """
 
-    trips = StopTime.objects.filter(stop_id__in=stops,
-                                    arrival_time__gte=current_time.time(),
-                                    arrival_time__lte=(current_time + timedelta(hours=time_scope)).time(),
-                                    trip_id__service_id__in=services).all()
+    # trips that are accessible from these stops
+    stop_trips = StopTime.objects.filter(stop_id__in=stops,
+                                         arrival_time__gte=current_time.time(),
+                                         arrival_time__lte=(current_time + timedelta(hours=time_scope)).time(),
+                                         trip_id__service_id__in=services).all()
 
-    print(trips)
+    # find stop times along these trips
+    accessible_stops = []
+    for stop_trip in stop_trips:
+        temp = StopTime.objects.filter(trip_id=stop_trip.trip_id,
+                                       stop_sequence__gte=stop_trip.stop_sequence).all()
+        accessible_stops.extend(temp)
+
+    # convert to pandas dataframe for later matrix calculation
+    df = pd.DataFrame([stop_time.to_latlon_matrix() for stop_time in accessible_stops])\
+        .drop_duplicates(subset=['trip_id', 'stop_id', 'time'])
+
+    return df
 
 

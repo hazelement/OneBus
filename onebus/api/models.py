@@ -77,3 +77,13 @@ class StopTime(models.Model):
     def __str__(self):
         return "trip_id: {}, arrival_time: {}, departure_time: {}".format(
             self.trip_id, self.arrival_time, self.departure_time)
+
+    def to_latlon_matrix(self):
+        return {"trip_id": self.trip_id.trip_id,
+                "route_id": self.trip_id.route_id.route_id,
+                "stop_id": self.stop_id.stop_id,
+                "stop_lat": self.stop_id.stop_lat,
+                "stop_lon": self.stop_id.stop_lon,
+                "time": self.arrival_time,
+                "stop_sequence": self.stop_sequence
+                }
