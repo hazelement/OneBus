@@ -2,7 +2,7 @@ from math import cos, pi
 from datetime import datetime, timedelta
 
 import pandas as pd
-from models import Calender, Stop, StopTime, Trip
+from api.models import Calender, Stop, StopTime, Trip
 
 dayofweek_mapping = {0: 'monday',
                      1: 'tuesday',
@@ -16,8 +16,8 @@ dayofweek_mapping = {0: 'monday',
 def meter_to_lat_lon(lat, lon, displacement):
     """
     Convert displacement in meters to changes in lat and lon
-    :param lat: float, latitude
-    :param lon: float, longitude
+    :param lat: float, latitude at which displacement occurred
+    :param lon: float, longitude at which displacement occurred
     :param displacement: float, displacement in meters
     :return: angular displacement in latitude degree, angular displacement in longitude
     """

@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
-from django.shortcuts import render
-
-from gtfs_tools import get_available_services, get_nearby_stops, get_following_stops
-# Create your views here.
 
 from django.http import HttpResponse
+
+from api.utils.gtfs_tools import get_available_services, get_nearby_stops, get_following_stops
+from api.utils.rectangle_gen import get_search_rectangles
+from api.utils.poi_api import yelp_rec_batch
+from api.utils.math_tools import result_filter_by_distance
+# Create your views here.
 
 
 def query(request):
@@ -30,6 +32,26 @@ def query(request):
     following_stops = get_following_stops(stops, services, datetime_object)
     print(following_stops)
 
+    # get POI from queries and around stops
+    stop_lat_lons = following_stops[['stop_lat', 'stop_lon']].values
+
+    # generate search rectangles, POI query will be based on these rectangles
+    search_rectangles = get_search_rectangles(stop_lat_lons)
+    print(search_rectangles)
+
+    poi_result = yelp_rec_batch(search_rectangles, 'restaurant')
+    print(poi_result)
+
+    poi_lat_lons = poi_result[['lat', 'lon']]
+
+    stop_mapping, poi_mapping = result_filter_by_distance(stop_lat_lons, poi_lat_lons)
+
+    selected_pois = poi_result[poi_mapping]
+    print(selected_pois)
+
+    selected_stops = following_stops.ix[stop_mapping]
+    print(selected_stops)
+
 
     # find POI that lies around these stops
 
@@ -39,7 +61,7 @@ def query(request):
 
     # construct response
     #
-    # destination_name
+    # destination: name, hours, etc
     # start_stop : lat, lon, time, stop_name
     # end_stop: lat, lon, time, stop_name
     # shape:  before, during, after # before hop on bus, while on bus, after bus
