@@ -64,6 +64,19 @@ def get_available_services(date):
     return Calender.objects.filter(**kwargs).all()
 
 
+def get_start_stop(trip, potential_start_stops):
+    """
+    Get stop that a trip given a list of stop to start from
+    :param trip: Trip objects
+    :param potential_start_stops: Stop object
+    :return:
+    """
+
+    start_stop = StopTime.objects.filter(trip_id=trip, stop_id__in=potential_start_stops).first()
+
+    return start_stop
+
+
 def get_following_stops(stops, services, current_time, time_scope=1):
     """
 

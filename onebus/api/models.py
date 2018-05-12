@@ -36,6 +36,7 @@ class Calender(models.Model):
 @python_2_unicode_compatible
 class Route(models.Model):
     route_id = models.CharField(primary_key=True, max_length=255)
+    route_short_name = models.CharField(max_length=255, default="")
     route_long_name = models.CharField(max_length=255)
 
     def __str__(self):
