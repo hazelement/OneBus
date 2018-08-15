@@ -18,3 +18,6 @@ class SimpleTest(TestCase):
         # Test my_view() as if it were deployed at /customer/details
         response = query(request)
         self.assertEqual(response.status_code, 200)
+
+
+# todo write test for repo.py

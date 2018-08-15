@@ -61,7 +61,6 @@ class Trip(models.Model):
     route_id = models.ForeignKey(Route, db_column='route_id')
     service_id = models.ForeignKey(Calender, db_column='service_id')
     shape_id = models.ForeignKey(Shape, db_column='shape_id')
-    trip_headsign = models.CharField(max_length=255)
 
     def __str__(self):
         return "trip_id: {}, route_id: {}, service_id: {}".format(self.trip_id, self.route_id, self.service_id)
