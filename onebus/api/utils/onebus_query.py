@@ -7,7 +7,7 @@ from datetime import datetime
 
 from api.models import Stop, Route, Trip, Shape
 
-from api.utils.gtfs_tools import get_available_services, get_nearby_stops, get_following_stops, get_start_stop
+from api.repo import get_available_services, get_nearby_stops, get_following_stops, get_start_stop
 from api.utils.rectangle_gen import get_search_rectangles
 from api.utils.poi_api import yelp_rec_batch
 from api.utils.math_tools import result_filter_by_distance
