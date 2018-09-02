@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 
 class Point(object):
     def __init__(self, lat, lng):
@@ -58,3 +58,15 @@ def get_search_rectangles(stop_gps):
 
     rec_list = np.array(rec_list)
     return rec_list
+
+def get_distance(point1, point2):
+    """
+    Get distinace between 2 points
+    :param point1: instance of Point
+    :param point2: instance of Point
+    :return:
+    """
+
+    assert isinstance(point1, Point)
+    assert isinstance(point2, Point)
+    return math.sqrt((point1.lat - point2.lat)**2 + (point1.lon - point2.lon)**2)

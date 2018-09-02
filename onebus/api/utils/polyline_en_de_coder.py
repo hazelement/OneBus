@@ -1,3 +1,4 @@
+
 '''Provides utility functions for encoding and decoding linestrings using the
 Google encoded polyline algorithm.
 '''
@@ -8,8 +9,7 @@ def encode_coords(coords):
     See http://code.google.com/apis/maps/documentation/polylinealgorithm.html
     for more information.
 
-    :param coords: Coordinates to transform (list of tuples in order: latitude,
-    longitude).
+    :param coords: list of Point objects
     :type coords: list
     :returns: Google-encoded polyline string.
     :rtype: string
@@ -20,8 +20,8 @@ def encode_coords(coords):
     prev_lat = 0
     prev_lng = 0
 
-    for x, y in coords:
-        lat, lng = int(x * 1e5), int(y * 1e5)
+    for item in coords:
+        lat, lng = int(item.lat * 1e5), int(item.lon * 1e5)
 
         d_lat = _encode_value(lat - prev_lat)
         d_lng = _encode_value(lng - prev_lng)

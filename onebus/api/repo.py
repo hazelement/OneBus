@@ -226,3 +226,11 @@ def get_following_stops(stops, services, current_time, time_scope=1):
         .drop_duplicates(subset=['trip_id', 'stop_id', 'time'])
 
     return df
+
+def get_shape_points(shape_id):
+    """
+
+    :param shape_id:
+    :return:
+    """
+    return Shape.objects.filter(shape_id=shape_id).order_by('shape_pt_sequence').all()
