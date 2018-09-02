@@ -88,11 +88,12 @@ def insert_trip(trip_id, route_id, service_id, shape_id):
     """
     route = Route.objects.get(route_id=route_id)
     service = Calender.objects.get(service_id=service_id)
+    shape = Shape.objects.get(shape_id=shape_id)
 
     d = Trip(trip_id=trip_id,
              route_id=route,
              service_id=service,
-             shape_id=shape_id)
+             shape_id=shape)
     d.save()
 
 

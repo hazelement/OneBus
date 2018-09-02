@@ -4,6 +4,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 
+# todo add POI interest and save search locations to this database
+
 # Create your models here.
 @python_2_unicode_compatible
 class Stop(models.Model):
@@ -45,6 +47,9 @@ class Route(models.Model):
 
 @python_2_unicode_compatible
 class Shape(models.Model):
+    class Meta:
+        unique_together = ('shape_id', 'shape_pt_sequence',)
+
     shape_id = models.CharField(primary_key=True, max_length=255)
     shape_pt_lat = models.FloatField()
     shape_pt_lon = models.FloatField()
@@ -68,6 +73,9 @@ class Trip(models.Model):
 
 @python_2_unicode_compatible
 class StopTime(models.Model):
+    class Meta:
+        unique_together = ('trip_id', 'stop_id', )
+
     trip_id = models.ForeignKey(Trip, db_column='trip_id')
     arrival_time = models.TimeField()
     departure_time = models.TimeField()

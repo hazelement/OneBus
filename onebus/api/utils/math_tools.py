@@ -59,7 +59,8 @@ def ramerdouglas(line, dist):
 
 def distance_calc(array1, array2):
     """
-    calculate distance between two arrays of coordinates, return
+    calculate distance between two arrays of coordinates, return a matrix containing distance between coordinates in
+    each array
     :param array1:
     :param array2:
     :return: mxn matrix

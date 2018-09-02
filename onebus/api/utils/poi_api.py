@@ -31,7 +31,6 @@ class Timer:
         print(self.name + " took " + str(self.interval) + " sec.")
 
 
-
 def _fetch_url(url):
     f = urllib.urlopen(url)
     response = json.loads(f.read())
@@ -194,15 +193,17 @@ def yelp_rec_batch(rec_array, query):
     print("using yelp")
 
     with Timer("yelp query"):
-        partial_yelp = partial(yelp_rec_api, query=query)
-        workers = multiprocessing.cpu_count()
-        # p=multiprocessing.Pool(workers)
-        p=ThreadPool(workers)
+        # partial_yelp = partial(yelp_rec_api, query=query)
+        # workers = multiprocessing.cpu_count()
+        # # p=multiprocessing.Pool(workers)
+        # p=ThreadPool(workers)
+        #
+        # result = p.map(partial_yelp, rec_array)
+        #
+        # p.close()
+        # p.join()
 
-        result = p.map(partial_yelp, rec_array)
-
-        p.close()
-        p.join()
+        result = yelp_rec_api(rec_array[0], query)
 
         df = pd.concat(result, ignore_index=True)
         df.drop_duplicates('name', inplace = True)
@@ -224,11 +225,7 @@ def yelp_rec_api(rec, query):
         :param rectangle:  [sw_lat, sw_lon, ne_lat, ne_lon]
         :return: pandas dataframe
         """
-        auth = Oauth1Authenticator( consumer_key=cf.read_api_config('yelp_consumer_key'),
-                                consumer_secret=cf.read_api_config('yelp_consumer_secret'),
-                                token=cf.read_api_config('yelp_token'),
-                                token_secret=cf.read_api_config('yelp_token_secret'))
-        client = Client(auth)
+        client = Client(cf.read_api_config('yelp_consumer_api_key'))
 
         df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
 

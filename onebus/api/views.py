@@ -10,7 +10,7 @@ from utils.onebus_query import search_query
 
 
 def query(request):
-    # http://127.0.0.1:8000/api/query?lat=51.173569&lon=-114.118553&datetime=2018-04-29_18:47:05
+    # http://127.0.0.1:8000/api/query?lat=51.173569&lon=-114.118553&datetime=2018-04-29_18:47:05&search_word=food
     lat = float(request.GET['lat'])
     lon = float(request.GET['lon'])
     date_time = request.GET['datetime']
