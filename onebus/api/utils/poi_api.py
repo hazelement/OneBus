@@ -7,11 +7,16 @@ import multiprocessing
 from multiprocessing.pool import ThreadPool
 from functools import partial
 import time
+from abc import abstractmethod, ABCMeta
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
 import config as cf
+
+ABC = ABCMeta('ABC', (object,), {'__slots__': ()})
+
+# TODO implement POI search using base classes for Google, Yelp and FourSquare
 
 
 class Timer:
@@ -29,6 +34,108 @@ class Timer:
         self.end = time.clock()
         self.interval = self.end - self.start
         print(self.name + " took " + str(self.interval) + " sec.")
+
+
+class AbstractPOIQuery(ABC):
+    """
+    Abstract POI query class, all POI based search query should substract this class
+    """
+
+    # todo add search by coordinate abstract method
+    @abstractmethod
+    def query_rec_batch(self, rec_array, query):
+        """
+        search batched rectangle with a query
+        :param rec_array: list rectanges to search on [[sw_lat, sw_lon, ne_lat, ne_lon], [sw_lat, sw_lon, ne_lat, ne_lon], ...]
+        :param query: str, query string
+        :return: list of BasePOI instance
+        """
+        pass
+
+
+class BasePOI(ABC):
+    """
+    Base POI class, all POI class should substract this class
+    """
+
+    def __init__(self, name, address, image_url, url, review_count, lat, lon):
+
+        assert isinstance(name, str)
+        assert isinstance(address, str)
+        assert isinstance(image_url, str)
+        assert isinstance(url, str)
+        assert isinstance(review_count, int)
+        assert isinstance(lat, float)
+        assert isinstance(lon, float)
+
+        self.name = name
+        self.address = address
+        self.image_url = image_url
+        self.url = url
+        self.review_count = review_count
+        self.lat = lat
+        self.lon = lon
+
+    def to_dict(self):
+        """
+        Convert to dictionary
+        :return:
+        """
+        return { 'name': self.name,
+                 'address': self.address,
+                 'image_url': self.image_url,
+                 'url': self.url,
+                 'review_count': self.review_count,
+                 'lat': self.lat,
+                 'lon': self.lon}
+
+
+class YelpPOI(BasePOI):
+
+    def __init__(self, name, address, image_url, url, review_count, lat, lon):
+        BasePOI.__init__(self, name, address, image_url, url, int(review_count), float(lat), float(lon))
+
+
+class YelpPOIQuery(AbstractPOIQuery):
+
+    def __init__(self):
+        self.client = Client(cf.read_api_config('yelp_consumer_api_key'))
+
+
+    def get_yelp(self, rectange, query):
+        """
+        get yelp result
+        :param rectangle:  [sw_lat, sw_lon, ne_lat, ne_lon]
+        :return: pandas dataframe
+        """
+        client = Client(cf.read_api_config('yelp_consumer_api_key'))
+
+        df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
+
+        response = client.search_by_bounding_box(rectange[0], rectange[1], rectange[2], rectange[3], term=query, limit='20', sort='0')
+        # response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='0', offset=str(i*20)) # meter
+        for loc in response.businesses:
+            df.loc[len(df)+1]=[loc.name,
+                               ' '.join(loc.location.display_address),
+                               loc.image_url, loc.url,
+                               loc.review_count,
+                               loc.rating_img_url,
+                               loc.location.coordinate.latitude,
+                               loc.location.coordinate.longitude]
+
+        df[['review_count']] = df[['review_count']].astype(int)
+
+        return df
+
+    def query_rec_batch(self, rec_array, query):
+
+        data = self.get_yelp(rec_array, query)
+
+        result = []
+        for index, row in data.iterrows():
+            result.append(YelpPOI(row['name'], row['address'], row['image_url'], row['url'], row['review_count'], row['lat'], row['lon']))
+
+        return result
 
 
 def _fetch_url(url):
@@ -211,6 +318,8 @@ def yelp_rec_batch(rec_array, query):
         print("Total no of raw results " + str(len(df)))
         return df
 
+
+# todo replace this method with POIQuery class
 def yelp_rec_api(rec, query):
     """
     return yelp results based on a rectangle given, search query

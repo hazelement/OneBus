@@ -127,6 +127,7 @@ def search_query(lat, lon, date_time, search_word):
 
         })
 
+    # TODO before all below, update POI search
 
 
     # use stop id to get stop names

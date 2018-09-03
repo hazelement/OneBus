@@ -1,10 +1,12 @@
 
-'''Provides utility functions for encoding and decoding linestrings using the
+'''
+Provides utility functions for encoding and decoding linestrings using the
 Google encoded polyline algorithm.
 '''
 
 def encode_coords(coords):
-    '''Encodes a polyline using Google's polyline algorithm
+    '''
+    Encodes a polyline using Google's polyline algorithm
 
     See http://code.google.com/apis/maps/documentation/polylinealgorithm.html
     for more information.
