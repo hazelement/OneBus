@@ -11,6 +11,7 @@ from abc import abstractmethod, ABCMeta
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
+from googleplaces import GooglePlaces, types, lang
 
 import config as cf
 
@@ -18,6 +19,8 @@ ABC = ABCMeta('ABC', (object,), {'__slots__': ()})
 
 # TODO implement POI search using base classes for Google, Yelp and FourSquare
 
+yelp_api_config = cf.read_api_config('yelp_consumer_api_key')
+google_places_api_key = cf.read_api_config('google_places_api_key')
 
 class Timer:
     """
@@ -59,6 +62,16 @@ class BasePOI(ABC):
     """
 
     def __init__(self, name, address, image_url, url, review_count, lat, lon):
+        """
+
+        :param name: str, name of this place
+        :param address: str, address of this place
+        :param image_url: str, image link of this place
+        :param url: str, website of this place
+        :param review_count: int, number of review count
+        :param lat: float, latitude of this place
+        :param lon: float, longitude of this place
+        """
 
         assert isinstance(name, str)
         assert isinstance(address, str)
@@ -96,23 +109,23 @@ class YelpPOI(BasePOI):
         BasePOI.__init__(self, name, address, image_url, url, int(review_count), float(lat), float(lon))
 
 
+
 class YelpPOIQuery(AbstractPOIQuery):
 
     def __init__(self):
-        self.client = Client(cf.read_api_config('yelp_consumer_api_key'))
+        self.client = Client(yelp_api_config)
 
 
-    def get_yelp(self, rectange, query):
+    def _get_yelp(self, rectange, query):
         """
         get yelp result
         :param rectangle:  [sw_lat, sw_lon, ne_lat, ne_lon]
         :return: pandas dataframe
         """
-        client = Client(cf.read_api_config('yelp_consumer_api_key'))
 
         df = pd.DataFrame(columns=['name', 'address', 'image_url', 'yelp_url', 'review_count', 'ratings_img_url', 'lat','lon'])
 
-        response = client.search_by_bounding_box(rectange[0], rectange[1], rectange[2], rectange[3], term=query, limit='20', sort='0')
+        response = self.client.search_by_bounding_box(rectange[0], rectange[1], rectange[2], rectange[3], term=query, limit='20', sort='0')
         # response = client.search_by_coordinates( lat, lng, accuracy=None, altitude=None,  altitude_accuracy=None, term=query, limit='20', radius_filter=radius_filter, sort='0', offset=str(i*20)) # meter
         for loc in response.businesses:
             df.loc[len(df)+1]=[loc.name,
@@ -129,7 +142,7 @@ class YelpPOIQuery(AbstractPOIQuery):
 
     def query_rec_batch(self, rec_array, query):
 
-        data = self.get_yelp(rec_array, query)
+        data = self._get_yelp(rec_array, query)
 
         result = []
         for index, row in data.iterrows():
@@ -137,6 +150,63 @@ class YelpPOIQuery(AbstractPOIQuery):
 
         return result
 
+
+class GooglePOI(BasePOI):
+    def __init__(self, name, address, image_url, url, review_count, lat, lon):
+        BasePOI.__init__(self, name, address, image_url, url, int(review_count), float(lat), float(lon))
+
+
+# todo make sure this is working
+class GooglePOIQuery(AbstractPOIQuery):
+    def __init__(self):
+        self.google_places = GooglePlaces(google_places_api_key)
+
+    def _get_google(self, rectange, query):
+        """
+        get yelp result
+        :param rectangle:  [sw_lat, sw_lon, ne_lat, ne_lon]
+        :return: pandas dataframe
+        """
+
+        df = pd.DataFrame(
+            columns=['name', 'address', 'image_url', 'url', 'review_count', 'ratings_img_url', 'lat', 'lon'])
+
+        lat_lng = {'lat': ((float)(rectange(0)+rectange(2)))/2.0,
+                   'lng': ((float)(rectange(1)+rectange(3)))/2.0}
+        radius = max(abs(rectange(0)-rectange(2)), abs(rectange(1)-rectange(3)))
+
+        query_result = self.google_places.nearby_search(
+            lat_lng=lat_lng, keyword='query',
+            radius=radius, types=[types.TYPE_FOOD])
+
+        for loc in query_result.places:
+            loc.get_details()
+            df.loc[len(df) + 1] = [loc.name,
+                                   loc.formatted_address,
+                                   loc.url, # not correct
+                                   loc.website,
+                                   loc.rating,
+                                   loc.geo_location.latitude,
+                                   loc.geo_location.longitude]
+
+        df[['review_count']] = df[['review_count']].astype(int)
+
+        return df
+
+    def query_rec_batch(self, rec_array, query):
+
+        data = self._get_google(rec_array, query)
+
+        result = []
+        for index, row in data.iterrows():
+            result.append(YelpPOI(row['name'], row['address'], row['image_url'], row['url'], row['review_count'], row['lat'], row['lon']))
+
+        return result
+
+
+
+
+# below maybe be superseded, check usage
 
 def _fetch_url(url):
     f = urllib.urlopen(url)
@@ -411,5 +481,7 @@ if __name__=="__main__":
     lng = -114.05651890000001
     query = "restaurant"
     # print(yelp_loc_list(lat, lng, query))
-    print(yelp_rec_batch([[51.0454027, -114.05652, 51.0230, -114.123]], query))
-    print(yelp_batch([[51.0454027, -114.05652], [51.0230, -114.123]], query))
+    google_poi_query = GooglePOIQuery()
+
+    print(google_poi_query.query_rec_batch([[51.0454027, -114.05652, 51.0230, -114.123]], query))
+    # print(yelp_batch([[51.0454027, -114.05652], [51.0230, -114.123]], query))

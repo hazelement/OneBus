@@ -68,6 +68,9 @@ def search_query(lat, lon, date_time, search_word):
     # construct route information for each poi
     stop_infos = []
     for index, row in selected_stops.iterrows():
+
+        # todo add search engine ID, yelp, google, foursquare etc
+
         print(index, row)
         trip_id = row['trip_id']
         trip = Trip(trip_id=trip_id)
@@ -75,8 +78,6 @@ def search_query(lat, lon, date_time, search_word):
         end_stop = Stop(stop_id=row["stop_id"])
         route = Route(route_id=row['route_id'])
         shapes = get_shape_points(trip.shape_id)
-
-        # todo get shape based on start/end stop
 
         # get shape based on start and end stop
         # calculate start shape point, and end shape point
@@ -127,7 +128,7 @@ def search_query(lat, lon, date_time, search_word):
 
         })
 
-    # TODO before all below, update POI search
+    # TODO before all below, update POI search classes
 
 
     # use stop id to get stop names

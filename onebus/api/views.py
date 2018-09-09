@@ -9,8 +9,8 @@ from utils.onebus_query import search_query
 # Create your views here.
 
 
-# TODO encapsulate POI search into classes
 # TODO encapusulate query search into classes with POIQuery class injection (maybe use factory pattern)
+# TODO encapsulate POI search into classes
 # TODO test search functionality with online POI search
 # TODO setup test script for POIQuery, API testing
 # TODO POI search caching in database
