@@ -90,14 +90,14 @@ def search_query(lat, lon, date_time, search_word):
         # calculate start shape point, and end shape point
         start_ind = 0
         start_shape_dist = get_distance(Point(shapes[0].shape_pt_lat, shapes[0].shape_pt_lon),
-                                        Point(start_stop.stop_id.stop_lat, start_stop.stop_id.stop_lon))
+                                        Point(start_stop.stop.stop_lat, start_stop.stop.stop_lon))
         end_ind = 0
         end_shape_dist = get_distance(Point(shapes[0].shape_pt_lat, shapes[0].shape_pt_lon),
                                       Point(end_stop.stop_lat, end_stop.stop_lon))
         for i in range(len(shapes)):
             shape = shapes[i]
             new_start_distance = get_distance(Point(shape.shape_pt_lat, shape.shape_pt_lon),
-                                              Point(start_stop.stop_id.stop_lat, start_stop.stop_id.stop_lon))
+                                              Point(start_stop.stop.stop_lat, start_stop.stop.stop_lon))
             if new_start_distance < start_shape_dist:
                 start_shape_dist = new_start_distance
                 start_ind = i
@@ -114,10 +114,10 @@ def search_query(lat, lon, date_time, search_word):
 
         poi_bus_infos.append({"start_stop":
             {
-                "start_stop_name": start_stop.stop_id.stop_name,
+                "start_stop_name": start_stop.stop.stop_name,
                 "start_stop_time": start_stop.arrival_time,
-                "start_stop_lat": start_stop.stop_id.stop_lat,
-                "start_stop_lon": start_stop.stop_id.stop_lon
+                "start_stop_lat": start_stop.stop.stop_lat,
+                "start_stop_lon": start_stop.stop.stop_lon
             },
             "end_stop":
                 {

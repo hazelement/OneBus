@@ -75,24 +75,24 @@ class Trip(models.Model):
 @python_2_unicode_compatible
 class StopTime(models.Model):
     class Meta:
-        unique_together = ('trip_id', 'stop_id', 'stop_sequence')
+        unique_together = ('trip', 'stop', 'stop_sequence')
 
-    trip_id = models.ForeignKey(Trip, db_column='trip_id')
+    trip = models.ForeignKey(Trip, default=None)
     arrival_time = models.IntegerField()  # in seconds, can't use datetime because operating hours go beyond 24 hours
     departure_time = models.IntegerField()  # in seconds
-    stop_id = models.ForeignKey(Stop, db_column='stop_id')
+    stop = models.ForeignKey(Stop, default=None)
     stop_sequence = models.IntegerField()
 
     def __str__(self):
         return "trip_id: {}, arrival_time: {}, departure_time: {}".format(
-            self.trip_id, self.arrival_time, self.departure_time)
+            self.trip.trip_id, self.arrival_time, self.departure_time)
 
     def to_latlon_matrix(self):
-        return {"trip_id": self.trip_id.trip_id,
-                "route_id": self.trip_id.route.route_id,
-                "stop_id": self.stop_id.stop_id,
-                "stop_lat": self.stop_id.stop_lat,
-                "stop_lon": self.stop_id.stop_lon,
+        return {"trip_id": self.trip.trip_id,
+                "route_id": self.trip.route.route_id,
+                "stop_id": self.stop.stop_id,
+                "stop_lat": self.stop.stop_lat,
+                "stop_lon": self.stop.stop_lon,
                 "time": self.arrival_time,
                 "stop_sequence": self.stop_sequence
                 }
