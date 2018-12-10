@@ -82,7 +82,7 @@ def search_query(lat, lon, date_time, search_word):
         start_stop = get_start_stop(trip, nearby_stops)
         end_stop = Stop.objects.filter(stop_id=row["stop_id"]).first()
         route = Route.objects.filter(route_id=row['route_id']).first()
-        shapes = get_shape_points(trip.shape_id.shape_id)
+        shapes = get_shape_points(trip.shape.shape_id)
 
         print(shapes)
 

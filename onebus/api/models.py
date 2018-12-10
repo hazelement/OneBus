@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
+# todo rename foreign key fields to non ids
 
 # todo add POI interest and save search locations to this database
 
@@ -63,9 +64,9 @@ class Shape(models.Model):
 @python_2_unicode_compatible
 class Trip(models.Model):
     trip_id = models.CharField(primary_key=True, max_length=255)
-    route_id = models.ForeignKey(Route, db_column='route_id')
-    service_id = models.ForeignKey(Calender, db_column='service_id')
-    shape_id = models.ForeignKey(Shape, db_column='shape_id')
+    route = models.ForeignKey(Route, default=None)
+    service = models.ForeignKey(Calender, default=None)
+    shape = models.ForeignKey(Shape, default=None)
 
     def __str__(self):
         return "trip_id: {}, route_id: {}, service_id: {}".format(self.trip_id, self.route_id, self.service_id)
@@ -88,7 +89,7 @@ class StopTime(models.Model):
 
     def to_latlon_matrix(self):
         return {"trip_id": self.trip_id.trip_id,
-                "route_id": self.trip_id.route_id.route_id,
+                "route_id": self.trip_id.route.route_id,
                 "stop_id": self.stop_id.stop_id,
                 "stop_lat": self.stop_id.stop_lat,
                 "stop_lon": self.stop_id.stop_lon,
