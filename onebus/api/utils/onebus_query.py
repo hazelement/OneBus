@@ -67,30 +67,32 @@ def search_query(lat, lon, date_time, search_word):
 
     selected_pois.reset_index(drop=True, inplace=True)
     selected_stops.reset_index(drop=True, inplace=True)
-    combined = pd.concat([selected_pois, selected_stops], axis=1, ignore_index=True)
+    combined = pd.concat([selected_pois, selected_stops], axis=1)
 
     # construct route information for each poi
     poi_bus_infos = []
     for index, row in combined.iterrows():
 
         # todo add search engine ID, yelp, google, foursquare etc
-
         print(index, row)
         trip_id = row['trip_id']
         print(trip_id)
-        trip = Trip(trip_id=trip_id)
+        trip = Trip.objects.filter(trip_id=trip_id).first()
+        print(trip.shape_id)
         start_stop = get_start_stop(trip, nearby_stops)
-        end_stop = Stop(stop_id=row["stop_id"])
-        route = Route(route_id=row['route_id'])
-        shapes = get_shape_points(trip.shape_id)
+        end_stop = Stop.objects.filter(stop_id=row["stop_id"]).first()
+        route = Route.objects.filter(route_id=row['route_id']).first()
+        shapes = get_shape_points(trip.shape_id.shape_id)
+
+        print(shapes)
 
         # get shape based on start and end stop
         # calculate start shape point, and end shape point
         start_ind = 0
-        start_shape_dist = get_distance(Point(shape[0].shape_pt_lat, shape[0].shape_pt_lon),
+        start_shape_dist = get_distance(Point(shapes[0].shape_pt_lat, shapes[0].shape_pt_lon),
                                         Point(start_stop.stop_id.stop_lat, start_stop.stop_id.stop_lon))
         end_ind = 0
-        end_shape_dist = get_distance(Point(shape[0].shape_pt_lat, shape[0].shape_pt_lon),
+        end_shape_dist = get_distance(Point(shapes[0].shape_pt_lat, shapes[0].shape_pt_lon),
                                       Point(end_stop.stop_lat, end_stop.stop_lon))
         for i in range(len(shapes)):
             shape = shapes[i]
@@ -101,7 +103,7 @@ def search_query(lat, lon, date_time, search_word):
                 start_ind = i
 
             new_end_distance = get_distance(Point(shape.shape_pt_lat, shape.shape_pt_lon),
-                                            Point(end_stop.stop_id.stop_lat, end_stop.stop_id.stop_lon))
+                                            Point(end_stop.stop_lat, end_stop.stop_lon))
             if new_end_distance < end_shape_dist:
                 end_shape_dist = new_end_distance
                 end_ind = i
@@ -144,8 +146,9 @@ def search_query(lat, lon, date_time, search_word):
 
 
 if __name__ == "__main__":
+
     lat = 51.173569
     lon = -114.118553
     date_time = "2018-04-29_18:47:05"
 
-    search_query(lat, lon, date_time, "restaurant")
+    print(search_query(lat, lon, date_time, "restaurant"))

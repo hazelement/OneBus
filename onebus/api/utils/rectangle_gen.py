@@ -69,4 +69,4 @@ def get_distance(point1, point2):
 
     assert isinstance(point1, Point)
     assert isinstance(point2, Point)
-    return math.sqrt((point1.lat - point2.lat)**2 + (point1.lon - point2.lon)**2)
+    return math.sqrt((point1.lat - point2.lat)**2 + (point1.lng - point2.lng)**2)

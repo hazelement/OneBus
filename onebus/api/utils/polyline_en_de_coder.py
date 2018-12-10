@@ -23,7 +23,7 @@ def encode_coords(coords):
     prev_lng = 0
 
     for item in coords:
-        lat, lng = int(item.lat * 1e5), int(item.lon * 1e5)
+        lat, lng = int(item.lat * 1e5), int(item.lng * 1e5)
 
         d_lat = _encode_value(lat - prev_lat)
         d_lng = _encode_value(lng - prev_lng)
