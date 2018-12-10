@@ -108,9 +108,9 @@ class Command(BaseCommand):
         Trip.objects.all().delete()
         for index, row in df.iterrows():
             insert_trip(trip_id=row['trip_id'],
-                        route_id=Route(route_id=row['route_id']),
-                        service_id=Calender(service_id=row['service_id']),
-                        shape_id=Shape(shape_id=row['shape_id']))
+                        route_id=row['route_id'],
+                        service_id=row['service_id'],
+                        shape_id=row['shape_id'])
 
     @atomic
     def _load_stop_time(self):

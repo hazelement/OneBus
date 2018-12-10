@@ -5,13 +5,9 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "onebus.settings")
 django.setup()
 
-from datetime import datetime
-
-from api.models import Stop, Route, Trip, Shape
-
 from api.repo import *
 from api.utils.rectangle_gen import get_search_rectangles, get_distance, Point
-from api.utils.poi_api import yelp_rec_batch
+from api.utils.poi_api import GooglePOIQuery
 from api.utils.math_tools import result_filter_by_distance
 from api.utils.polyline_en_de_coder import encode_coords
 
@@ -40,19 +36,23 @@ def search_query(lat, lon, date_time, search_word):
     following_stops = get_following_stops(nearby_stops, services, datetime_object)
     print(following_stops)
 
-    # get POI from queries and around stops
+    # get stop coordinates from trips
     stop_lat_lons = following_stops[['stop_lat', 'stop_lon']].values
 
-    # generate search rectangles, POI query will be based on these rectangles
+    # generate search rectangles along these stops, POI query will be based on these rectangles
     search_rectangles = get_search_rectangles(stop_lat_lons)
-    print(search_rectangles)
+    # print(search_rectangles)
 
-    poi_result = yelp_rec_batch(search_rectangles, search_word)
+    # perform POI query to find POI within these rectanges
+    poi_result = GooglePOIQuery().query_rec_batch(search_rectangles, search_word)
+    # poi_result = yelp_rec_batch(search_rectangles, search_word)
+    poi_result = pd.DataFrame.from_records([x.to_dict() for x in poi_result])
     print(poi_result)
 
-    poi_lat_lons = poi_result[['lat', 'lon']]
+    # POI lat and lon
+    poi_lat_lons = poi_result[['poi_lat', 'poi_lon']]
 
-    # find POI that lies around these stops
+    # find POI that lies around these stops, filter out those are too far
     # get accessible POI, their trip_id, start_stop, end_stop, route_info, shape
     stop_mapping, poi_mapping = result_filter_by_distance(stop_lat_lons, poi_lat_lons)
 
@@ -65,14 +65,19 @@ def search_query(lat, lon, date_time, search_word):
     # construct response
     # get start stop from trip_id and accessible stops
 
+    selected_pois.reset_index(drop=True, inplace=True)
+    selected_stops.reset_index(drop=True, inplace=True)
+    combined = pd.concat([selected_pois, selected_stops], axis=1, ignore_index=True)
+
     # construct route information for each poi
-    stop_infos = []
-    for index, row in selected_stops.iterrows():
+    poi_bus_infos = []
+    for index, row in combined.iterrows():
 
         # todo add search engine ID, yelp, google, foursquare etc
 
         print(index, row)
         trip_id = row['trip_id']
+        print(trip_id)
         trip = Trip(trip_id=trip_id)
         start_stop = get_start_stop(trip, nearby_stops)
         end_stop = Stop(stop_id=row["stop_id"])
@@ -102,10 +107,10 @@ def search_query(lat, lon, date_time, search_word):
                 end_ind = i
 
         # encode points into Google-encoded polyline string
-        shape_points = shapes[start_ind:end_ind+1]
+        shape_points = shapes[start_ind:end_ind + 1]
         encoded = encode_coords([Point(item.shape_pt_lat, item.shape_pt_lon) for item in shape_points])
 
-        stop_infos.append({"start_stop":
+        poi_bus_infos.append({"start_stop":
             {
                 "start_stop_name": start_stop.stop_id.stop_name,
                 "start_stop_time": start_stop.arrival_time,
@@ -121,32 +126,21 @@ def search_query(lat, lon, date_time, search_word):
                 },
             "route_info":
                 {
-                    "shape": "asdfwef",
                     "route_name": route.route_short_name
                 },
-            "shape": encoded
+            "shape": encoded,
+            "poi": {
+                "lat": row['poi_lat'],
+                "lon": row['poi_lon'],
+                "address": row['address'],
+                'name': row['name'],
+                'url': row['url'],
+                'rating': row['rating']
+            }
 
         })
 
-    # TODO before all below, update POI search classes
-
-
-    # use stop id to get stop names
-
-
-    # use route id to get route information
-
-
-    # use trip id to get shape
-
-
-
-    # destination: name, hours, etc
-    # start_stop : lat, lon, time, stop_name
-    # end_stop: lat, lon, time, stop_name
-    # shape:  before, during, after # before hop on bus, while on bus, after bus
-    # route_number
-    # route_headsign
+    return poi_bus_infos
 
 
 if __name__ == "__main__":

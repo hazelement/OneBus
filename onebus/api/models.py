@@ -74,11 +74,11 @@ class Trip(models.Model):
 @python_2_unicode_compatible
 class StopTime(models.Model):
     class Meta:
-        unique_together = ('trip_id', 'stop_id', )
+        unique_together = ('trip_id', 'stop_id', 'stop_sequence')
 
     trip_id = models.ForeignKey(Trip, db_column='trip_id')
-    arrival_time = models.TimeField()
-    departure_time = models.TimeField()
+    arrival_time = models.IntegerField()  # in seconds, can't use datetime because operating hours go beyond 24 hours
+    departure_time = models.IntegerField()  # in seconds
     stop_id = models.ForeignKey(Stop, db_column='stop_id')
     stop_sequence = models.IntegerField()
 

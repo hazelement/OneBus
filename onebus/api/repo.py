@@ -1,6 +1,6 @@
 
 from math import cos, pi
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import pandas as pd
 
 from models import Route, Calender, Shape, Trip, StopTime, Stop
@@ -15,13 +15,29 @@ DAYOFWEEK_MAPPING = {0: 'monday',
 
 # todo implement delete method and replace populate_db.py with this method
 
-def parse_date(date):
+def parse_date(d):
     """
     Convert date string to date for saving in django
-    :param date: date string in "%Y%m%d"
+    :param d: date string in "%Y%m%d"
     :return:
     """
-    return datetime.strptime(date, "%Y%m%d").date()
+    if isinstance(d, date) or isinstance(d, datetime):
+        return d
+    else:
+        return datetime.strptime(d, "%Y%m%d").date()
+
+def parse_time(t):
+    """
+    Convert time string to time for saving in django
+    :param d: date string in "%H%M%S"
+    :return:
+    """
+    z = t.split(':')
+
+    return int(z[0]) * 3600 + int(z[1]) * 60 + int(z[2])
+
+def time_to_float(t):
+    return t.hour * 3600 + t.minute * 60 + t.second
 
 
 def insert_service(service_id, start_date, end_date, monday, tuesday, wednesday, thursday, friday, saturday, sunday):
@@ -124,12 +140,12 @@ def insert_stop_time(stop_id, trip_id, arrival_time, departure_time, stop_sequen
     :return:
     """
     stop = Stop.objects.get(stop_id=stop_id)
-    trip = Stop.objects.get(trip_id=trip_id)
+    trip = Trip.objects.get(trip_id=trip_id)
 
     d = StopTime(stop_id=stop,
                  trip_id=trip,
-                 arrival_time=parse_date(arrival_time),
-                 departure_time=parse_date(departure_time),
+                 arrival_time=parse_time(arrival_time),
+                 departure_time=parse_time(departure_time),
                  stop_sequence=stop_sequence)
     d.save()
 
@@ -210,8 +226,8 @@ def get_following_stops(stops, services, current_time, time_scope=1):
 
     # trips that are accessible from these stops
     stop_trips = StopTime.objects.filter(stop_id__in=stops,
-                                         arrival_time__gte=current_time.time(),
-                                         arrival_time__lte=(current_time + timedelta(hours=time_scope)).time(),
+                                         arrival_time__gte=time_to_float(current_time.time()),
+                                         arrival_time__lte=time_to_float((current_time + timedelta(hours=time_scope)).time()),
                                          trip_id__service_id__in=services).all()
 
     # find stop times along these trips

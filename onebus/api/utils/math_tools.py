@@ -11,7 +11,7 @@ def result_filter_by_distance(stops, targets):
     return filtered index of stops, and targets
     :param stops: array of stops to reference from
     :param targets: array of targets to filter through
-    :return:
+    :return: stop mapping and poi mapping, these are POI that are close to stops and their corresponding stops
     """
     # import pdb;pdb.set_trace()
     # generate distance matrix

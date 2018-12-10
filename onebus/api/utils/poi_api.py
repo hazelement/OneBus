@@ -95,11 +95,10 @@ class BasePOI(ABC):
         """
         return {'name': self.name,
                 'address': self.address,
-                'image_url': self.image_url,
                 'url': self.url,
                 'rating': self.rating,
-                'lat': self.lat,
-                'lon': self.lon}
+                'poi_lat': self.lat,
+                'poi_lon': self.lon}
 
 
 class YelpPOI(BasePOI):
@@ -182,8 +181,8 @@ class GooglePOIQuery(AbstractPOIQuery):
                                     loc.formatted_address,
                                     loc.website,
                                     (float(loc.rating)) / 5, # google's full score is 5 star
-                                    loc.geo_location['lat'],
-                                    loc.geo_location['lng']))
+                                    float(loc.geo_location['lat']),
+                                    float(loc.geo_location['lng'])))
 
         return result
 
