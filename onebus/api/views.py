@@ -5,7 +5,7 @@ from datetime import datetime
 
 from django.http import HttpResponse
 
-from utils.onebus_query import search_query
+from api.utils.onebus_query import search_query
 # Create your views here.
 
 
