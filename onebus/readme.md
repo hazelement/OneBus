@@ -1,1 +1,0 @@
-This folder contains the django application that is to replace the flask implementation. 
